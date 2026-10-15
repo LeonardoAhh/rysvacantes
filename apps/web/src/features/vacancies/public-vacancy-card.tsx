@@ -2,7 +2,6 @@ import { useState } from "react"
 import {
   ArrowRight,
   ArrowUpRight,
-  CalendarDays,
   Check,
   MapPin,
 } from "lucide-react"
@@ -33,12 +32,6 @@ const cardSections = [
   "Descripción",
   "Jornada y prestaciones",
 ] as const
-
-function formatDeadline(deadline: string) {
-  return new Intl.DateTimeFormat("es-MX", { dateStyle: "long" }).format(
-    new Date(`${deadline}T00:00:00`)
-  )
-}
 
 export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
   const [sectionIndex, setSectionIndex] = useState(0)
@@ -113,17 +106,6 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
                   {vacancy.salary.trim() || "Por definir"} · {vacancy.salaryPeriod
                     ? vacancySalaryPeriodLabels[vacancy.salaryPeriod]
                     : "Período por definir"}
-                </dd>
-              </div>
-              <div>
-                <dt>
-                  <CalendarDays aria-hidden="true" />
-                  Fecha límite
-                </dt>
-                <dd>
-                  <time dateTime={vacancy.deadline}>
-                    {formatDeadline(vacancy.deadline)}
-                  </time>
                 </dd>
               </div>
             </dl>
