@@ -28,6 +28,8 @@ Cada tarjeta pública presenta tres vistas dentro de la misma tarjeta: resumen (
 
 Las URL y los identificadores internos son en inglés; el contenido visible, las etiquetas accesibles, los valores predeterminados de las primitivas y los mensajes de estado son en español. El calendario compartido usa español por defecto. Las rutas y enlaces internos están centralizados en `apps/web/src/lib/routes.ts`.
 
+En Vercel, `apps/web/vercel.json` reescribe las solicitudes de rutas de la SPA a `index.html`. Esto permite abrir o recargar directamente `/auth`, `/dashboard` y las demás rutas sin recibir un 404 del servidor estático.
+
 El título de la pestaña cambia con cada ruta desde `apps/web/src/lib/page-title.ts`: Inicio usa «ViñoPlastic - Reclutamiento» y las demás páginas muestran un nombre breve en español. `apps/web/index.html` define el título inicial y carga `apps/web/public/favicon.svg`, basado en el símbolo de la marca. La ruta desconocida y los errores de carga también reciben un título propio.
 
 ## Autenticación
