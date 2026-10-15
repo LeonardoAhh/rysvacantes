@@ -15,7 +15,7 @@ export const vacancyFormSteps = [
   },
   {
     title: "Sueldo y prestaciones",
-    fields: ["salary", "benefits"],
+    fields: ["salary", "salaryPeriod", "benefits"],
   },
 ] as const satisfies readonly {
   title: string

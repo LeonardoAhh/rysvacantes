@@ -1,5 +1,6 @@
 import {
   isMeaningfulVacancyDetail,
+  isVacancySalaryPeriod,
   isVacancyStatus,
   type VacancyFormValues,
 } from "./vacancy-types"
@@ -20,7 +21,7 @@ export const vacancyTextFields = {
   workSchedule: { label: "Horario laboral", maxLength: 120, capitalize: false },
   workDays: { label: "Días de trabajo", maxLength: 120, capitalize: true },
   restDays: { label: "Días de descanso", maxLength: 120, capitalize: true },
-  salary: { label: "Sueldo", maxLength: 120, capitalize: false },
+  salary: { label: "Sueldo bruto", maxLength: 120, capitalize: false },
   benefits: { label: "Prestaciones", maxLength: 1200, capitalize: true },
 } as const
 
@@ -40,6 +41,7 @@ export const vacancyFieldOrder: (keyof VacancyFormValues)[] = [
   "workDays",
   "restDays",
   "salary",
+  "salaryPeriod",
   "benefits",
 ]
 
@@ -142,6 +144,10 @@ export function validateVacancyForm(
   ) {
     errors.benefits =
       "El porcentaje del fondo de ahorro debe ser mayor que 0 y máximo 100."
+  }
+
+  if (!isVacancySalaryPeriod(values.salaryPeriod)) {
+    errors.salaryPeriod = "Selecciona si el sueldo bruto es semanal o mensual."
   }
 
   if (!isVacancyStatus(values.status)) {

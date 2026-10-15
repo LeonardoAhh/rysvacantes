@@ -1,4 +1,9 @@
-import { isVacancyStatus, type Vacancy } from "./vacancy-types"
+import {
+  isVacancySalaryPeriod,
+  isVacancyStatus,
+  type Vacancy,
+  type VacancySalaryPeriod,
+} from "./vacancy-types"
 
 type VacancyDetails = Pick<
   Vacancy,
@@ -10,8 +15,8 @@ type VacancyDetails = Pick<
   | "benefits"
 >
 
-type StoredVacancy = Omit<Vacancy, keyof VacancyDetails> &
-  Partial<VacancyDetails>
+type StoredVacancy = Omit<Vacancy, keyof VacancyDetails | "salaryPeriod"> &
+  Partial<VacancyDetails> & { salaryPeriod?: VacancySalaryPeriod | null }
 
 const storageKey = "vinoplastic.vacancies.v1"
 const importedKey = "vinoplastic.vacancies.imported.v1"
@@ -40,6 +45,9 @@ function isStoredVacancy(value: unknown): value is StoredVacancy {
       (field) =>
         vacancy[field] === undefined || typeof vacancy[field] === "string"
     ) &&
+    (vacancy.salaryPeriod === undefined ||
+      vacancy.salaryPeriod === null ||
+      isVacancySalaryPeriod(vacancy.salaryPeriod)) &&
     typeof vacancy.status === "string" &&
     isVacancyStatus(vacancy.status) &&
     typeof vacancy.deadline === "string" &&
@@ -78,6 +86,7 @@ export function readLegacyVacancies(): {
           workDays: vacancy.workDays ?? "",
           restDays: vacancy.restDays ?? "",
           salary: vacancy.salary ?? "",
+          salaryPeriod: vacancy.salaryPeriod ?? null,
           benefits: vacancy.benefits ?? "",
         })),
       error: null,

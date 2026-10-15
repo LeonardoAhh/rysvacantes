@@ -7,6 +7,18 @@ export const vacancyStatuses = [
 
 export type VacancyStatus = (typeof vacancyStatuses)[number]
 
+export const vacancySalaryPeriods = ["weekly", "monthly"] as const
+export type VacancySalaryPeriod = (typeof vacancySalaryPeriods)[number]
+
+export const vacancySalaryPeriodLabels: Record<VacancySalaryPeriod, string> = {
+  weekly: "Semanal",
+  monthly: "Mensual",
+}
+
+export function isVacancySalaryPeriod(value: unknown): value is VacancySalaryPeriod {
+  return value === "weekly" || value === "monthly"
+}
+
 export type Vacancy = Readonly<{
   id: string
   title: string
@@ -19,6 +31,7 @@ export type Vacancy = Readonly<{
   workDays: string
   restDays: string
   salary: string
+  salaryPeriod: VacancySalaryPeriod | null
   benefits: string
   status: VacancyStatus
   deadline: string

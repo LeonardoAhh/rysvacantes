@@ -18,7 +18,11 @@ import {
 } from "@workspace/ui/components/card"
 import { routes } from "@/lib/routes"
 import { getPublicBenefits } from "./vacancy-benefits"
-import { hasCompleteVacancyDetails, type Vacancy } from "./vacancy-types"
+import {
+  hasCompleteVacancyDetails,
+  vacancySalaryPeriodLabels,
+  type Vacancy,
+} from "./vacancy-types"
 
 type PublicVacancyCardProps = {
   vacancy: Vacancy
@@ -104,8 +108,12 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
                 <dd>{vacancy.modality}</dd>
               </div>
               <div className="public-vacancy-salary">
-                <dt>Sueldo</dt>
-                <dd>{vacancy.salary.trim() || "Por definir"}</dd>
+                <dt>Sueldo bruto</dt>
+                <dd>
+                  {vacancy.salary.trim() || "Por definir"} · {vacancy.salaryPeriod
+                    ? vacancySalaryPeriodLabels[vacancy.salaryPeriod]
+                    : "Período por definir"}
+                </dd>
               </div>
               <div>
                 <dt>

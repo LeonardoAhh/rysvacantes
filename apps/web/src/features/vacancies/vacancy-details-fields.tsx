@@ -1,7 +1,21 @@
 import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select"
 import { Textarea } from "@workspace/ui/components/textarea"
-import type { VacancyFormValues } from "./vacancy-types"
+import {
+  isVacancySalaryPeriod,
+  vacancySalaryPeriodLabels,
+  vacancySalaryPeriods,
+  type VacancyFormValues,
+} from "./vacancy-types"
 import { VacancyBenefitsField } from "./vacancy-benefits-field"
 import { VacancyFieldError } from "./vacancy-field-error"
 import {
@@ -15,13 +29,14 @@ type DetailField =
   | "workDays"
   | "restDays"
   | "salary"
+  | "salaryPeriod"
   | "benefits"
 
 type VacancyDetailsFieldsProps = {
   section: "work" | "compensation"
   values: VacancyFormValues
-  onChange: (field: DetailField, value: string) => void
-  onBlur: (field: DetailField) => void
+  onChange: <Key extends DetailField>(field: Key, value: VacancyFormValues[Key]) => void
+  onBlur: (field: Exclude<DetailField, "salaryPeriod">) => void
   errors: VacancyFormErrors
 }
 
@@ -118,7 +133,7 @@ export function VacancyDetailsFields({
       {section === "compensation" && (
         <>
           <div className="vacancy-form-field">
-            <Label htmlFor="vacancy-salary">Sueldo</Label>
+            <Label htmlFor="vacancy-salary">Sueldo bruto</Label>
             <Input
               aria-describedby={
                 errors.salary ? "vacancy-salary-error" : undefined
@@ -132,6 +147,46 @@ export function VacancyDetailsFields({
               value={values.salary}
             />
             <VacancyFieldError field="vacancy-salary" message={errors.salary} />
+          </div>
+          <div className="vacancy-form-field">
+            <Label htmlFor="vacancy-salary-period">Período del sueldo</Label>
+            <Select
+              onValueChange={(value) => {
+                if (isVacancySalaryPeriod(value)) {
+                  onChange("salaryPeriod", value)
+                }
+              }}
+              value={values.salaryPeriod}
+            >
+              <SelectTrigger
+                aria-describedby={
+                  errors.salaryPeriod ? "vacancy-salary-period-error" : undefined
+                }
+                aria-invalid={Boolean(errors.salaryPeriod)}
+                className="vacancy-select-trigger"
+                id="vacancy-salary-period"
+              >
+                <SelectValue>
+                  {values.salaryPeriod
+                    ? vacancySalaryPeriodLabels[values.salaryPeriod]
+                    : "Selecciona un período"}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Período del sueldo bruto</SelectLabel>
+                  {vacancySalaryPeriods.map((period) => (
+                    <SelectItem key={period} value={period}>
+                      {vacancySalaryPeriodLabels[period]}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <VacancyFieldError
+              field="vacancy-salary-period"
+              message={errors.salaryPeriod}
+            />
           </div>
           <VacancyBenefitsField
             error={errors.benefits}

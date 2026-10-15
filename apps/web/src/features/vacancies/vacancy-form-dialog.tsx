@@ -51,6 +51,7 @@ const emptyForm: VacancyFormValues = {
   workDays: "",
   restDays: "",
   salary: "",
+  salaryPeriod: null,
   benefits: legalBenefitsLabel,
   status: "draft",
   deadline: "",
@@ -75,6 +76,7 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
     workDays: editableDetail(vacancy.workDays),
     restDays: editableDetail(vacancy.restDays),
     salary: editableDetail(vacancy.salary),
+    salaryPeriod: vacancy.salaryPeriod,
     benefits: serializeBenefitSelection(
       parseBenefitSelection(editableDetail(vacancy.benefits))
     ),

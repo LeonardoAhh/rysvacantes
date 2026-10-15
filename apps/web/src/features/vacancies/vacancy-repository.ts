@@ -4,13 +4,14 @@ import {
   type Vacancy,
   type VacancyFormValues,
   type VacancyStatus,
+  type VacancySalaryPeriod,
 } from "./vacancy-types"
 
 export const vacancyPageSize = 12
 let publicAreasCache: Promise<string[]> | null = null
 
 const columns =
-  "id,title,area,location,modality,employment_type,description,work_schedule,work_days,rest_days,salary,benefits,status,deadline,created_at"
+  "id,title,area,location,modality,employment_type,description,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
 
 type VacancyRow = {
   id: string
@@ -24,6 +25,7 @@ type VacancyRow = {
   work_days: string
   rest_days: string
   salary: string
+  salary_period: VacancySalaryPeriod | null
   benefits: string
   status: VacancyStatus
   deadline: string
@@ -68,6 +70,7 @@ function fromRow(row: VacancyRow): Vacancy {
     workDays: row.work_days,
     restDays: row.rest_days,
     salary: row.salary,
+    salaryPeriod: row.salary_period,
     benefits: row.benefits,
     status: row.status,
     deadline: row.deadline,
@@ -87,6 +90,7 @@ function toRow(values: VacancyFormValues) {
     work_days: values.workDays,
     rest_days: values.restDays,
     salary: values.salary,
+    salary_period: values.salaryPeriod,
     benefits: values.benefits,
     status: values.status,
     deadline: values.deadline,
