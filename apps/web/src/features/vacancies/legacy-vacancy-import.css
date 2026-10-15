@@ -1,0 +1,23 @@
+.legacy-import {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg-token);
+  background: var(--surface-default);
+  padding: var(--space-4) var(--space-5);
+}
+
+.legacy-import p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.legacy-import .legacy-import-error {
+  width: 100%;
+  color: var(--status-error);
+}

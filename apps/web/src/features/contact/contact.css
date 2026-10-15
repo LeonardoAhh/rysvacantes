@@ -1,0 +1,94 @@
+.contact-main {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  padding-block: var(--space-8);
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, var(--container-narrow));
+  align-items: center;
+  gap: clamp(var(--space-8), 8vw, var(--space-16));
+  margin-inline: auto;
+}
+
+.contact-intro {
+  max-width: 36rem;
+}
+
+.contact-eyebrow {
+  margin: 0 0 var(--space-4);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.contact-intro h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-display);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-brand);
+  line-height: var(--line-height-tight);
+}
+
+.contact-description {
+  max-width: 30rem;
+  margin: var(--space-5) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+.contact-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-8);
+  color: var(--brand-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  text-underline-offset: var(--space-1);
+}
+
+.contact-back-link:hover {
+  text-decoration: underline;
+}
+
+.contact-back-link svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+@media (width < 48rem) {
+  .contact-main {
+    place-items: start center;
+    padding-block: var(--space-8);
+  }
+
+  .contact-layout {
+    max-width: 34rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+
+  .contact-intro h1 {
+    font-size: var(--font-size-display-mobile);
+  }
+
+  .contact-description {
+    margin-top: var(--space-3);
+    font-size: var(--font-size-base);
+  }
+
+  .contact-back-link {
+    margin-top: var(--space-5);
+  }
+}

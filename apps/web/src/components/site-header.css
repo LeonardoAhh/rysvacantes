@@ -1,0 +1,87 @@
+.site-header {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  border-bottom: var(--border-width) solid var(--border-default);
+  background: var(--surface-default);
+}
+
+.site-header-inner {
+  display: flex;
+  min-height: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.site-header-brand {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--letter-spacing-brand);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header-brand-mark {
+  width: var(--space-8);
+  height: var(--space-8);
+  flex: 0 0 auto;
+  color: var(--brand-primary);
+}
+
+.site-header-action-button {
+  min-height: var(--space-10);
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill-token);
+  background: var(--brand-primary);
+  color: var(--brand-primary-foreground);
+  font-size: var(--font-size-xs);
+  text-decoration: none;
+}
+
+.site-header-action-button:hover {
+  background: color-mix(
+    in srgb,
+    var(--brand-primary) 84%,
+    var(--surface-default)
+  );
+  color: var(--brand-primary-foreground);
+}
+
+.site-header-action-link {
+  flex: 0 0 auto;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+}
+
+.site-header-action-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+  text-underline-offset: var(--space-1);
+}
+
+@media (width < 26.25rem) {
+  .site-header-inner {
+    min-height: var(--space-14);
+  }
+
+  .site-header-brand {
+    font-size: var(--font-size-base);
+  }
+
+  .site-header-brand-mark {
+    width: var(--space-6);
+    height: var(--space-6);
+  }
+
+  .site-header-action-link {
+    font-size: var(--font-size-xs);
+  }
+}

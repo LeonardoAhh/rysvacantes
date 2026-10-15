@@ -1,0 +1,99 @@
+.route-skeleton {
+  position: relative;
+  min-height: 100svh;
+  background: var(--background);
+}
+
+.route-skeleton-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.route-skeleton-brand {
+  width: clamp(7rem, 18vw, 11rem);
+  height: var(--space-6);
+}
+
+.route-skeleton-action {
+  width: var(--space-16);
+  height: var(--space-10);
+  border-radius: var(--radius-pill-token);
+}
+
+.route-skeleton-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+  padding-block: clamp(var(--space-12), 10vh, calc(var(--space-16) * 2));
+}
+
+.route-skeleton-eyebrow {
+  width: min(35vw, 10rem);
+  height: var(--space-4);
+}
+
+.route-skeleton-title {
+  width: min(75vw, 35rem);
+  height: var(--space-16);
+}
+
+.route-skeleton-copy {
+  width: min(65vw, 26rem);
+  height: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-skeleton [data-slot="skeleton"] {
+    animation: none;
+  }
+}
+
+.route-status-page {
+  position: relative;
+  min-height: 100svh;
+  background: var(--background);
+}
+
+.not-found-page {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 100svh;
+  align-content: center;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+.not-found-page h1,
+.not-found-page p {
+  margin: 0;
+}
+
+.not-found-page h1 {
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--weight-semibold);
+}
+
+.not-found-page p {
+  color: var(--text-secondary);
+}
+
+.not-found-page .not-found-code {
+  color: var(--brand-primary);
+  font-weight: var(--weight-bold);
+}
+
+.not-found-page a {
+  color: var(--brand-primary);
+  font-weight: var(--weight-semibold);
+  text-underline-offset: var(--space-1);
+}

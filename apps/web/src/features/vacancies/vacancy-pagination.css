@@ -1,0 +1,10 @@
+.vacancy-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}

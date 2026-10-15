@@ -1,0 +1,528 @@
+.dashboard-page {
+  position: relative;
+  min-height: 100svh;
+  background: var(--neutral-background);
+  color: var(--text-primary);
+}
+
+.dashboard-content {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--space-10) var(--space-16);
+}
+
+.dashboard-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.dashboard-eyebrow {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.dashboard-intro h1 {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+.dashboard-description {
+  margin: var(--space-3) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.dashboard-create-button {
+  min-height: var(--space-12);
+  border-radius: var(--radius-md-token);
+}
+
+.dashboard-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.dashboard-sign-out {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-1);
+}
+
+.dashboard-sign-out [role="alert"] {
+  color: var(--status-error);
+  font-size: var(--font-size-xs);
+}
+
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.dashboard-summary-card {
+  display: flex;
+  min-height: calc(var(--space-10) + var(--space-8));
+  align-items: center;
+  gap: var(--space-4);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg-token);
+  background: var(--surface-default);
+  padding: var(--space-4) var(--space-5);
+}
+
+.dashboard-summary-icon {
+  display: grid;
+  width: var(--space-10);
+  height: var(--space-10);
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: var(--radius-md-token);
+  background: var(--muted);
+  color: var(--text-secondary);
+}
+
+.dashboard-summary-icon svg {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.dashboard-summary-icon-active {
+  background: var(--surface-success-subtle);
+  color: var(--status-success);
+}
+
+.dashboard-summary-icon-draft {
+  background: var(--surface-warning-subtle);
+  color: var(--status-warning);
+}
+
+.dashboard-summary-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.dashboard-summary-card strong {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--text-primary);
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--weight-semibold);
+}
+
+.dashboard-summary-skeleton {
+  width: var(--space-10);
+  height: var(--space-6);
+  margin-top: var(--space-1);
+}
+
+.dashboard-count-skeleton {
+  width: var(--space-16);
+  height: var(--space-4);
+}
+
+.dashboard-listing {
+  margin-top: var(--space-10);
+}
+
+.dashboard-listing-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.dashboard-listing-heading h2 {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--weight-semibold);
+}
+
+.dashboard-listing-heading p {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.dashboard-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dashboard-search {
+  position: relative;
+  display: flex;
+  width: min(var(--container-search), 100%);
+  align-items: center;
+}
+
+.dashboard-search > svg {
+  position: absolute;
+  left: var(--space-3);
+  width: var(--space-4);
+  height: var(--space-4);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.dashboard-search input,
+.dashboard-status-filter [data-slot="select-trigger"] {
+  min-height: var(--space-10);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md-token);
+  background: var(--surface-default);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--font-size-sm);
+}
+
+.dashboard-search input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-9);
+}
+
+.dashboard-status-filter {
+  width: min(100%, var(--container-filter));
+}
+
+.dashboard-status-filter [data-slot="select-trigger"] {
+  width: 100%;
+  padding-inline: var(--space-3);
+}
+
+.dashboard-storage-error {
+  margin: 0 0 var(--space-4);
+  border: var(--border-width) solid var(--border-error-subtle);
+  border-radius: var(--radius-md-token);
+  background: var(--surface-error-subtle);
+  color: var(--status-error);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  padding: var(--space-3) var(--space-4);
+}
+
+.vacancy-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vacancy-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-6);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg-token);
+  background: var(--surface-default);
+  padding: var(--space-5);
+}
+
+.vacancy-card-main {
+  min-width: 0;
+}
+
+.vacancy-card-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.vacancy-card-title h3 {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+.vacancy-demo-badge {
+  border-radius: var(--radius-pill-token);
+  background: var(--muted);
+  color: var(--text-secondary);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--weight-semibold);
+  line-height: var(--line-height-normal);
+  padding: var(--space-1) var(--space-2);
+}
+
+.vacancy-incomplete-badge {
+  border-radius: var(--radius-pill-token);
+  background: var(--surface-warning-subtle);
+  color: var(--status-warning);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--weight-semibold);
+  line-height: var(--line-height-normal);
+  padding: var(--space-1) var(--space-2);
+}
+
+.vacancy-area {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.vacancy-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.vacancy-card-meta span,
+.vacancy-deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.vacancy-card-meta svg,
+.vacancy-deadline svg {
+  width: var(--space-3);
+  height: var(--space-3);
+  flex: 0 0 auto;
+}
+
+.vacancy-card-status {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.vacancy-status {
+  border-radius: var(--radius-pill-token);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-medium);
+  padding: var(--space-1) var(--space-3);
+}
+
+.vacancy-status-draft {
+  background: var(--surface-warning-subtle);
+  color: var(--status-warning);
+}
+
+.vacancy-status-published {
+  background: var(--surface-success-subtle);
+  color: var(--status-success);
+}
+
+.vacancy-status-paused {
+  background: var(--muted);
+  color: var(--text-secondary);
+}
+
+.vacancy-status-filled {
+  background: var(--surface-brand-subtle);
+  color: var(--brand-primary);
+}
+
+.vacancy-deadline {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.vacancy-card-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.dashboard-empty-state {
+  display: grid;
+  justify-items: center;
+  border: var(--border-width) dashed var(--border-default);
+  border-radius: var(--radius-lg-token);
+  background: var(--surface-default);
+  padding: var(--space-10) var(--space-4);
+  text-align: center;
+}
+
+.dashboard-empty-state > svg {
+  width: var(--space-8);
+  height: var(--space-8);
+  color: var(--text-secondary);
+}
+
+.dashboard-empty-state h3 {
+  margin: var(--space-4) 0 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-semibold);
+}
+
+.dashboard-empty-state p {
+  max-width: var(--container-empty-copy);
+  margin: var(--space-2) 0 var(--space-5);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+@media (width < 64rem) {
+  .vacancy-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-4);
+  }
+
+  .vacancy-card-status {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .vacancy-card-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+@media (width < 48rem) {
+  .dashboard-search input,
+  .dashboard-status-filter [data-slot="select-trigger"] {
+    font-size: var(--font-size-base);
+  }
+
+  .dashboard-content {
+    padding-block: var(--space-8) var(--space-10);
+  }
+
+  .dashboard-intro {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .dashboard-intro-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dashboard-intro h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .dashboard-create-button {
+    min-height: var(--space-10);
+    padding-inline: var(--space-3);
+  }
+
+  .dashboard-summary {
+    gap: var(--space-2);
+  }
+
+  .dashboard-summary-card {
+    min-height: unset;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .dashboard-summary-icon {
+    width: var(--space-8);
+    height: var(--space-8);
+  }
+
+  .dashboard-summary-card p {
+    font-size: var(--font-size-2xs);
+  }
+
+  .dashboard-listing-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .dashboard-filters {
+    width: 100%;
+  }
+
+  .dashboard-search {
+    width: auto;
+    flex: 1;
+  }
+
+  .dashboard-status-filter {
+    width: min(100%, var(--container-filter-compact));
+  }
+}
+
+@media (width < 26.25rem) {
+  .dashboard-intro {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .dashboard-create-button {
+    width: 100%;
+  }
+
+  .dashboard-summary-card {
+    align-items: start;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .dashboard-summary-card strong {
+    font-size: var(--font-size-xl);
+  }
+
+  .dashboard-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dashboard-search {
+    width: 100%;
+  }
+
+  .dashboard-status-filter {
+    width: 100%;
+  }
+
+  .dashboard-status-filter [data-slot="select-trigger"] {
+    min-height: var(--space-10);
+  }
+
+  .vacancy-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .vacancy-card-status {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .vacancy-card-actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .vacancy-card-meta {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}

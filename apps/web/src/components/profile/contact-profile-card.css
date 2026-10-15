@@ -1,0 +1,115 @@
+.contact-profile-card {
+  width: min(100%, var(--container-narrow));
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg-token);
+  background: var(--surface-default);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-soft);
+}
+
+.contact-profile-reference {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.contact-profile-name {
+  margin: var(--space-4) 0 0;
+  color: var(--text-primary);
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+.contact-profile-title {
+  margin: var(--space-2) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.contact-profile-fields {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-6) 0 0;
+  border-top: 1px solid var(--border-default);
+  padding-top: var(--space-4);
+}
+
+.contact-profile-field {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.55fr) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block: var(--space-1);
+}
+
+.contact-profile-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-medium);
+}
+
+.contact-profile-value {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  text-align: right;
+  white-space: pre-line;
+}
+
+.contact-profile-phone-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  column-gap: var(--space-2);
+}
+
+.contact-profile-phone-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.contact-profile-phone-item:not(:last-child)::after {
+  color: var(--text-secondary);
+  content: "·";
+}
+
+.contact-profile-value a {
+  color: inherit;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--space-1);
+  transition:
+    color var(--duration-fast) var(--easing-standard),
+    text-decoration-color var(--duration-fast) var(--easing-standard);
+}
+
+.contact-profile-value a:hover {
+  color: var(--brand-primary);
+  text-decoration-color: currentColor;
+}
+
+@media (width <= 26.25rem) {
+  .contact-profile-field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+
+  .contact-profile-value {
+    text-align: left;
+  }
+
+  .contact-profile-phone-list {
+    justify-content: flex-start;
+  }
+}

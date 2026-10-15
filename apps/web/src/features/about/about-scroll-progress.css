@@ -1,0 +1,15 @@
+.about-scroll-progress {
+  position: fixed;
+  z-index: 3;
+  inset: 0 0 auto;
+  height: var(--outline-width);
+  transform-origin: left center;
+  background: var(--brand-primary);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-scroll-progress {
+    display: none;
+  }
+}

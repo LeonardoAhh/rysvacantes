@@ -1,0 +1,71 @@
+.dashboard-access-page {
+  position: relative;
+  min-height: 100svh;
+  background: var(--background);
+}
+
+.dashboard-access-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: var(--space-16);
+  align-items: center;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.dashboard-access-brand {
+  width: 10rem;
+  height: var(--space-6);
+}
+
+.dashboard-access-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+  padding-block: var(--space-12);
+}
+
+.dashboard-access-title {
+  width: min(70vw, 24rem);
+  height: var(--space-10);
+}
+
+.dashboard-access-line {
+  width: min(55vw, 18rem);
+  height: var(--space-4);
+}
+
+.dashboard-access-message {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: calc(100svh - var(--space-16));
+  align-content: center;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+.dashboard-access-message h1,
+.dashboard-access-message p {
+  margin: 0;
+}
+
+.dashboard-access-message h1 {
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--weight-semibold);
+}
+
+.dashboard-access-message p {
+  max-width: 34rem;
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-access-page [data-slot="skeleton"] {
+    animation: none;
+  }
+}

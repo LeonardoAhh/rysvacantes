@@ -1,0 +1,222 @@
+.vacancy-dialog-content {
+  width: min(calc(100% - var(--space-8)), var(--container-form));
+  max-width: var(--container-form);
+  max-height: calc(100svh - var(--space-8));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vacancy-form {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.vacancy-step-header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.vacancy-step-count {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.vacancy-step-title {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.vacancy-step-progress {
+  display: flex;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vacancy-step-progress li {
+  height: var(--space-1);
+  flex: 1;
+  border-radius: var(--radius-pill-token);
+  background: var(--border-default);
+}
+
+.vacancy-step-progress .vacancy-step-progress-active {
+  background: var(--brand-primary);
+}
+
+.vacancy-step-fields {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  overflow-y: auto;
+}
+
+.vacancy-form-field {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.vacancy-form-field input,
+.vacancy-form-field textarea,
+.vacancy-select-trigger {
+  width: 100%;
+  min-height: var(--space-10);
+  border-color: var(--border-default);
+  border-radius: var(--radius-md-token);
+  background: var(--surface-default);
+  font-size: var(--font-size-sm);
+}
+
+.vacancy-form-field textarea {
+  min-height: calc(var(--space-10) + var(--space-16));
+  resize: vertical;
+  line-height: var(--line-height-normal);
+}
+
+.vacancy-field-hint {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.vacancy-benefits-field {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.vacancy-benefits-field legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-weight: var(--weight-medium);
+}
+
+.vacancy-benefits-included,
+.vacancy-benefits-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.vacancy-benefits-included {
+  margin: 0;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md-token);
+  background: var(--muted);
+  padding: var(--space-3);
+}
+
+.vacancy-benefits-included svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  color: var(--brand-primary);
+}
+
+.vacancy-benefits-always {
+  margin-inline-start: auto;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.vacancy-benefits-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.vacancy-benefits-option {
+  min-height: var(--space-10);
+}
+
+.vacancy-benefits-option label {
+  cursor: pointer;
+}
+
+.vacancy-benefits-rate,
+.vacancy-benefits-other {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.vacancy-benefits-rate-input {
+  position: relative;
+  width: min(100%, var(--container-filter-compact));
+}
+
+.vacancy-benefits-rate-input input {
+  padding-inline-end: var(--space-8);
+}
+
+.vacancy-benefits-rate-input span {
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.vacancy-form-field [data-slot="input"]:focus-visible {
+  background-color: var(--surface-default);
+}
+
+.vacancy-form-field
+  :is(input, textarea, [data-slot="select-trigger"])[aria-invalid="true"] {
+  box-shadow: none;
+}
+
+.vacancy-step-fields > .vacancy-form-field-wide {
+  grid-column: 1 / -1;
+}
+
+.vacancy-form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.vacancy-form-save-error {
+  margin: 0;
+  color: var(--status-error);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.vacancy-form-footer > :first-child {
+  margin-inline-end: auto;
+}
+
+@media (width < 48rem) {
+  .vacancy-benefits-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vacancy-step-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vacancy-step-fields > .vacancy-form-field-wide {
+    grid-column: auto;
+  }
+
+  .vacancy-form-field input,
+  .vacancy-form-field textarea,
+  .vacancy-select-trigger {
+    font-size: var(--font-size-base);
+  }
+}

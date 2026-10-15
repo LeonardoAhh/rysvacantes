@@ -1,0 +1,29 @@
+.vacancy-loading-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-height: 12rem;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg-token);
+  background: var(--surface-default);
+  padding: var(--space-6);
+}
+
+.vacancy-loading-label {
+  width: 28%;
+  height: var(--space-5);
+}
+
+.vacancy-loading-title {
+  width: 70%;
+  height: var(--space-6);
+}
+
+.vacancy-loading-detail {
+  width: 90%;
+  height: var(--space-4);
+}
+
+.vacancy-loading-detail-short {
+  width: 52%;
+}
