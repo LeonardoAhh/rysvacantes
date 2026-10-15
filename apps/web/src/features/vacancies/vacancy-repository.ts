@@ -143,19 +143,25 @@ export async function listVacancies({
 }
 
 export async function listPublicAreas() {
-  if (!publicAreasCache) {
-    publicAreasCache = client()
+  let request = publicAreasCache
+
+  if (!request) {
+    request = Promise.resolve(
+      client()
       .rpc("public_vacancy_areas")
       .then(({ data, error }) => {
         if (error) throw dataError(error.code, "consultar")
         return ((data ?? []) as { area: string }[]).map((row) => row.area)
       })
+    )
       .catch((error: unknown) => {
-        publicAreasCache = null
+        if (publicAreasCache === request) publicAreasCache = null
         throw error
       })
+    publicAreasCache = request
   }
-  return publicAreasCache
+
+  return request
 }
 
 function invalidatePublicAreas() {

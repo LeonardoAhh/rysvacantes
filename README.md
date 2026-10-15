@@ -119,5 +119,3 @@ Si Vite no puede iniciar su cargador de configuración por restricciones de proc
 ## Límites actuales
 
 La migración SQL y el alta de al menos un editor deben ejecutarse en el proyecto de Supabase antes de que funcionen los listados y el panel. Este repositorio no incluye credenciales administrativas ni despliega cambios de esquema por sí solo. No hay postulaciones en línea ni gestión de candidatos.
-#   r y s v a c a n t e s  
- 
