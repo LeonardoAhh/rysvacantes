@@ -514,6 +514,14 @@
 }
 
 @media (width < 64rem) {
+  .hero-actions {
+    flex-wrap: nowrap;
+  }
+
+  .hero-actions > a {
+    white-space: nowrap;
+  }
+
   .hero-section {
     grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.82fr);
     gap: var(--space-8);
@@ -628,9 +636,12 @@
   }
 
   .hero-actions {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .hero-actions .landing-primary-cta {
+    gap: var(--space-1);
+    padding-inline: var(--space-3);
   }
 }
 
