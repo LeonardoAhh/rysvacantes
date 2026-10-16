@@ -2,8 +2,6 @@
   --landing-ink: var(--text-primary);
   --landing-muted: var(--text-secondary);
   --landing-paper: var(--background);
-  --landing-green: var(--brand-secondary);
-  --landing-forest: var(--brand-primary);
   --landing-line: var(--border-default);
   --landing-hover: color-mix(
     in srgb,
@@ -30,8 +28,6 @@
     var(--brand-secondary) 24%,
     var(--surface-default)
   );
-  --landing-shadow: var(--shadow-soft);
-  --landing-card-shadow: var(--shadow-card);
   --landing-hero-gap: clamp(var(--space-8), 6vw, 6.5rem);
   --landing-hero-padding: clamp(var(--space-8), 7vh, 5.5rem);
   position: relative;
@@ -52,7 +48,7 @@
 .landing-primary-cta {
   min-height: var(--space-12);
   border: 0;
-  background: var(--landing-forest);
+  background: var(--brand-primary);
   color: var(--primary-foreground);
   text-decoration: none;
   transition:
@@ -108,7 +104,6 @@
   font-size: var(--font-size-xs);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
 }
 
 .eyebrow-mark {
@@ -132,9 +127,9 @@
   margin: 0;
   font-family: var(--font-heading-family);
   font-size: var(--font-size-display);
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-semibold);
   letter-spacing: var(--letter-spacing-brand);
-  line-height: var(--line-height-tight);
+  line-height: var(--line-height-display);
 }
 
 .hero-copy h1 span {
@@ -146,7 +141,8 @@
   max-width: 29rem;
   margin: var(--space-6) 0 0;
   color: var(--landing-muted);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-lg);
+  font-weight: var(--weight-light);
   line-height: var(--line-height-relaxed);
 }
 
@@ -297,7 +293,6 @@
   height: 0.45rem;
   border-radius: 50%;
   background: var(--brand-primary);
-  box-shadow: 0 0 0 0.2rem var(--landing-soft);
 }
 
 .connection-card {
@@ -305,10 +300,9 @@
   width: min(70%, 20rem);
   min-width: 16rem;
   overflow: hidden;
-  border: 1px solid var(--border-default);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-xl-token);
   background: var(--surface-default);
-  box-shadow: var(--landing-card-shadow);
   transform: rotate(-3deg);
 }
 
@@ -451,7 +445,6 @@
   border-radius: var(--radius-lg-token);
   background: var(--surface-default);
   padding: var(--space-3);
-  box-shadow: var(--landing-shadow);
 }
 
 .floating-note-top {
@@ -546,10 +539,6 @@
 }
 
 @media (width < 48rem) {
-  .landing-page .page-background-subtle::after {
-    display: none;
-  }
-
   .landing-main {
     align-items: flex-start;
   }
@@ -583,7 +572,7 @@
   .hero-description {
     max-width: 28rem;
     margin-top: var(--space-4);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     line-height: var(--line-height-relaxed);
   }
 
@@ -671,7 +660,7 @@
   }
 
   .landing-primary-cta {
-    min-height: var(--space-10);
+    min-height: var(--space-11);
   }
 
   .hero-note {

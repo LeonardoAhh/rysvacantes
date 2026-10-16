@@ -16,10 +16,13 @@ export function AboutIntroduction() {
     <section
       aria-labelledby="about-title"
       className="about-intro page-container"
+      id="about-intro"
     >
       <AboutReveal className="about-intro-copy">
         <p className="about-eyebrow">Empresa · Desde 1970</p>
-        <h1 id="about-title">Conoce ViñoPlastic</h1>
+        <h1 id="about-title" tabIndex={-1}>
+          Conoce ViñoPlastic
+        </h1>
         <p className="about-lead">
           Transformamos plásticos mediante inyección para atender las
           necesidades de la industria nacional e internacional.
@@ -63,7 +66,9 @@ export function AboutServices() {
       <div className="page-container about-split">
         <AboutReveal className="about-section-copy">
           <p className="about-eyebrow">Lo que hacemos</p>
-          <h2 id="services-title">Capacidad para cada proceso</h2>
+          <h2 id="services-title" tabIndex={-1}>
+            Capacidad para cada proceso
+          </h2>
           <p>
             Nuestro trabajo abarca la inyección de plástico, el decorado, los
             subensambles y el desarrollo de moldes.
@@ -100,11 +105,14 @@ export function AboutPurpose() {
     <section
       aria-labelledby="purpose-title"
       className="about-section about-purpose"
+      id="purpose"
     >
       <div className="page-container">
         <AboutReveal>
           <p className="about-eyebrow">Nuestra dirección</p>
-          <h2 id="purpose-title">Lo que nos guía</h2>
+          <h2 id="purpose-title" tabIndex={-1}>
+            Lo que nos guía
+          </h2>
         </AboutReveal>
         <div className="about-purpose-grid">
           <AboutReveal className="about-purpose-card">
@@ -144,12 +152,18 @@ export function AboutPurpose() {
 
 export function AboutProducts() {
   return (
-    <section aria-labelledby="products-title" className="about-section">
+    <section
+      aria-labelledby="products-title"
+      className="about-section"
+      id="products"
+    >
       <div className="page-container">
         <AboutReveal className="about-section-heading">
           <div>
             <p className="about-eyebrow">Nuestros productos</p>
-            <h2 id="products-title">Piezas para distintas industrias</h2>
+            <h2 id="products-title" tabIndex={-1}>
+              Piezas para distintas industrias
+            </h2>
           </div>
           <p>
             Las piezas de plástico inyectado que producimos se utilizan en
@@ -176,11 +190,14 @@ export function AboutQuality() {
     <section
       aria-labelledby="quality-title"
       className="about-section about-quality"
+      id="quality"
     >
       <div className="page-container about-quality-grid">
         <AboutReveal>
           <p className="about-eyebrow">Calidad</p>
-          <h2 id="quality-title">Procesos orientados a la calidad</h2>
+          <h2 id="quality-title" tabIndex={-1}>
+            Procesos orientados a la calidad
+          </h2>
           <p>
             Buscamos mejorar nuestros productos y procesos para responder a las
             necesidades de cada proyecto con calidad y eficiencia.

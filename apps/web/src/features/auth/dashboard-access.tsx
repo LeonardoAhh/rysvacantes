@@ -61,7 +61,7 @@ export function DashboardAccess({ children }: { children: ReactNode }) {
       auth.status === "authenticated" && editor?.status === "denied"
     return (
       <div className="dashboard-access-page">
-        <PageBackground variant="quiet" />
+        <PageBackground />
         <SiteHeader />
         <main className="dashboard-access-message page-container">
           <h1>
@@ -92,7 +92,7 @@ export function DashboardAccess({ children }: { children: ReactNode }) {
       className="dashboard-access-page"
       role="status"
     >
-      <PageBackground variant="quiet" />
+      <PageBackground />
       <div className="dashboard-access-header page-container">
         <Skeleton className="dashboard-access-brand" />
       </div>

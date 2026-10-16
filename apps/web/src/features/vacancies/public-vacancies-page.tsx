@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { BriefcaseBusiness, Search } from "lucide-react"
+import { ArrowUpRight, BriefcaseBusiness, Search } from "lucide-react"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+import { Button, buttonVariants } from "@workspace/ui/components/button"
 import {
   Empty,
   EmptyDescription,
@@ -22,10 +22,14 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select"
 import { LandingHeader } from "@/features/landing/landing-header"
+import { routes } from "@/lib/routes"
+import { cn } from "@/lib/utils"
 import { listPublicAreas } from "./vacancy-repository"
 import { useDebouncedValue, useVacancyPage } from "./use-vacancy-page"
+import { useVacancyMasonry } from "./use-vacancy-masonry"
 import { VacancyListSkeleton } from "./vacancy-list-skeleton"
 import { VacancyPagination } from "./vacancy-pagination"
+import { VacancyHiringPopover } from "./vacancy-hiring-popover"
 import { PublicVacancyCard } from "./public-vacancy-card"
 import "./public-vacancies.css"
 
@@ -44,6 +48,10 @@ export function PublicVacanciesPage() {
     enabled: search === debouncedSearch,
   })
   const loading = listing.loading || search !== debouncedSearch
+  const masonryRef = useVacancyMasonry(
+    listing.vacancies,
+    !loading && !listing.error && listing.vacancies.length > 2
+  )
 
   useEffect(() => {
     let active = true
@@ -59,7 +67,7 @@ export function PublicVacanciesPage() {
 
   return (
     <div className="public-vacancies-page">
-      <PageBackground variant="quiet" />
+      <PageBackground />
       <a className="skip-link" href="#vacancies-content">
         Saltar al contenido
       </a>
@@ -71,13 +79,10 @@ export function PublicVacanciesPage() {
         tabIndex={-1}
       >
         <header className="public-vacancies-intro">
-          <p className="public-vacancies-eyebrow">
-            Oportunidades en ViñoPlastic
-          </p>
+          <p className="public-vacancies-eyebrow">Trabaja en ViñoPlastic</p>
           <h1>Vacantes disponibles</h1>
           <p className="public-vacancies-description">
-            Explora las oportunidades publicadas y encuentra una que vaya
-            contigo.
+            Revisa cada puesto y encuentra el que vaya contigo.
           </p>
         </header>
 
@@ -87,7 +92,7 @@ export function PublicVacanciesPage() {
         >
           <div className="public-vacancies-toolbar">
             <div>
-              <h2 id="vacancies-list-title">Oportunidades</h2>
+              <h2 id="vacancies-list-title">Resultados</h2>
               <div aria-live="polite" className="public-vacancies-count">
                 {loading ? (
                   <Skeleton className="public-vacancies-count-skeleton" />
@@ -99,52 +104,67 @@ export function PublicVacanciesPage() {
                 )}
               </div>
             </div>
-            <div className="public-vacancies-filters">
-              <label
-                className="public-vacancies-search"
-                htmlFor="public-vacancies-search"
-              >
-                <span className="sr-only">Buscar vacantes</span>
-                <Search aria-hidden="true" />
-                <Input
-                  id="public-vacancies-search"
-                  onChange={(event) => {
-                    setSearch(event.target.value)
-                    setPage(0)
-                  }}
-                  placeholder="Buscar vacantes"
-                  type="search"
-                  value={search}
-                />
-              </label>
-              <div className="public-vacancies-area-filter">
-                <Select
-                  modal={false}
-                  onValueChange={(value) => {
-                    if (typeof value === "string") {
-                      setArea(value)
-                      setPage(0)
-                    }
-                  }}
-                  value={area}
+            <div className="public-vacancies-controls">
+              <div className="public-vacancies-filters">
+                <label
+                  className="public-vacancies-search"
+                  htmlFor="public-vacancies-search"
                 >
-                  <SelectTrigger aria-label="Filtrar por área">
-                    <SelectValue>
-                      {area === "all" ? "Todas las áreas" : area}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Áreas</SelectLabel>
-                      <SelectItem value="all">Todas las áreas</SelectItem>
-                      {areas.map((option) => (
-                        <SelectItem key={option} value={option}>
-                          {option}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                  <span className="sr-only">Buscar vacantes</span>
+                  <Search aria-hidden="true" />
+                  <Input
+                    id="public-vacancies-search"
+                    onChange={(event) => {
+                      setSearch(event.target.value)
+                      setPage(0)
+                    }}
+                    placeholder="Buscar vacantes"
+                    type="search"
+                    value={search}
+                  />
+                </label>
+                <div className="public-vacancies-area-filter">
+                  <Select
+                    modal={false}
+                    onValueChange={(value) => {
+                      if (typeof value === "string") {
+                        setArea(value)
+                        setPage(0)
+                      }
+                    }}
+                    value={area}
+                  >
+                    <SelectTrigger aria-label="Filtrar por área">
+                      <SelectValue>
+                        {area === "all" ? "Todas las áreas" : area}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent align="start" alignItemWithTrigger={false}>
+                      <SelectGroup>
+                        <SelectLabel>Áreas</SelectLabel>
+                        <SelectItem value="all">Todas las áreas</SelectItem>
+                        {areas.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="public-vacancies-actions">
+                <a
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "public-vacancies-action"
+                  )}
+                  href={routes.contact}
+                >
+                  Pedir información
+                  <ArrowUpRight aria-hidden="true" />
+                </a>
+                <VacancyHiringPopover />
               </div>
             </div>
           </div>
@@ -170,7 +190,7 @@ export function PublicVacanciesPage() {
           {loading ? (
             <VacancyListSkeleton className="public-vacancies-grid" />
           ) : listing.error ? null : listing.vacancies.length > 0 ? (
-            <ul className="public-vacancies-grid">
+            <ul className="public-vacancies-grid" ref={masonryRef}>
               {listing.vacancies.map((vacancy) => (
                 <PublicVacancyCard key={vacancy.id} vacancy={vacancy} />
               ))}

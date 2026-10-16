@@ -10,9 +10,11 @@ import {
   parseBenefitSelection,
   serializeBenefitSelection,
 } from "./vacancy-benefits"
+import { splitVacancyShiftFromTitle } from "./vacancy-shift"
 
 export const vacancyTextFields = {
   title: { label: "Puesto", maxLength: 100, capitalize: true },
+  shift: { label: "Turno", maxLength: 40, capitalize: true },
   area: { label: "Área", maxLength: 80, capitalize: true },
   location: { label: "Ubicación", maxLength: 100, capitalize: true },
   modality: { label: "Modalidad", maxLength: 60, capitalize: true },
@@ -30,6 +32,7 @@ export type VacancyFormErrors = Partial<Record<keyof VacancyFormValues, string>>
 
 export const vacancyFieldOrder: (keyof VacancyFormValues)[] = [
   "title",
+  "shift",
   "area",
   "location",
   "modality",
@@ -100,6 +103,13 @@ export function normalizeVacancyForm(
     normalized[field] = normalizeVacancyField(field, values[field])
   }
 
+  const position = splitVacancyShiftFromTitle(
+    normalized.title,
+    normalized.shift
+  )
+  normalized.title = position.title
+  normalized.shift = position.shift
+
   return normalized
 }
 
@@ -112,6 +122,7 @@ export function validateVacancyForm(
   for (const field of Object.keys(vacancyTextFields) as VacancyTextField[]) {
     const value = values[field]
     const { label, maxLength } = vacancyTextFields[field]
+    if (field === "shift" && !value.trim()) continue
     if (
       !value.trim() ||
       (detailFields.has(field) && !isMeaningfulVacancyDetail(value))

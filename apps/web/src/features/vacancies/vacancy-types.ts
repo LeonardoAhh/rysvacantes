@@ -15,13 +15,16 @@ export const vacancySalaryPeriodLabels: Record<VacancySalaryPeriod, string> = {
   monthly: "Mensual",
 }
 
-export function isVacancySalaryPeriod(value: unknown): value is VacancySalaryPeriod {
+export function isVacancySalaryPeriod(
+  value: unknown
+): value is VacancySalaryPeriod {
   return value === "weekly" || value === "monthly"
 }
 
 export type Vacancy = Readonly<{
   id: string
   title: string
+  shift: string
   area: string
   location: string
   modality: string

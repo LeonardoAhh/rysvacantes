@@ -1,0 +1,47 @@
+.about-page-navigation {
+  position: fixed;
+  z-index: 4;
+  right: max(var(--page-gutter), calc((100vw - var(--container-max)) / 2));
+  bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+}
+
+.about-page-navigation-button {
+  min-height: var(--space-11);
+  gap: 0;
+  background: var(--surface-default);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+.about-page-navigation-button svg {
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+
+.about-page-navigation-label {
+  display: inline-block;
+  max-width: 0;
+  margin-inline-start: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-width var(--duration-fast) var(--easing-standard),
+    margin-inline-start var(--duration-fast) var(--easing-standard),
+    opacity var(--duration-fast) var(--easing-standard);
+}
+
+.about-page-navigation-button[data-at-bottom="true"] svg {
+  transform: rotate(180deg);
+}
+
+.about-page-navigation-button[data-at-bottom="true"] .about-page-navigation-label {
+  max-width: var(--space-16);
+  margin-inline-start: var(--space-2);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page-navigation-button svg,
+  .about-page-navigation-label {
+    transition: none;
+  }
+}

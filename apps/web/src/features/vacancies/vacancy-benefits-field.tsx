@@ -1,11 +1,8 @@
-import { useState } from "react"
 import { Check } from "lucide-react"
 import { Checkbox } from "@workspace/ui/components/checkbox"
 import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
-import { Textarea } from "@workspace/ui/components/textarea"
 import {
-  getVacancyBenefits,
   legalBenefitsLabel,
   parseBenefitSelection,
   serializeBenefitSelection,
@@ -27,7 +24,6 @@ export function VacancyBenefitsField({
   onBlur,
 }: VacancyBenefitsFieldProps) {
   const selection = parseBenefitSelection(value)
-  const [otherText, setOtherText] = useState(() => selection.other.join("\n"))
 
   function updateSelection(next: Partial<BenefitSelection>) {
     onChange(serializeBenefitSelection({ ...selection, ...next }))
@@ -106,25 +102,6 @@ export function VacancyBenefitsField({
           </div>
         </div>
       )}
-      <div className="vacancy-benefits-other">
-        <Label htmlFor="vacancy-other-benefits">
-          Otras prestaciones (opcional)
-        </Label>
-        <Textarea
-          id="vacancy-other-benefits"
-          onBlur={onBlur}
-          onChange={(event) => {
-            const nextText = event.target.value
-            setOtherText(nextText)
-            updateSelection({ other: getVacancyBenefits(nextText) })
-          }}
-          rows={2}
-          value={otherText}
-        />
-        <p className="vacancy-field-hint">
-          Escribe una prestación por renglón si aplica.
-        </p>
-      </div>
       <VacancyFieldError field="vacancy-benefits" message={error} />
     </fieldset>
   )

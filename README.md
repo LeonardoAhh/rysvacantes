@@ -24,7 +24,7 @@ El desplazamiento de `/about` conserva el scroll nativo del navegador. Motion an
 
 El cierre de `/about` muestra la ubicación de Querétaro en un mapa de Google dentro de un marco CSS responsive, con la dirección visible y un enlace para abrirla en Google Maps. El mapa se carga de forma diferida y requiere conexión; la dirección y el enlace permanecen disponibles si no carga. `company-location.ts` centraliza esa dirección y las URL del mapa para `/about` y `/contact`.
 
-Cada tarjeta pública presenta tres vistas dentro de la misma tarjeta: resumen (ubicación, modalidad, sueldo y fecha límite), descripción, y jornada y prestaciones (horario, días de trabajo y descanso, y beneficios). Los controles «Detalle», «Siguiente» y «Volver» recorren esas vistas sin cambiar de página; el número de sección se comunica a lectores de pantalla y no ocupa espacio visual. Al final de la tercera vista aparecen «Pedir información» y «Proceso» en la misma fila. Este último abre un popover con los tres pasos de selección; «Avanzar» muestra los documentos para contratación y el aviso sobre pruebas antidopaje. La lista no tiene desplazamiento interno; en pantallas muy bajas puede desplazarse el popover completo para mantener visible todo el contenido.
+Cada tarjeta pública presenta tres vistas dentro de la misma tarjeta: resumen (ubicación, modalidad, sueldo y fecha límite), descripción, y jornada y prestaciones (horario, días de trabajo y descanso, y beneficios). Los controles «Detalle», «Siguiente» y «Volver» recorren esas vistas sin cambiar de página; el número de sección se comunica a lectores de pantalla y no ocupa espacio visual. En escritorio, las dos columnas acomodan cada tarjeta según su propia altura: al cambiar de vista, las siguientes vacantes ocupan el espacio disponible sin estirar las tarjetas vecinas. En móvil se conserva una sola columna. Al final de la tercera vista aparecen «Pedir información» y «Proceso» en la misma fila. Este último abre un popover con los tres pasos de selección; «Avanzar» muestra los documentos para contratación y el aviso sobre pruebas antidopaje. La lista no tiene desplazamiento interno; en pantallas muy bajas puede desplazarse el popover completo para mantener visible todo el contenido.
 
 Las URL y los identificadores internos son en inglés; el contenido visible, las etiquetas accesibles, los valores predeterminados de las primitivas y los mensajes de estado son en español. El calendario compartido usa español por defecto. Las rutas y enlaces internos están centralizados en `apps/web/src/lib/routes.ts`.
 
@@ -45,7 +45,7 @@ El panel espera a que `supabase.auth.getUser()` verifique la sesión y a que la 
 ## Base de datos de vacantes
 
 1. Configura `apps/web/.env.local` según `apps/web/.env.example`, con la URL, la clave publicable de Supabase y el dominio de correo del acceso. No añadas claves secretas ni `service_role` al cliente.
-2. Ejecuta **únicamente** [`supabase/migrations/20261015000000_vacancies.sql`](supabase/migrations/20261015000000_vacancies.sql) en el SQL Editor del proyecto correcto. Esta migración crea las tablas, índices, funciones y políticas RLS; no inserta vacantes de ejemplo ni toca otras tablas del proyecto.
+2. En un proyecto nuevo, ejecuta en orden [`20261015000000_vacancies.sql`](supabase/migrations/20261015000000_vacancies.sql), [`20261015010000_vacancy_salary_period.sql`](supabase/migrations/20261015010000_vacancy_salary_period.sql) y [`20261015020000_vacancy_shift.sql`](supabase/migrations/20261015020000_vacancy_shift.sql). En un proyecto ya configurado, ejecuta solo las migraciones pendientes. La última agrega el turno opcional y separa títulos existentes que terminan en «-Turno X». No ejecutes el esquema completo.
 3. Crea la cuenta de editor en Supabase Auth desde el panel administrativo. Para habilitar a `leonardo@reclutamiento.local`, ejecuta en SQL Editor, después de crear la cuenta:
 
    ```sql
@@ -64,6 +64,8 @@ Si había vacantes reales en el almacenamiento de este navegador, el panel ofrec
 
 ## Validación del formulario de vacantes
 
+El turno se captura por separado del puesto y es opcional. Cuando se especifica, aparece como insignia junto al nombre de la vacante en el listado público y en el panel.
+
 El modal divide la captura en cuatro pasos: puesto y ubicación, condiciones, descripción y jornada, y sueldo y prestaciones. Cada paso valida sus campos antes de avanzar; Anterior conserva los datos y el guardado final vuelve al primer campo inválido si cambió un paso previo. El modal muestra errores junto a cada campo al salir de él o al intentar avanzar. Los campos de texto eliminan espacios sobrantes al salir y al guardar; descripción y prestaciones conservan los saltos de línea. Se capitaliza únicamente la primera letra cuando corresponde, sin cambiar el resto del texto ni los nombres con mayúsculas internas. Horario y sueldo conservan su formato, por ejemplo `8:00 - 18:00` y `20000`.
 
 Prestaciones de ley se incluye siempre. En la captura se pueden activar Fondo de ahorro, Vales de despensa y Transporte de personal solo cuando apliquen. El porcentaje del fondo es opcional y, si se captura, debe ser mayor que 0 y máximo 100. Otras prestaciones se pueden escribir por renglón. Los registros anteriores mantienen su campo de texto: IMSS, INFONAVIT, vacaciones y aguinaldo se agrupan visualmente como «Prestaciones de ley», mientras que las demás prestaciones reconocidas y cualquier texto adicional se conservan. La tarjeta pública muestra una sola entrada para las prestaciones de ley y las opciones aplicables.
@@ -76,11 +78,12 @@ Todos los campos principales son obligatorios; el porcentaje del fondo y las otr
 
 - `apps/web/src/App.tsx`: navegación interna, historial y transición entre páginas.
 - `apps/web/src/lib/route-loader.ts`: carga diferida y caché de módulos de página.
-- `apps/web/src/features/landing/`: hero y estilos del inicio; la portada usa `PageBackground` en su variante sutil y `LandingHeader` selecciona la acción de cada página pública.
+- `apps/web/src/features/landing/`: hero y estilos del inicio; `LandingHeader` selecciona la acción de cada página pública.
 - `apps/web/src/features/about/`: página de Empresa, contenido corporativo, secciones y estilos propios.
 - `apps/web/src/features/contact/`: página y estilos de Contacto.
 - `apps/web/src/features/auth/`: formulario, conversión de usuario, verificación de sesión y protección del panel.
 - `apps/web/src/features/vacancies/`: modelo, repositorio de Supabase, paginación, importación local opcional, listado público, tarjetas, formulario y panel de vacantes.
+- `apps/web/src/features/vacancies/use-vacancy-masonry.ts`: mide la altura real de las tarjetas públicas con `ResizeObserver` y ajusta la cuadrícula de dos columnas cuando cambia una vista o el ancho disponible. Si el navegador no dispone de esa API, se conserva la cuadrícula normal.
 - `supabase/migrations/`: esquema y políticas de acceso de vacantes.
 - `apps/web/src/components/`: componentes propios de la aplicación, como la marca, `SiteHeader` y la tarjeta de contacto; sus CSS viven junto a ellos.
 - `apps/web/src/lib/`: utilidades y constantes de rutas de la aplicación.
@@ -92,11 +95,11 @@ Para crear una página, coloca su TSX y CSS en `apps/web/src/features/<feature>/
 
 ## Diseño y accesibilidad
 
-La apariencia global se define en `packages/ui/src/styles/globals.css`. Usa los tokens semánticos de color, tipografía, pesos, espacio, radios y sombras. Montserrat Variable se usa en títulos e Inter Variable en texto. La escala de espacio parte de `--space-1` (4 px). `--page-gutter` y `--container-max` gobiernan el ancho de todas las páginas; aplica `page-container` al contenido de páginas futuras. La clase `skip-link` compartida ofrece navegación directa al contenido principal.
+La apariencia global sigue `apps/web/design.md` y se define en `packages/ui/src/styles/globals.css`. Usa los tokens semánticos de color, tipografía, pesos, espacio y radios. Inter Variable se usa en todos los textos. La escala de espacio parte de `--space-1` (4 px). `--page-gutter` y `--container-max` gobiernan el ancho de todas las páginas; aplica `page-container` al contenido de páginas futuras. La clase `skip-link` compartida ofrece navegación directa al contenido principal.
 
-`SiteHeader` comparte marca, altura, comportamiento responsive y el mismo `page-container` del contenido. La barra ocupa todo el ancho y el contenedor alinea su contenido con las páginas. Acepta un enlace de acción, un control personalizado o ninguna acción. Inicio, Contacto y Vacantes usan enlaces; Dashboard muestra el botón para cerrar sesión. Los estilos del header están en `apps/web/src/components/site-header.css` y no dependen de variables definidas por una página concreta.
+`SiteHeader` comparte marca, altura y comportamiento responsive. Se desplaza con la página y alinea su contenido con las secciones mediante un único `page-container`. Acepta un enlace de acción, un control personalizado o ninguna acción. Inicio, Contacto y Vacantes usan enlaces; Dashboard muestra el botón para cerrar sesión. Los estilos del header están en `apps/web/src/components/site-header.css` y no dependen de variables definidas por una página concreta.
 
-Todas las páginas existentes usan `PageBackground` detrás del contenido. Inicio y Empresa conservan `subtle`; Contacto usa `technical`; Vacantes, Dashboard, Acceso y las pantallas de estado usan `quiet`, una variante tenue sin anillos ni líneas. También se aplica al esqueleto inicial para evitar un cambio brusco de fondo. La variante `quiet` se limita a la primera altura de pantalla en páginas largas.
+Todas las páginas existentes usan `PageBackground` detrás del contenido. La primitiva comparte el lienzo blanco del tema y añade un degradado neutro y un aro fino en la primera altura de pantalla. También se aplica al esqueleto inicial para evitar un cambio brusco de fondo.
 
 El foco de teclado usa `--outline-width` y `--focus-ring`, derivado del primario. Los campos y selectores muestran un único borde de foco; los demás controles usan un contorno fino. No añadas anillos o contornos de foco en los CSS de cada página. Los campos editables mantienen al menos 16 px en dispositivos táctiles para evitar el zoom automático al enfocarlos, sin restringir el zoom manual. La carga inicial de una ruta muestra un esqueleto de página. Durante la navegación interna se conserva la página anterior hasta que la nueva está lista y Motion anima el cambio respetando el movimiento reducido. Los enlaces conservan su semántica nativa, la apertura en otra pestaña y el historial del navegador. El filtro de estado del panel usa el `Select` compartido de shadcn/ui.
 

@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase"
+import { splitVacancyShiftFromTitle } from "./vacancy-shift"
 import {
   hasCompleteVacancyDetails,
   type Vacancy,
@@ -11,11 +12,12 @@ export const vacancyPageSize = 12
 let publicAreasCache: Promise<string[]> | null = null
 
 const columns =
-  "id,title,area,location,modality,employment_type,description,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
+  "id,title,shift,area,location,modality,employment_type,description,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
 
 type VacancyRow = {
   id: string
   title: string
+  shift: string
   area: string
   location: string
   modality: string
@@ -48,8 +50,13 @@ function client() {
 }
 
 function dataError(code: string | undefined, action: string) {
-  if (code === "PGRST205" || code === "42P01") {
-    return new Error("La base de vacantes aún no está configurada.")
+  if (
+    code === "PGRST205" ||
+    code === "PGRST204" ||
+    code === "42P01" ||
+    code === "42703"
+  ) {
+    return new Error("La base de vacantes necesita las migraciones pendientes.")
   }
   if (code === "42501") {
     return new Error("Tu cuenta no tiene permiso para gestionar vacantes.")
@@ -61,6 +68,7 @@ function fromRow(row: VacancyRow): Vacancy {
   return {
     id: row.id,
     title: row.title,
+    shift: row.shift,
     area: row.area,
     location: row.location,
     modality: row.modality,
@@ -81,6 +89,7 @@ function fromRow(row: VacancyRow): Vacancy {
 function toRow(values: VacancyFormValues) {
   return {
     title: values.title,
+    shift: values.shift,
     area: values.area,
     location: values.location,
     modality: values.modality,
@@ -130,7 +139,7 @@ export async function listVacancies({
   const pattern = searchPattern(search ?? "")
   if (pattern) {
     query = query.or(
-      ["title", "area", "location", "description"]
+      ["title", "shift", "area", "location", "description"]
         .map((field) => `${field}.ilike.${pattern}`)
         .join(",")
     )
@@ -152,16 +161,15 @@ export async function listPublicAreas() {
   if (!request) {
     request = Promise.resolve(
       client()
-      .rpc("public_vacancy_areas")
-      .then(({ data, error }) => {
-        if (error) throw dataError(error.code, "consultar")
-        return ((data ?? []) as { area: string }[]).map((row) => row.area)
-      })
-    )
-      .catch((error: unknown) => {
-        if (publicAreasCache === request) publicAreasCache = null
-        throw error
-      })
+        .rpc("public_vacancy_areas")
+        .then(({ data, error }) => {
+          if (error) throw dataError(error.code, "consultar")
+          return ((data ?? []) as { area: string }[]).map((row) => row.area)
+        })
+    ).catch((error: unknown) => {
+      if (publicAreasCache === request) publicAreasCache = null
+      throw error
+    })
     publicAreasCache = request
   }
 
@@ -226,6 +234,7 @@ export async function importLegacyVacancies(vacancies: readonly Vacancy[]) {
     id: vacancy.id,
     ...toRow({
       ...vacancy,
+      ...splitVacancyShiftFromTitle(vacancy.title, vacancy.shift),
       status:
         vacancy.status === "published" && !hasCompleteVacancyDetails(vacancy)
           ? "draft"

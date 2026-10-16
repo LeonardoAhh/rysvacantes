@@ -15,8 +15,14 @@ type VacancyDetails = Pick<
   | "benefits"
 >
 
-type StoredVacancy = Omit<Vacancy, keyof VacancyDetails | "salaryPeriod"> &
-  Partial<VacancyDetails> & { salaryPeriod?: VacancySalaryPeriod | null }
+type StoredVacancy = Omit<
+  Vacancy,
+  keyof VacancyDetails | "salaryPeriod" | "shift"
+> &
+  Partial<VacancyDetails> & {
+    salaryPeriod?: VacancySalaryPeriod | null
+    shift?: string
+  }
 
 const storageKey = "vinoplastic.vacancies.v1"
 const importedKey = "vinoplastic.vacancies.imported.v1"
@@ -37,6 +43,7 @@ function isStoredVacancy(value: unknown): value is StoredVacancy {
     typeof vacancy.id === "string" &&
     vacancy.id.length > 0 &&
     typeof vacancy.title === "string" &&
+    (vacancy.shift === undefined || typeof vacancy.shift === "string") &&
     typeof vacancy.area === "string" &&
     typeof vacancy.location === "string" &&
     typeof vacancy.modality === "string" &&
@@ -86,6 +93,7 @@ export function readLegacyVacancies(): {
           workDays: vacancy.workDays ?? "",
           restDays: vacancy.restDays ?? "",
           salary: vacancy.salary ?? "",
+          shift: vacancy.shift ?? "",
           salaryPeriod: vacancy.salaryPeriod ?? null,
           benefits: vacancy.benefits ?? "",
         })),

@@ -24,11 +24,12 @@ import {
 } from "./vacancy-types"
 
 type GeneralTextField =
-  "title" | "area" | "location" | "modality" | "employmentType"
+  "title" | "shift" | "area" | "location" | "modality" | "employmentType"
 
-const identityFields = ["title", "area", "location"] as const
+const identityFields = ["title", "shift", "area", "location"] as const
 const conditionFields = ["modality", "employmentType"] as const
 const placeholders: Partial<Record<GeneralTextField, string>> = {
+  shift: "Turno 1, nocturno...",
   modality: "Presencial, híbrida...",
   employmentType: "Tiempo completo...",
 }
@@ -64,13 +65,16 @@ export function VacancyGeneralFields({
         return (
           <div
             className={
-              field === "title"
+              field === "title" || field === "shift"
                 ? "vacancy-form-field vacancy-form-field-wide"
                 : "vacancy-form-field"
             }
             key={field}
           >
-            <Label htmlFor={id}>{vacancyTextFields[field].label}</Label>
+            <Label htmlFor={id}>
+              {vacancyTextFields[field].label}
+              {field === "shift" && " (opcional)"}
+            </Label>
             <Input
               aria-describedby={errors[field] ? `${id}-error` : undefined}
               aria-invalid={Boolean(errors[field])}
@@ -80,7 +84,7 @@ export function VacancyGeneralFields({
               onBlur={() => onBlur(field)}
               onChange={(event) => onChange(field, event.target.value)}
               placeholder={placeholders[field]}
-              required
+              required={field !== "shift"}
               value={values[field]}
             />
             <VacancyFieldError field={id} message={errors[field]} />

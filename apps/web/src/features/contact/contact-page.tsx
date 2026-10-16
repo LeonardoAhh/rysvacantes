@@ -10,7 +10,7 @@ import "./contact.css"
 export function ContactPage() {
   return (
     <div className="site-page contact-page">
-      <PageBackground variant="technical" />
+      <PageBackground />
       <a className="skip-link" href="#contact-content">
         Saltar al contenido
       </a>

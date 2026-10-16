@@ -1,5 +1,6 @@
 import { CalendarDays, MapPin, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
+import { VacancyShiftBadge } from "./vacancy-shift-badge"
 import {
   hasCompleteVacancyDetails,
   vacancyStatusLabels,
@@ -30,6 +31,7 @@ export function VacancyCard({
       <div className="vacancy-card-main">
         <div className="vacancy-card-title">
           <h3>{vacancy.title}</h3>
+          <VacancyShiftBadge shift={vacancy.shift} />
           {vacancy.isDemo && (
             <span className="vacancy-demo-badge">Ejemplo</span>
           )}

@@ -3,7 +3,7 @@
   align-content: start;
   gap: var(--space-4);
   min-height: 12rem;
-  border: var(--border-width) solid var(--border-default);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg-token);
   background: var(--surface-default);
   padding: var(--space-6);

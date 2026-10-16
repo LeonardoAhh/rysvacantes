@@ -4,14 +4,15 @@
   min-height: 100svh;
   place-items: center;
   background: var(--neutral-background);
-  padding: var(--space-6) var(--page-gutter);
+  padding: calc(var(--space-6) + env(safe-area-inset-top)) var(--page-gutter)
+    calc(var(--space-6) + env(safe-area-inset-bottom));
 }
 
 .auth-card {
   position: relative;
   z-index: 1;
   width: min(100%, 26rem);
-  border: var(--border-width) solid var(--border-default);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-xl-token);
   background: var(--surface-default);
   padding: clamp(var(--space-6), 5vw, var(--space-10));
@@ -41,9 +42,9 @@
 
 .auth-field input {
   min-height: var(--space-12);
-  border-color: var(--border-default);
+  border-color: transparent;
   border-radius: var(--radius-md-token);
-  background: var(--surface-default);
+  background: var(--surface-field);
   padding-inline: var(--space-3);
   font-size: var(--font-size-base);
 }
@@ -52,7 +53,7 @@
   width: 100%;
   min-height: var(--space-12);
   margin-top: var(--space-1);
-  border-radius: var(--radius-md-token);
+  border-radius: var(--radius-pill-token);
 }
 
 .auth-notice {

@@ -133,7 +133,7 @@ function DashboardContent() {
 
   return (
     <div className="dashboard-page">
-      <PageBackground variant="quiet" />
+      <PageBackground />
       <a className="skip-link" href="#dashboard-content">
         Saltar al contenido
       </a>
@@ -219,7 +219,7 @@ function DashboardContent() {
             <div className="dashboard-filters">
               <label className="dashboard-search">
                 <Search aria-hidden="true" />
-                <span className="sr-only">Buscar vacantes</span>
+                <span className="sr-only">Buscar vacante</span>
                 <Input
                   onChange={(event) => {
                     setSearch(event.target.value)
@@ -345,7 +345,7 @@ function DashboardContent() {
         }}
         open={vacancyToDelete !== null}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="vacancy-delete-dialog-content">
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar esta vacante?</AlertDialogTitle>
             <AlertDialogDescription>

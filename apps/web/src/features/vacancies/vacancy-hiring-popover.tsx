@@ -31,11 +31,7 @@ const hiringDocuments = [
   "Semanas cotizadas en el IMSS",
 ] as const
 
-export function VacancyHiringPopover({
-  vacancyTitle,
-}: {
-  vacancyTitle: string
-}) {
+export function VacancyHiringPopover() {
   const [open, setOpen] = useState(false)
   const [view, setView] = useState<"process" | "documents">("process")
 
@@ -49,8 +45,8 @@ export function VacancyHiringPopover({
       <PopoverTrigger
         render={
           <Button
-            aria-label={`Ver proceso de selección y documentos para ${vacancyTitle}`}
-            className="public-vacancy-footer-action"
+            aria-label="Ver proceso de selección y documentos para contratación"
+            className="public-vacancies-action"
             size="default"
             type="button"
             variant="outline"
@@ -63,7 +59,7 @@ export function VacancyHiringPopover({
       <PopoverContent
         align="end"
         className="vacancy-hiring-popover"
-        side="top"
+        side="bottom"
         sideOffset={8}
       >
         <PopoverHeader>

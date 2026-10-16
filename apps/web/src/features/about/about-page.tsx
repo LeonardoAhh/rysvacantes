@@ -1,6 +1,7 @@
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { LandingHeader } from "@/features/landing/landing-header"
 import { AboutScrollProgress } from "./about-scroll-progress"
+import { AboutPageNavigation } from "./about-page-navigation"
 import { AboutLocation } from "./about-location"
 import {
   AboutIntroduction,
@@ -15,8 +16,9 @@ import "./about.css"
 export function AboutPage() {
   return (
     <div className="site-page about-page">
-      <PageBackground variant="subtle" />
+      <PageBackground />
       <AboutScrollProgress />
+      <AboutPageNavigation />
       <a className="skip-link" href="#about-content">
         Saltar al contenido
       </a>

@@ -12,11 +12,14 @@ export function AboutLocation() {
     <section
       aria-labelledby="about-location-title"
       className="about-location page-container"
+      id="location"
     >
       <AboutReveal className="about-location-heading">
         <div>
           <p className="about-eyebrow">Nuestra ubicación</p>
-          <h2 id="about-location-title">Encuéntranos en Querétaro</h2>
+          <h2 id="about-location-title" tabIndex={-1}>
+            Encuéntranos en Querétaro
+          </h2>
         </div>
         <p>
           <MapPin aria-hidden="true" />

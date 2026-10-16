@@ -2,11 +2,6 @@
   overflow: clip;
 }
 
-.about-page > .page-background {
-  bottom: auto;
-  height: min(100svh, 52rem);
-}
-
 .about-page main {
   position: relative;
   z-index: 1;
@@ -52,7 +47,6 @@
   font-size: var(--font-size-xs);
   font-weight: var(--weight-bold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
 }
 
 .about-intro {
@@ -70,9 +64,9 @@
 .about-intro h1 {
   max-width: 11ch;
   font-size: var(--font-size-display);
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-semibold);
   letter-spacing: var(--letter-spacing-brand);
-  line-height: var(--line-height-tight);
+  line-height: var(--line-height-display);
 }
 
 .about-lead {
@@ -80,6 +74,7 @@
   margin-top: var(--space-6) !important;
   color: var(--text-primary);
   font-size: var(--font-size-lg);
+  font-weight: var(--weight-light);
   line-height: var(--line-height-normal);
 }
 
@@ -105,7 +100,6 @@
   border: 1px solid var(--border-default);
   border-radius: var(--radius-2xl-token);
   background: var(--surface-default);
-  box-shadow: var(--shadow-card);
 }
 
 .about-hero-image {
@@ -187,11 +181,7 @@
 .about-purpose,
 .about-quality {
   border-block: 1px solid var(--border-default);
-  background: color-mix(
-    in srgb,
-    var(--brand-secondary) 12%,
-    var(--surface-default)
-  );
+  background: var(--surface-soft);
 }
 
 .about-purpose-grid {
@@ -203,7 +193,7 @@
 
 .about-purpose-card,
 .about-quality-card {
-  border: 1px solid var(--border-default);
+  border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-xl-token);
   background: var(--surface-default);
   padding: clamp(var(--space-6), 3vw, var(--space-10));
@@ -214,7 +204,6 @@
   font-size: var(--font-size-xs);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
 }
 
 .about-purpose-card h3 {

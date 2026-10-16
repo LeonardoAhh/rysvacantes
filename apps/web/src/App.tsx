@@ -27,7 +27,7 @@ type ActiveRoute = {
 function RouteStatusPage({ children }: { children: ReactNode }) {
   return (
     <div className="route-status-page">
-      <PageBackground variant="quiet" />
+      <PageBackground />
       <main className="not-found-page page-container">{children}</main>
     </div>
   )
@@ -61,7 +61,7 @@ function InitialRouteSkeleton() {
       className="route-skeleton"
       role="status"
     >
-      <PageBackground variant="quiet" />
+      <PageBackground />
       <div className="route-skeleton-header page-container">
         <Skeleton className="route-skeleton-brand" />
         <Skeleton className="route-skeleton-action" />

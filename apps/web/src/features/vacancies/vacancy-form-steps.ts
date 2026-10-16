@@ -3,7 +3,7 @@ import type { VacancyFormValues } from "./vacancy-types"
 export const vacancyFormSteps = [
   {
     title: "Puesto y ubicación",
-    fields: ["title", "area", "location"],
+    fields: ["title", "shift", "area", "location"],
   },
   {
     title: "Condiciones",

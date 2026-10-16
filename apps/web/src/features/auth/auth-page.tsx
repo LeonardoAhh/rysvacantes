@@ -69,7 +69,7 @@ export function AuthPage() {
 
   return (
     <main className="auth-page">
-      <PageBackground variant="quiet" />
+      <PageBackground />
       <section aria-labelledby="auth-title" className="auth-card">
         <h1 id="auth-title">Inicia sesión</h1>
 

@@ -3,7 +3,6 @@ import { Button } from "@workspace/ui/components/button"
 import { Spinner } from "@workspace/ui/components/spinner"
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -32,6 +31,7 @@ import {
   type VacancyTextField,
 } from "./vacancy-form-validation"
 import type { Vacancy, VacancyFormValues } from "./vacancy-types"
+import { splitVacancyShiftFromTitle } from "./vacancy-shift"
 import "./vacancy-form-dialog.css"
 
 type VacancyFormDialogProps = {
@@ -42,6 +42,7 @@ type VacancyFormDialogProps = {
 
 const emptyForm: VacancyFormValues = {
   title: "",
+  shift: "",
   area: "",
   location: "",
   modality: "",
@@ -64,9 +65,11 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
     vacancy.isDemo && value.trim().toLocaleLowerCase("es-MX") === "por definir"
       ? ""
       : value
+  const position = splitVacancyShiftFromTitle(vacancy.title, vacancy.shift)
 
   return {
-    title: vacancy.title,
+    title: position.title,
+    shift: position.shift,
     area: vacancy.area,
     location: vacancy.location,
     modality: vacancy.modality,
@@ -274,13 +277,6 @@ export function VacancyFormDialog({
             </p>
           )}
           <DialogFooter className="vacancy-form-footer">
-            <DialogClose
-              render={
-                <Button disabled={saving} variant="outline" type="button" />
-              }
-            >
-              Cancelar
-            </DialogClose>
             {step > 0 && (
               <Button
                 disabled={saving}

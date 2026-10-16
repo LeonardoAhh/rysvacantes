@@ -6,7 +6,7 @@ import "./landing.css"
 export function LandingPage() {
   return (
     <div className="site-page landing-page" id="home">
-      <PageBackground variant="subtle" />
+      <PageBackground />
       <a className="skip-link" href="#main-content">
         Saltar al contenido
       </a>

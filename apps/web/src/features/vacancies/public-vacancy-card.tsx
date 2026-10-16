@@ -1,18 +1,15 @@
 import { useState } from "react"
-import { ArrowRight, ArrowUpRight, Check, MapPin } from "lucide-react"
+import { ArrowRight, Check, MapPin } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
-import { Button, buttonVariants } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui/components/button"
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
-import { routes } from "@/lib/routes"
-import { cn } from "@/lib/utils"
 import { getPublicBenefits } from "./vacancy-benefits"
-import { VacancyHiringPopover } from "./vacancy-hiring-popover"
+import { VacancyShiftBadge } from "./vacancy-shift-badge"
 import {
   hasCompleteVacancyDetails,
   vacancySalaryPeriodLabels,
@@ -69,8 +66,9 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
               </Button>
             </div>
           </div>
-          <CardTitle>
+          <CardTitle className="public-vacancy-title">
             <h2>{vacancy.title}</h2>
+            <VacancyShiftBadge shift={vacancy.shift} />
           </CardTitle>
         </CardHeader>
 
@@ -139,22 +137,6 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
             </>
           )}
         </CardContent>
-
-        {sectionIndex === cardSections.length - 1 && (
-          <CardFooter className="public-vacancy-card-footer">
-            <a
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "public-vacancy-footer-action"
-              )}
-              href={routes.contact}
-            >
-              Pedir información
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-            <VacancyHiringPopover vacancyTitle={vacancy.title} />
-          </CardFooter>
-        )}
       </Card>
     </li>
   )

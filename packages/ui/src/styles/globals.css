@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/montserrat";
 @import "@fontsource-variable/inter";
 
 @source "../../../apps/**/*.{ts,tsx}";
@@ -11,14 +10,18 @@
 :root {
   color-scheme: light;
 
-  --brand-primary: #17324d;
+  --brand-primary: #141414;
   --brand-primary-foreground: #ffffff;
-  --brand-secondary: #bfe8d5;
-  --neutral-background: #f5f8fa;
+  --brand-secondary: #f3f3f3;
+  --neutral-background: #ffffff;
   --surface-default: #ffffff;
-  --text-primary: #17232d;
-  --text-secondary: #596a75;
-  --border-default: #d8e2e8;
+  --surface-soft: #f3f3f3;
+  --surface-field: #f0f0f0;
+  --text-primary: #141414;
+  --text-secondary: #707070;
+  --text-faint: #adadad;
+  --border-subtle: #f0f0f0;
+  --border-default: #e0e0e0;
   --status-success: #26734d;
   --status-warning: #a15c00;
   --status-error: #b42318;
@@ -37,11 +40,7 @@
     var(--status-error) 6%,
     var(--surface-default)
   );
-  --surface-brand-subtle: color-mix(
-    in srgb,
-    var(--brand-primary) 10%,
-    var(--surface-default)
-  );
+  --surface-brand-subtle: var(--surface-soft);
   --border-error-subtle: color-mix(
     in srgb,
     var(--status-error) 30%,
@@ -58,29 +57,21 @@
   --primary-foreground: var(--brand-primary-foreground);
   --secondary: var(--brand-secondary);
   --secondary-foreground: var(--brand-primary);
-  --muted: color-mix(
-    in srgb,
-    var(--border-default) 45%,
-    var(--surface-default)
-  );
+  --muted: var(--surface-soft);
   --muted-foreground: var(--text-secondary);
-  --accent: var(--brand-secondary);
+  --accent: var(--surface-soft);
   --accent-foreground: var(--brand-primary);
   --destructive: var(--status-error);
   --border: var(--border-default);
-  --input: var(--border-default);
+  --input: var(--surface-field);
   --ring: var(--brand-primary);
-  --focus-ring: color-mix(
-    in srgb,
-    var(--brand-primary) 55%,
-    var(--surface-default)
-  );
+  --focus-ring: var(--brand-primary);
   --chart-1: var(--brand-primary);
   --chart-2: var(--status-success);
   --chart-3: var(--status-warning);
   --chart-4: var(--text-secondary);
   --chart-5: var(--brand-secondary);
-  --radius: 0.625rem;
+  --radius: 1rem;
   --sidebar: var(--surface-default);
   --sidebar-foreground: var(--text-primary);
   --sidebar-primary: var(--brand-primary);
@@ -90,35 +81,38 @@
   --sidebar-border: var(--border-default);
   --sidebar-ring: var(--brand-primary);
 
-  --font-body-family: "Inter Variable", sans-serif;
-  --font-heading-family: "Montserrat Variable", sans-serif;
+  --font-body-family:
+    "Inter Variable", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-heading-family: var(--font-body-family);
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
+  --font-size-lg: 1.25rem;
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
   --font-size-2xs: 0.625rem;
-  --font-size-display-sm: clamp(2rem, 4vw, 4rem);
+  --font-size-display-sm: clamp(2rem, 4vw, 3.5rem);
   --font-size-display: clamp(2.75rem, 5.5vw, 5rem);
-  --font-size-display-mobile: clamp(2.55rem, 10vw, 4.3rem);
+  --font-size-display-mobile: clamp(2.5rem, 10vw, 4rem);
   --font-size-display-compact: clamp(2rem, 9vw, 2.65rem);
   --font-size-display-short: clamp(2.7rem, 5vw, 4.4rem);
 
-  --weight-regular: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
+  --weight-light: 300;
+  --weight-regular: 450;
+  --weight-medium: 600;
+  --weight-semibold: 650;
   --weight-bold: 700;
 
-  --line-height-tight: 1.05;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.7;
-  --letter-spacing-tight: -0.05em;
-  --letter-spacing-brand: -0.075em;
-  --letter-spacing-label: 0.12em;
+  --line-height-display: 1;
+  --line-height-tight: 1.13;
+  --line-height-normal: 1.38;
+  --line-height-relaxed: 1.43;
+  --letter-spacing-tight: 0;
+  --letter-spacing-brand: 0;
+  --letter-spacing-label: 0;
   --duration-fast: 160ms;
   --easing-standard: ease;
 
@@ -131,6 +125,7 @@
   --space-8: 2rem;
   --space-9: 2.25rem;
   --space-10: 2.5rem;
+  --space-11: 2.75rem;
   --space-12: 3rem;
   --space-14: 3.5rem;
   --space-16: 4rem;
@@ -146,15 +141,15 @@
   --border-width: 1px;
   --outline-width: 1px;
 
-  --radius-sm-token: 0.375rem;
-  --radius-md-token: 0.625rem;
-  --radius-lg-token: 0.875rem;
-  --radius-xl-token: 1.25rem;
+  --radius-sm-token: 1rem;
+  --radius-md-token: 1rem;
+  --radius-lg-token: 1.5rem;
+  --radius-xl-token: 1.5rem;
   --radius-2xl-token: 1.5rem;
   --radius-pill-token: 999px;
-  --shadow-soft: 0 0.9rem 2rem rgb(23 50 77 / 10%);
-  --shadow-card:
-    0 2rem 4.5rem rgb(23 50 77 / 12%), 0 0.25rem 1rem rgb(23 50 77 / 6%);
+  --radius-squircle-token: 30%;
+  --shadow-soft: none;
+  --shadow-card: none;
 }
 
 @theme inline {
@@ -212,6 +207,7 @@
   --text-4xl: var(--font-size-4xl);
   --text-2xs: var(--font-size-2xs);
   --font-weight-normal: var(--weight-regular);
+  --font-weight-light: var(--weight-light);
   --font-weight-medium: var(--weight-medium);
   --font-weight-semibold: var(--weight-semibold);
   --font-weight-bold: var(--weight-bold);
@@ -236,6 +232,19 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body-family);
+    font-weight: var(--weight-regular);
+    line-height: var(--line-height-normal);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading-family);
+    font-weight: var(--weight-semibold);
+    line-height: var(--line-height-tight);
   }
 
   button:not(:disabled),
@@ -245,6 +254,7 @@
 
   html {
     @apply font-sans;
+    background: var(--background);
   }
 }
 
@@ -260,7 +270,7 @@
     top: var(--space-2);
     left: var(--page-gutter);
     transform: translateY(calc(-100% - var(--space-4)));
-    border-radius: var(--radius-md-token);
+    border-radius: var(--radius-pill-token);
     background: var(--brand-primary);
     color: var(--brand-primary-foreground);
     padding: var(--space-3) var(--space-4);
@@ -273,7 +283,7 @@
 
 /* One quiet focus indicator for native controls and shadcn primitives. */
 :focus-visible {
-  outline: var(--outline-width) solid var(--focus-ring);
+  outline: calc(var(--outline-width) * 2) solid var(--focus-ring);
   outline-offset: var(--space-1);
   box-shadow: none;
 }
@@ -286,6 +296,7 @@
 ):focus-visible {
   border-color: var(--focus-ring);
   outline: none;
+  box-shadow: inset 0 0 0 var(--outline-width) var(--focus-ring);
 }
 
 /* Grouped controls expose their boundary as the focus target. */
@@ -324,6 +335,12 @@
 
 @media (pointer: coarse) {
   :root :is(input, textarea, select, [contenteditable="true"]) {
+    font-size: max(var(--font-size-base), 1em);
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  html body :is(input, textarea, select, [contenteditable="true"]) {
     font-size: max(var(--font-size-base), 1em);
   }
 }
