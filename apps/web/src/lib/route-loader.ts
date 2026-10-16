@@ -17,6 +17,10 @@ const loaders: Record<string, RouteLoader> = {
     import("@/features/contact/contact-page").then(
       (module) => module.ContactPage
     ),
+  [routes.transport]: () =>
+    import("@/features/transport/transport-page").then(
+      (module) => module.TransportPage
+    ),
   [routes.vacancies]: () =>
     import("@/features/vacancies/public-vacancies-page").then(
       (module) => module.PublicVacanciesPage

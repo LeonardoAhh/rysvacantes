@@ -16,6 +16,7 @@ const pageLabels: Record<string, string> = {
   [routes.home]: "Inicio",
   [routes.about]: "Empresa",
   [routes.contact]: "Contacto",
+  [routes.transport]: "Transporte",
   [routes.vacancies]: "Vacantes",
 }
 const numberFormat = new Intl.NumberFormat("es-MX")

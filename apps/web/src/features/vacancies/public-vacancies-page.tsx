@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ArrowUpRight, BriefcaseBusiness, Search } from "lucide-react"
+import { ArrowUpRight, BriefcaseBusiness, BusFront, Search } from "lucide-react"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Button, buttonVariants } from "@workspace/ui/components/button"
 import {
@@ -84,6 +84,14 @@ export function PublicVacanciesPage() {
           <p className="public-vacancies-description">
             Revisa cada puesto y encuentra el que vaya contigo.
           </p>
+          <a
+            className="public-vacancies-transport-link"
+            href={routes.transport}
+          >
+            <BusFront aria-hidden="true" />
+            Consultar rutas de transporte
+            <ArrowUpRight aria-hidden="true" />
+          </a>
         </header>
 
         <section
@@ -91,7 +99,7 @@ export function PublicVacanciesPage() {
           className="public-vacancies-listing"
         >
           <div className="public-vacancies-toolbar">
-            <div>
+            <div className="public-vacancies-results-heading">
               <h2 id="vacancies-list-title">Resultados</h2>
               <div aria-live="polite" className="public-vacancies-count">
                 {loading ? (

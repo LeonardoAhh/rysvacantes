@@ -43,6 +43,10 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
           <div className="public-vacancy-topline">
             <div className="public-vacancy-tags">
               <Badge variant="secondary">{vacancy.area}</Badge>
+              <VacancyShiftBadge
+                className="public-vacancy-shift"
+                shift={vacancy.shift}
+              />
               {vacancy.isDemo && <Badge variant="outline">Ejemplo</Badge>}
               {!hasCompleteVacancyDetails(vacancy) && (
                 <Badge variant="outline">Información pendiente</Badge>
@@ -68,7 +72,6 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
           </div>
           <CardTitle className="public-vacancy-title">
             <h2>{vacancy.title}</h2>
-            <VacancyShiftBadge shift={vacancy.shift} />
           </CardTitle>
         </CardHeader>
 

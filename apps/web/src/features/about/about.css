@@ -130,6 +130,10 @@
   padding-block: clamp(var(--space-12), 7vw, calc(var(--space-16) * 2));
 }
 
+.about-products {
+  background: var(--surface-default);
+}
+
 .about-section-copy > p:not(.about-eyebrow),
 .about-quality-grid > div > p:not(.about-eyebrow),
 .about-section-heading > p {

@@ -58,7 +58,6 @@
   width: 100%;
   max-height: var(--space-12);
   object-fit: contain;
-  mix-blend-mode: multiply;
 }
 
 @keyframes about-logo-scroll {

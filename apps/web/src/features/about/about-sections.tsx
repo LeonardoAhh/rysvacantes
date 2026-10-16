@@ -1,6 +1,5 @@
 import { ArrowRight, Check } from "lucide-react"
 import { buttonVariants } from "@workspace/ui/components/button"
-import { routes } from "@/lib/routes"
 import {
   aboutImages,
   qualityBenefits,
@@ -34,11 +33,8 @@ export function AboutIntroduction() {
         <div className="about-actions">
           <a
             className={`${buttonVariants({ size: "lg" })} landing-primary-cta`}
-            href={routes.vacancies}
+            href="#services"
           >
-            Ver vacantes <ArrowRight aria-hidden="true" />
-          </a>
-          <a className="text-link" href="#services">
             Explorar la empresa <ArrowRight aria-hidden="true" />
           </a>
         </div>
@@ -154,7 +150,7 @@ export function AboutProducts() {
   return (
     <section
       aria-labelledby="products-title"
-      className="about-section"
+      className="about-section about-products"
       id="products"
     >
       <div className="page-container">
