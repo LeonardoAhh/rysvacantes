@@ -1,22 +1,18 @@
 import { useState } from "react"
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Check,
-  MapPin,
-} from "lucide-react"
+import { ArrowRight, ArrowUpRight, Check, MapPin } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button, buttonVariants } from "@workspace/ui/components/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
 import { routes } from "@/lib/routes"
+import { cn } from "@/lib/utils"
 import { getPublicBenefits } from "./vacancy-benefits"
+import { VacancyHiringPopover } from "./vacancy-hiring-popover"
 import {
   hasCompleteVacancyDetails,
   vacancySalaryPeriodLabels,
@@ -38,7 +34,7 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
   const benefits = getPublicBenefits(vacancy.benefits)
   const nextLabel =
     sectionIndex === 0
-      ? "Ver más"
+      ? "Detalle"
       : sectionIndex === cardSections.length - 1
         ? "Volver"
         : "Siguiente"
@@ -56,15 +52,8 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
               )}
             </div>
             <div className="public-vacancy-navigation">
-              <span
-                aria-label={`Sección ${sectionIndex + 1} de ${cardSections.length}: ${cardSections[sectionIndex]}`}
-                aria-live="polite"
-                className="public-vacancy-section-count"
-              >
-                {sectionIndex + 1} de {cardSections.length}
-              </span>
               <Button
-                aria-label={`${sectionIndex === cardSections.length - 1 ? "Volver al resumen" : nextLabel} de ${vacancy.title}. Vista ${sectionIndex + 1} de ${cardSections.length}`}
+                aria-label={`${sectionIndex === cardSections.length - 1 ? "Volver al resumen" : nextLabel} de ${vacancy.title}. Sección ${sectionIndex + 1} de ${cardSections.length}: ${cardSections[sectionIndex]}`}
                 className="public-vacancy-switch"
                 onClick={() =>
                   setSectionIndex(
@@ -83,7 +72,6 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
           <CardTitle>
             <h2>{vacancy.title}</h2>
           </CardTitle>
-          <CardDescription>{vacancy.employmentType}</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -103,7 +91,8 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
               <div className="public-vacancy-salary">
                 <dt>Sueldo bruto</dt>
                 <dd>
-                  {vacancy.salary.trim() || "Por definir"} · {vacancy.salaryPeriod
+                  {vacancy.salary.trim() || "Por definir"} ·{" "}
+                  {vacancy.salaryPeriod
                     ? vacancySalaryPeriodLabels[vacancy.salaryPeriod]
                     : "Período por definir"}
                 </dd>
@@ -154,12 +143,16 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
         {sectionIndex === cardSections.length - 1 && (
           <CardFooter className="public-vacancy-card-footer">
             <a
-              className={`${buttonVariants({ variant: "outline" })} public-vacancy-action`}
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "public-vacancy-footer-action"
+              )}
               href={routes.contact}
             >
               Pedir información
               <ArrowUpRight aria-hidden="true" />
             </a>
+            <VacancyHiringPopover vacancyTitle={vacancy.title} />
           </CardFooter>
         )}
       </Card>

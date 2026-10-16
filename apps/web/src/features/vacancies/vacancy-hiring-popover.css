@@ -1,0 +1,81 @@
+.vacancy-hiring-popover {
+  width: min(calc(100vw - 2 * var(--page-gutter)), var(--container-narrow));
+  max-height: calc(100dvh - 2 * var(--page-gutter));
+  gap: var(--space-3);
+  overflow-y: auto;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg-token);
+  padding: var(--space-4);
+}
+
+.vacancy-hiring-body {
+  min-width: 0;
+}
+
+.vacancy-hiring-steps,
+.vacancy-hiring-documents {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vacancy-hiring-steps {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.vacancy-hiring-steps li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.vacancy-hiring-step-icon {
+  display: grid;
+  width: var(--space-10);
+  height: var(--space-10);
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: var(--radius-md-token);
+  background: var(--surface-brand-subtle);
+  color: var(--brand-primary);
+}
+
+.vacancy-hiring-step-icon svg {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.vacancy-hiring-documents {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.vacancy-hiring-documents li {
+  padding-left: var(--space-4);
+  position: relative;
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
+}
+
+.vacancy-hiring-documents li::before {
+  position: absolute;
+  left: 0;
+  color: var(--brand-primary);
+  content: "•";
+}
+
+.vacancy-hiring-note {
+  margin: var(--space-3) 0 0;
+  border-top: var(--border-width) solid var(--border-default);
+  padding-top: var(--space-2);
+  line-height: var(--line-height-normal);
+}
+
+.vacancy-hiring-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  border-top: var(--border-width) solid var(--border-default);
+  padding-top: var(--space-2);
+}
