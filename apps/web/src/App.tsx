@@ -15,7 +15,8 @@ import {
 } from "@/lib/navigation-context"
 import { loadRoute, normalizePath } from "@/lib/route-loader"
 import { getPageTitle } from "@/lib/page-title"
-import { routes } from "@/lib/routes"
+import { syncPwaMetadata } from "@/lib/pwa-metadata"
+import { publicSiteRoutes, routes } from "@/lib/routes"
 import "./App.css"
 
 type ActiveRoute = {
@@ -138,7 +139,18 @@ export function App() {
         activeRoute.path,
         activeRoute.Page === RouteErrorPage
       )
+      syncPwaMetadata(activeRoute.path)
     }
+  }, [activeRoute])
+
+  useEffect(() => {
+    if (!activeRoute) return
+    const path = activeRoute.path
+    if (!publicSiteRoutes.includes(path)) return
+
+    void import("@/features/site-analytics/site-analytics")
+      .then(({ recordPublicPageView }) => recordPublicPageView(path))
+      .catch(() => undefined)
   }, [activeRoute])
 
   const showRoute = useCallback(

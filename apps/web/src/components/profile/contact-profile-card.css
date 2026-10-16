@@ -1,4 +1,5 @@
 .contact-profile-card {
+  container-type: inline-size;
   width: min(100%, var(--container-narrow));
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg-token);
@@ -43,7 +44,7 @@
 
 .contact-profile-field {
   display: grid;
-  grid-template-columns: minmax(6rem, 0.55fr) minmax(0, 1fr);
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: baseline;
   gap: var(--space-3);
   padding-block: var(--space-1);
@@ -66,22 +67,54 @@
 }
 
 .contact-profile-phone-list {
+  overflow-wrap: normal;
+}
+
+.contact-profile-phone-field {
+  align-items: center;
+}
+
+.contact-profile-phone-viewport {
+  position: relative;
+  display: block;
+  height: var(--space-11);
+  overflow: hidden;
+}
+
+.contact-profile-phone-viewport .contact-profile-phone-item {
+  position: absolute;
+  inset: 0;
+  justify-content: flex-end;
+}
+
+.contact-profile-phone-static-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  column-gap: var(--space-2);
+  gap: var(--space-2) var(--space-3);
 }
 
 .contact-profile-phone-item {
   display: inline-flex;
-  align-items: baseline;
-  gap: var(--space-2);
+  align-items: center;
   white-space: nowrap;
 }
 
-.contact-profile-phone-item:not(:last-child)::after {
-  color: var(--text-secondary);
-  content: "·";
+.contact-profile-phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--space-11);
+}
+
+.contact-profile-phone-viewport .contact-profile-phone-link:focus-visible {
+  outline-offset: calc(-1 * var(--space-1));
+}
+
+.contact-profile-whatsapp-icon {
+  width: var(--space-5);
+  height: var(--space-5);
+  flex: 0 0 auto;
 }
 
 .contact-profile-value a {
@@ -98,7 +131,7 @@
   text-decoration-color: currentColor;
 }
 
-@media (width <= 26.25rem) {
+@container (width <= 22rem) {
   .contact-profile-field {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-1);
@@ -108,7 +141,8 @@
     text-align: left;
   }
 
-  .contact-profile-phone-list {
+  .contact-profile-phone-viewport .contact-profile-phone-item,
+  .contact-profile-phone-static-list {
     justify-content: flex-start;
   }
 }

@@ -1,0 +1,17 @@
+{
+  "id": "/admin",
+  "name": "ViñoPlastic Administración",
+  "short_name": "Viño Admin",
+  "description": "Gestiona las vacantes de ViñoPlastic con una cuenta autorizada.",
+  "lang": "es-MX",
+  "start_url": "/auth",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/admin-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/admin-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/admin-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

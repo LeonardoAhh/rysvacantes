@@ -6,3 +6,10 @@ export const routes = {
   vacancies: "/vacancies",
   dashboard: "/dashboard",
 } as const
+
+export const publicSiteRoutes: readonly string[] = [
+  routes.home,
+  routes.about,
+  routes.contact,
+  routes.vacancies,
+]

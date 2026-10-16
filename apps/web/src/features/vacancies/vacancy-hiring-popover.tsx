@@ -1,6 +1,14 @@
 import { useState } from "react"
-import { ArrowRight, BadgeCheck, ClipboardList, FileText } from "lucide-react"
+import { ArrowRight, BadgeCheck, ClipboardList, FileText, X } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@workspace/ui/components/dialog"
+import { useIsMobile } from "@workspace/ui/hooks/use-mobile"
 import {
   Popover,
   PopoverContent,
@@ -34,25 +42,107 @@ const hiringDocuments = [
 export function VacancyHiringPopover() {
   const [open, setOpen] = useState(false)
   const [view, setView] = useState<"process" | "documents">("process")
+  const isMobile = useIsMobile()
 
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen)
     if (!nextOpen) setView("process")
   }
 
+  const title = view === "process" ? "Proceso de selección" : "Documentos para contratación"
+  const trigger = (
+    <Button
+      aria-label="Ver proceso de selección y documentos para contratación"
+      className="public-vacancies-action"
+      size="default"
+      type="button"
+      variant="outline"
+    />
+  )
+
+  const details = (
+    <>
+      <div className="vacancy-hiring-body">
+        {view === "process" ? (
+          <ol className="vacancy-hiring-steps">
+            {selectionSteps.map(({ label, Icon }, index) => (
+              <li key={label}>
+                <span className="vacancy-hiring-step-icon">
+                  <Icon aria-hidden="true" />
+                </span>
+                <span>
+                  {index + 1}. {label}
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <>
+            <ul className="vacancy-hiring-documents">
+              {hiringDocuments.map((document) => (
+                <li key={document}>{document}</li>
+              ))}
+            </ul>
+            <p className="vacancy-hiring-note">
+              <strong>Dato importante:</strong> Realizamos pruebas antidopaje.
+            </p>
+          </>
+        )}
+      </div>
+
+      <div className="vacancy-hiring-actions">
+        {view === "process" ? (
+          <Button onClick={() => setView("documents")} size="sm" type="button">
+            Avanzar <ArrowRight aria-hidden="true" />
+          </Button>
+        ) : (
+          <>
+            <Button
+              onClick={() => setView("process")}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
+              Volver
+            </Button>
+            <Button onClick={() => handleOpenChange(false)} size="sm" type="button">
+              Cerrar
+            </Button>
+          </>
+        )}
+      </div>
+    </>
+  )
+
+  if (isMobile) {
+    return (
+      <Dialog onOpenChange={handleOpenChange} open={open}>
+        <DialogTrigger render={trigger}>
+          Proceso
+          <ClipboardList aria-hidden="true" />
+        </DialogTrigger>
+        <DialogContent className="vacancy-hiring-sheet" showCloseButton={false}>
+          <DialogHeader className="vacancy-hiring-sheet-header">
+            <DialogTitle aria-live="polite">{title}</DialogTitle>
+            <Button
+              aria-label="Cerrar"
+              onClick={() => handleOpenChange(false)}
+              size="icon-sm"
+              type="button"
+              variant="ghost"
+            >
+              <X aria-hidden="true" />
+            </Button>
+          </DialogHeader>
+          {details}
+        </DialogContent>
+      </Dialog>
+    )
+  }
+
   return (
     <Popover onOpenChange={handleOpenChange} open={open}>
-      <PopoverTrigger
-        render={
-          <Button
-            aria-label="Ver proceso de selección y documentos para contratación"
-            className="public-vacancies-action"
-            size="default"
-            type="button"
-            variant="outline"
-          />
-        }
-      >
+      <PopoverTrigger render={trigger}>
         Proceso
         <ClipboardList aria-hidden="true" />
       </PopoverTrigger>
@@ -63,70 +153,9 @@ export function VacancyHiringPopover() {
         sideOffset={8}
       >
         <PopoverHeader>
-          <PopoverTitle aria-live="polite">
-            {view === "process"
-              ? "Proceso de selección"
-              : "Documentos para contratación"}
-          </PopoverTitle>
+          <PopoverTitle aria-live="polite">{title}</PopoverTitle>
         </PopoverHeader>
-
-        <div className="vacancy-hiring-body">
-          {view === "process" ? (
-            <ol className="vacancy-hiring-steps">
-              {selectionSteps.map(({ label, Icon }, index) => (
-                <li key={label}>
-                  <span className="vacancy-hiring-step-icon">
-                    <Icon aria-hidden="true" />
-                  </span>
-                  <span>
-                    {index + 1}. {label}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <>
-              <ul className="vacancy-hiring-documents">
-                {hiringDocuments.map((document) => (
-                  <li key={document}>{document}</li>
-                ))}
-              </ul>
-              <p className="vacancy-hiring-note">
-                <strong>Dato importante:</strong> Realizamos pruebas antidopaje.
-              </p>
-            </>
-          )}
-        </div>
-
-        <div className="vacancy-hiring-actions">
-          {view === "process" ? (
-            <Button
-              onClick={() => setView("documents")}
-              size="sm"
-              type="button"
-            >
-              Avanzar <ArrowRight aria-hidden="true" />
-            </Button>
-          ) : (
-            <>
-              <Button
-                onClick={() => setView("process")}
-                size="sm"
-                type="button"
-                variant="outline"
-              >
-                Volver
-              </Button>
-              <Button
-                onClick={() => handleOpenChange(false)}
-                size="sm"
-                type="button"
-              >
-                Cerrar
-              </Button>
-            </>
-          )}
-        </div>
+        {details}
       </PopoverContent>
     </Popover>
   )

@@ -30,6 +30,10 @@ Las URL y los identificadores internos son en inglés; el contenido visible, las
 
 En Vercel, `apps/web/vercel.json` reescribe las solicitudes de rutas de la SPA a `index.html`. Esto permite abrir o recargar directamente `/auth`, `/dashboard` y las demás rutas sin recibir un 404 del servidor estático.
 
+## Instalación como PWA
+
+La instalación pública usa `app.webmanifest` y abre `/`. La instalación administrativa usa `admin.webmanifest`, tiene nombre e icono propios y abre `/auth`. Para instalar el panel, abre directamente la URL desplegada `/auth` en Safari o Chrome del teléfono y usa «Añadir a pantalla de inicio» o «Instalar aplicación». Si ya hay sesión, `/auth` lleva al panel; sin sesión, muestra el acceso. En Android, Chrome puede omitir la instalación de una segunda app del mismo origen y alcance cuando la pública ya está instalada; en ese caso se puede intentar «Añadir a pantalla de inicio», pero para garantizar dos instalaciones independientes hace falta alojar el panel en otro origen. La identidad separada del PWA no sustituye la autenticación ni los permisos de editor.
+
 El título de la pestaña cambia con cada ruta desde `apps/web/src/lib/page-title.ts`: Inicio usa «ViñoPlastic - Reclutamiento» y las demás páginas muestran un nombre breve en español. `apps/web/index.html` define el título inicial y carga `apps/web/public/favicon.svg`, basado en el símbolo de la marca. La ruta desconocida y los errores de carga también reciben un título propio.
 
 ## Autenticación
@@ -45,7 +49,7 @@ El panel espera a que `supabase.auth.getUser()` verifique la sesión y a que la 
 ## Base de datos de vacantes
 
 1. Configura `apps/web/.env.local` según `apps/web/.env.example`, con la URL, la clave publicable de Supabase y el dominio de correo del acceso. No añadas claves secretas ni `service_role` al cliente.
-2. En un proyecto nuevo, ejecuta en orden [`20261015000000_vacancies.sql`](supabase/migrations/20261015000000_vacancies.sql), [`20261015010000_vacancy_salary_period.sql`](supabase/migrations/20261015010000_vacancy_salary_period.sql) y [`20261015020000_vacancy_shift.sql`](supabase/migrations/20261015020000_vacancy_shift.sql). En un proyecto ya configurado, ejecuta solo las migraciones pendientes. La última agrega el turno opcional y separa títulos existentes que terminan en «-Turno X». No ejecutes el esquema completo.
+2. En un proyecto nuevo, ejecuta en orden [`20261015000000_vacancies.sql`](supabase/migrations/20261015000000_vacancies.sql), [`20261015010000_vacancy_salary_period.sql`](supabase/migrations/20261015010000_vacancy_salary_period.sql), [`20261015020000_vacancy_shift.sql`](supabase/migrations/20261015020000_vacancy_shift.sql) y [`20261016000000_site_visits.sql`](supabase/migrations/20261016000000_site_visits.sql). En un proyecto ya configurado, ejecuta solo las migraciones pendientes. La migración de turno separa títulos existentes que terminan en «-Turno X». No ejecutes el esquema completo.
 3. Crea la cuenta de editor en Supabase Auth desde el panel administrativo. Para habilitar a `leonardo@reclutamiento.local`, ejecuta en SQL Editor, después de crear la cuenta:
 
    ```sql
@@ -57,6 +61,8 @@ El panel espera a que `supabase.auth.getUser()` verifique la sesión y a que la 
    Comprueba que se insertó una fila. Cambia el correo si asignas otra cuenta. Para revocar acceso, elimina solo su fila de `public.vacancy_editors`; las vacantes permanecen.
 
 La clave publicable puede estar en el navegador. RLS permite a cualquiera leer solo vacantes publicadas. Solo usuarios autenticados incluidos en `vacancy_editors` pueden leer borradores y crear, editar o eliminar vacantes. La tabla de editores no se expone directamente a `anon` ni a `authenticated`; la comprobación usa una función que consulta únicamente el ID de la sesión. La base vuelve a comprobar los estados válidos, la longitud de los campos y que una vacante publicada tenga descripción, jornada, sueldo y prestaciones.
+
+El botón «Visitas al sitio» del panel muestra vistas totales, vistas del día y visitantes aproximados, con desglose por página pública. El registro empieza después de aplicar la migración y desplegar el cliente; no reconstruye visitas pasadas. Un identificador aleatorio guardado en el navegador permite estimar visitantes distintos sin guardar IP ni agente de usuario. El recuento de visitantes representa navegadores, no personas verificadas. Las páginas `/auth` y `/dashboard` y las visitas desde `localhost` quedan fuera. Solo un editor autenticado puede consultar el resumen.
 
 Para cuidar el plan gratuito, los listados traen 12 vacantes por solicitud y seleccionan únicamente las columnas usadas. Búsqueda y filtros se resuelven en Supabase, con 350 ms de espera al escribir; las solicitudes obsoletas se cancelan. Las áreas públicas se consultan una vez por sesión de página y se invalidan al modificar vacantes. El resumen del panel usa una sola consulta agregada y se actualiza tras cambios; no hay suscripciones en tiempo real ni sondeos periódicos. Cada carga del listado también pide un conteo exacto para la paginación. Si el volumen crece mucho, conviene revisar este conteo y la búsqueda antes de añadir más consultas.
 

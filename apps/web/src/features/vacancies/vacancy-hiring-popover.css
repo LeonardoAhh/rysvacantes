@@ -9,7 +9,8 @@
   padding: var(--space-6);
 }
 
-.vacancy-hiring-popover [data-slot="popover-title"] {
+.vacancy-hiring-popover [data-slot="popover-title"],
+.vacancy-hiring-sheet [data-slot="dialog-title"] {
   font-size: var(--font-size-xl);
   font-weight: var(--weight-semibold);
   line-height: var(--line-height-tight);
@@ -20,6 +21,7 @@
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
+  overscroll-behavior: contain;
 }
 
 .vacancy-hiring-steps,
@@ -98,6 +100,47 @@
   gap: var(--space-2);
   border-top: var(--border-width) solid var(--border-subtle);
   padding-top: var(--space-3);
+}
+
+[data-slot="dialog-content"].vacancy-hiring-sheet {
+  inset: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: calc(100dvh - var(--space-4));
+  min-height: 0;
+  translate: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow: hidden;
+  border-radius: var(--radius-lg-token) var(--radius-lg-token) 0 0;
+  padding: var(--space-5) var(--space-4)
+    calc(var(--space-4) + env(safe-area-inset-bottom));
+}
+
+.vacancy-hiring-sheet-header {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.vacancy-hiring-sheet-header [data-slot="dialog-title"] {
+  padding-top: var(--space-2);
+}
+
+.vacancy-hiring-sheet-header [data-slot="button"] {
+  flex: 0 0 auto;
+}
+
+.vacancy-hiring-sheet .vacancy-hiring-actions {
+  flex: 0 0 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="dialog-content"].vacancy-hiring-sheet {
+    animation: none;
+  }
 }
 
 @media (width < 26.25rem) {

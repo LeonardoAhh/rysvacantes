@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { BriefcaseBusiness, Plus, Search } from "lucide-react"
+import { BarChart3, BriefcaseBusiness, Plus, Search } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { DashboardAccess } from "@/features/auth/dashboard-access"
 import { SignOutButton } from "@/features/auth/sign-out-button"
@@ -46,6 +46,7 @@ import { VacancyListSkeleton } from "./vacancy-list-skeleton"
 import { VacancyPagination } from "./vacancy-pagination"
 import { VacancyFormDialog } from "./vacancy-form-dialog"
 import { VacancyCard } from "./vacancy-card"
+import { SiteAnalyticsDialog } from "@/features/site-analytics/site-analytics-dialog"
 import "./dashboard.css"
 
 type StatusFilter = "all" | VacancyStatus
@@ -60,6 +61,7 @@ function DashboardContent() {
   const [mutationError, setMutationError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [formOpen, setFormOpen] = useState(false)
+  const [analyticsOpen, setAnalyticsOpen] = useState(false)
   const [selectedVacancy, setSelectedVacancy] = useState<Vacancy | null>(null)
   const [vacancyToDelete, setVacancyToDelete] = useState<Vacancy | null>(null)
   const debouncedSearch = useDebouncedValue(search)
@@ -152,6 +154,14 @@ function DashboardContent() {
             </p>
           </div>
           <div className="dashboard-intro-actions">
+            <Button
+              onClick={() => setAnalyticsOpen(true)}
+              size="lg"
+              variant="outline"
+            >
+              <BarChart3 aria-hidden="true" />
+              Visitas al sitio
+            </Button>
             <Button
               className="dashboard-create-button"
               disabled={!editingEnabled}
@@ -338,6 +348,9 @@ function DashboardContent() {
           onSave={handleSave}
           vacancy={selectedVacancy}
         />
+      )}
+      {analyticsOpen && (
+        <SiteAnalyticsDialog onClose={() => setAnalyticsOpen(false)} />
       )}
       <AlertDialog
         onOpenChange={(open) => {

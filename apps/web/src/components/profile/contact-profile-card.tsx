@@ -1,5 +1,6 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react"
 import { cn } from "@/lib/utils"
+import { ContactPhoneRow, type ContactPhone } from "./contact-phone-row"
 import "./contact-profile-card.css"
 
 type ContactField = Readonly<{
@@ -14,7 +15,7 @@ export type ContactProfileCardProps = Readonly<
     title?: string
     email?: string
     phone?: string
-    phones?: readonly string[]
+    phones?: readonly ContactPhone[]
     location?: string
     website?: string
     websiteHref?: string
@@ -41,29 +42,6 @@ function ContactFieldRow({ label, value, href }: ContactField) {
   )
 }
 
-function ContactPhoneRow({ phones }: { phones: readonly string[] }) {
-  const numbers = phones.filter((phone) => phone.trim() !== "")
-
-  return (
-    <div className="contact-profile-field">
-      <dt className="contact-profile-label">Teléfono</dt>
-      <dd className="contact-profile-value contact-profile-phone-list">
-        {numbers.map((phone, index) => {
-          const phoneNumber = phone.replace(/[^\d+]/g, "")
-          const phoneHref =
-            !isPending(phone) && phoneNumber ? `tel:${phoneNumber}` : undefined
-
-          return (
-            <span className="contact-profile-phone-item" key={`${phone}-${index}`}>
-              {phoneHref ? <a href={phoneHref}>{phone}</a> : <span>{phone}</span>}
-            </span>
-          )
-        })}
-      </dd>
-    </div>
-  )
-}
-
 export const ContactProfileCard = forwardRef<
   HTMLElement,
   ContactProfileCardProps
@@ -85,7 +63,7 @@ export const ContactProfileCard = forwardRef<
     ref
   ) => {
     const emailHref = !isPending(email) ? `mailto:${email}` : undefined
-    const contactPhones = phones ?? [phone]
+    const contactPhones = phones ?? [{ number: phone }]
 
     return (
       <article
