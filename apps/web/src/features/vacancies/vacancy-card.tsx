@@ -6,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
-import { VacancyShiftBadge } from "./vacancy-shift-badge"
 import {
   hasCompleteVacancyDetails,
   vacancyStatusLabels,
@@ -46,7 +45,9 @@ export function VacancyCard({
         </div>
         <div className="vacancy-card-context">
           <p className="vacancy-area">{vacancy.area}</p>
-          <VacancyShiftBadge shift={vacancy.shift} />
+          {vacancy.shift.trim() && (
+            <span className="vacancy-shift">{vacancy.shift}</span>
+          )}
         </div>
         <div className="vacancy-card-meta">
           <span>
@@ -83,7 +84,10 @@ export function VacancyCard({
             <Ellipsis aria-hidden="true" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" side="top">
-            <DropdownMenuItem className="min-h-11" onClick={() => onEdit(vacancy)}>
+            <DropdownMenuItem
+              className="min-h-11"
+              onClick={() => onEdit(vacancy)}
+            >
               <Pencil aria-hidden="true" />
               Editar
             </DropdownMenuItem>
