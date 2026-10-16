@@ -10,6 +10,10 @@ export const vacancyFormSteps = [
     fields: ["modality", "employmentType", "status", "deadline"],
   },
   {
+    title: "Requisitos",
+    fields: ["education", "experience", "requirements"],
+  },
+  {
     title: "Descripción y jornada",
     fields: ["description", "workSchedule", "workDays", "restDays"],
   },
@@ -22,7 +26,7 @@ export const vacancyFormSteps = [
   fields: readonly (keyof VacancyFormValues)[]
 }[]
 
-export type VacancyFormStep = 0 | 1 | 2 | 3
+export type VacancyFormStep = 0 | 1 | 2 | 3 | 4
 
 export function getVacancyFieldId(field: keyof VacancyFormValues) {
   return `vacancy-${field.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`

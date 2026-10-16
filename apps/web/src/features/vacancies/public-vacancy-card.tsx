@@ -14,6 +14,7 @@ import { getPublicBenefits } from "./vacancy-benefits"
 import { VacancyShiftBadge } from "./vacancy-shift-badge"
 import {
   hasCompleteVacancyDetails,
+  isMeaningfulVacancyDetail,
   vacancySalaryPeriodLabels,
   type Vacancy,
 } from "./vacancy-types"
@@ -22,16 +23,28 @@ type PublicVacancyCardProps = {
   vacancy: Vacancy
 }
 
-const cardSections = [
-  "Resumen",
-  "Descripción",
-  "Jornada y prestaciones",
-] as const
-
 export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
   const [sectionIndex, setSectionIndex] = useState(0)
   const reduceMotion = useReducedMotion()
   const benefits = getPublicBenefits(vacancy.benefits)
+  const hasRequirements = [
+    vacancy.education,
+    vacancy.experience,
+    vacancy.requirements,
+  ].some(isMeaningfulVacancyDetail)
+  const requirements = vacancy.requirements
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(isMeaningfulVacancyDetail)
+  const cardSections = [
+    { id: "summary", label: "Resumen" },
+    { id: "description", label: "Descripción" },
+    ...(hasRequirements
+      ? [{ id: "requirements", label: "Requisitos" }]
+      : []),
+    { id: "compensation", label: "Jornada y prestaciones" },
+  ]
+  const section = cardSections[sectionIndex]?.id ?? "summary"
   const nextLabel =
     sectionIndex === 0
       ? "Detalle"
@@ -69,7 +82,7 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
                 </Button>
               )}
               <Button
-                aria-label={`${sectionIndex === cardSections.length - 1 ? "Volver al resumen" : nextLabel} de ${vacancy.title}. Sección ${sectionIndex + 1} de ${cardSections.length}: ${cardSections[sectionIndex]}`}
+                aria-label={`${sectionIndex === cardSections.length - 1 ? "Volver al resumen" : nextLabel} de ${vacancy.title}. Sección ${sectionIndex + 1} de ${cardSections.length}: ${cardSections[sectionIndex]?.label}`}
                 className="public-vacancy-switch"
                 data-site-event={
                   sectionIndex === 0 ? "vacancy_detail" : undefined
@@ -94,11 +107,11 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
           <div aria-live="polite" className="public-vacancy-progress">
             <span>
               {sectionIndex + 1} de {cardSections.length} ·{" "}
-              {cardSections[sectionIndex]}
+              {cardSections[sectionIndex]?.label}
             </span>
             <span aria-hidden="true" className="public-vacancy-progress-marks">
               {cardSections.map((section, index) => (
-                <i data-active={index === sectionIndex} key={section} />
+                <i data-active={index === sectionIndex} key={section.id} />
               ))}
             </span>
           </div>
@@ -112,7 +125,7 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.16 }}
           >
-            {sectionIndex === 0 && (
+            {section === "summary" && (
               <dl className="public-vacancy-details">
                 <div>
                   <dt>
@@ -136,13 +149,42 @@ export function PublicVacancyCard({ vacancy }: PublicVacancyCardProps) {
                 </div>
               </dl>
             )}
-            {sectionIndex === 1 && (
+            {section === "description" && (
               <section className="public-vacancy-description">
                 <h3>Descripción</h3>
                 <p>{vacancy.description.trim() || "Por definir"}</p>
               </section>
             )}
-            {sectionIndex === 2 && (
+            {section === "requirements" && (
+              <section className="public-vacancy-requirements">
+                <h3>Requisitos</h3>
+                <dl className="public-vacancy-details">
+                  {isMeaningfulVacancyDetail(vacancy.education) && (
+                    <div>
+                      <dt>Escolaridad</dt>
+                      <dd>{vacancy.education}</dd>
+                    </div>
+                  )}
+                  {isMeaningfulVacancyDetail(vacancy.experience) && (
+                    <div>
+                      <dt>Experiencia</dt>
+                      <dd>{vacancy.experience}</dd>
+                    </div>
+                  )}
+                </dl>
+                {requirements.length > 0 && (
+                  <div className="public-vacancy-skills">
+                    <h4>Conocimientos y habilidades</h4>
+                    <ul>
+                      {requirements.map((requirement, index) => (
+                        <li key={`${requirement}-${index}`}>{requirement}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </section>
+            )}
+            {section === "compensation" && (
               <>
                 <dl className="public-vacancy-details">
                   <div>

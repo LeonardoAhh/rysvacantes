@@ -18,6 +18,9 @@ import {
 } from "./vacancy-types"
 import { VacancyBenefitsField } from "./vacancy-benefits-field"
 import { VacancyFieldError } from "./vacancy-field-error"
+import { VacancyOptionSelect } from "./vacancy-option-select"
+import { formatVacancySalary } from "./vacancy-options"
+import { getVacancyFieldId } from "./vacancy-form-steps"
 import {
   vacancyTextFields,
   type VacancyFormErrors,
@@ -35,7 +38,10 @@ type DetailField =
 type VacancyDetailsFieldsProps = {
   section: "work" | "compensation"
   values: VacancyFormValues
-  onChange: <Key extends DetailField>(field: Key, value: VacancyFormValues[Key]) => void
+  onChange: <Key extends DetailField>(
+    field: Key,
+    value: VacancyFormValues[Key]
+  ) => void
   onBlur: (field: Exclude<DetailField, "salaryPeriod">) => void
   errors: VacancyFormErrors
 }
@@ -71,63 +77,24 @@ export function VacancyDetailsFields({
               message={errors.description}
             />
           </div>
-          <div className="vacancy-form-field">
-            <Label htmlFor="vacancy-work-schedule">Horario laboral</Label>
-            <Input
-              aria-describedby={
-                errors.workSchedule ? "vacancy-work-schedule-error" : undefined
-              }
-              aria-invalid={Boolean(errors.workSchedule)}
-              id="vacancy-work-schedule"
-              maxLength={vacancyTextFields.workSchedule.maxLength}
-              onBlur={() => onBlur("workSchedule")}
-              onChange={(event) => onChange("workSchedule", event.target.value)}
-              required
-              value={values.workSchedule}
-            />
-            <VacancyFieldError
-              field="vacancy-work-schedule"
-              message={errors.workSchedule}
-            />
-          </div>
-          <div className="vacancy-form-field">
-            <Label htmlFor="vacancy-work-days">Días de trabajo</Label>
-            <Input
-              aria-describedby={
-                errors.workDays ? "vacancy-work-days-error" : undefined
-              }
-              aria-invalid={Boolean(errors.workDays)}
-              id="vacancy-work-days"
-              maxLength={vacancyTextFields.workDays.maxLength}
-              onBlur={() => onBlur("workDays")}
-              onChange={(event) => onChange("workDays", event.target.value)}
-              required
-              value={values.workDays}
-            />
-            <VacancyFieldError
-              field="vacancy-work-days"
-              message={errors.workDays}
-            />
-          </div>
-          <div className="vacancy-form-field">
-            <Label htmlFor="vacancy-rest-days">Días de descanso</Label>
-            <Input
-              aria-describedby={
-                errors.restDays ? "vacancy-rest-days-error" : undefined
-              }
-              aria-invalid={Boolean(errors.restDays)}
-              id="vacancy-rest-days"
-              maxLength={vacancyTextFields.restDays.maxLength}
-              onBlur={() => onBlur("restDays")}
-              onChange={(event) => onChange("restDays", event.target.value)}
-              required
-              value={values.restDays}
-            />
-            <VacancyFieldError
-              field="vacancy-rest-days"
-              message={errors.restDays}
-            />
-          </div>
+          {(["workSchedule", "workDays", "restDays"] as const).map((field) => (
+            <div className="vacancy-form-field" key={field}>
+              <Label htmlFor={getVacancyFieldId(field)}>
+                {vacancyTextFields[field].label}
+              </Label>
+              <VacancyOptionSelect
+                field={field}
+                value={values[field]}
+                error={errors[field]}
+                onChange={(value) => onChange(field, value)}
+                onBlur={() => onBlur(field)}
+              />
+              <VacancyFieldError
+                field={getVacancyFieldId(field)}
+                message={errors[field]}
+              />
+            </div>
+          ))}
         </>
       )}
       {section === "compensation" && (
@@ -142,7 +109,10 @@ export function VacancyDetailsFields({
               id="vacancy-salary"
               maxLength={vacancyTextFields.salary.maxLength}
               onBlur={() => onBlur("salary")}
-              onChange={(event) => onChange("salary", event.target.value)}
+              onChange={(event) =>
+                onChange("salary", formatVacancySalary(event.target.value))
+              }
+              placeholder="$"
               required
               value={values.salary}
             />
@@ -160,7 +130,9 @@ export function VacancyDetailsFields({
             >
               <SelectTrigger
                 aria-describedby={
-                  errors.salaryPeriod ? "vacancy-salary-period-error" : undefined
+                  errors.salaryPeriod
+                    ? "vacancy-salary-period-error"
+                    : undefined
                 }
                 aria-invalid={Boolean(errors.salaryPeriod)}
                 className="vacancy-select-trigger"

@@ -8,6 +8,9 @@ import {
 type VacancyDetails = Pick<
   Vacancy,
   | "description"
+  | "education"
+  | "experience"
+  | "requirements"
   | "workSchedule"
   | "workDays"
   | "restDays"
@@ -28,6 +31,9 @@ const storageKey = "vinoplastic.vacancies.v1"
 const importedKey = "vinoplastic.vacancies.imported.v1"
 const detailFields = [
   "description",
+  "education",
+  "experience",
+  "requirements",
   "workSchedule",
   "workDays",
   "restDays",
@@ -89,6 +95,9 @@ export function readLegacyVacancies(): {
         .map((vacancy) => ({
           ...vacancy,
           description: vacancy.description ?? "",
+          education: vacancy.education ?? "",
+          experience: vacancy.experience ?? "",
+          requirements: vacancy.requirements ?? "",
           workSchedule: vacancy.workSchedule ?? "",
           workDays: vacancy.workDays ?? "",
           restDays: vacancy.restDays ?? "",

@@ -373,6 +373,7 @@
 }
 
 .public-vacancy-description h3,
+.public-vacancy-requirements h3,
 .public-vacancy-benefits h3 {
   margin: 0 0 var(--space-2);
   color: var(--public-vacancy-muted);
@@ -397,6 +398,37 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.public-vacancy-requirements {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.public-vacancy-requirements .public-vacancy-details > div {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.public-vacancy-requirements .public-vacancy-details dd {
+  text-align: left;
+}
+
+.public-vacancy-skills h4 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-medium);
+}
+
+.public-vacancy-skills ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
 }
 
 .public-vacancy-benefits li {

@@ -12,7 +12,7 @@ export const vacancyPageSize = 12
 let publicAreasCache: Promise<string[]> | null = null
 
 const columns =
-  "id,title,shift,area,location,modality,employment_type,description,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
+  "id,title,shift,area,location,modality,employment_type,description,education,experience,requirements,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
 
 type VacancyRow = {
   id: string
@@ -23,6 +23,9 @@ type VacancyRow = {
   modality: string
   employment_type: string
   description: string
+  education: string
+  experience: string
+  requirements: string
   work_schedule: string
   work_days: string
   rest_days: string
@@ -75,6 +78,9 @@ function fromRow(row: VacancyRow): Vacancy {
     modality: row.modality,
     employmentType: row.employment_type,
     description: row.description,
+    education: row.education ?? "",
+    experience: row.experience ?? "",
+    requirements: row.requirements ?? "",
     workSchedule: row.work_schedule,
     workDays: row.work_days,
     restDays: row.rest_days,
@@ -96,6 +102,9 @@ function toRow(values: VacancyFormValues) {
     modality: values.modality,
     employment_type: values.employmentType,
     description: values.description,
+    education: values.education,
+    experience: values.experience,
+    requirements: values.requirements,
     work_schedule: values.workSchedule,
     work_days: values.workDays,
     rest_days: values.restDays,

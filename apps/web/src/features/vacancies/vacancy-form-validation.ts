@@ -11,6 +11,11 @@ import {
   serializeBenefitSelection,
 } from "./vacancy-benefits"
 import { splitVacancyShiftFromTitle } from "./vacancy-shift"
+import {
+  formatVacancySalary,
+  isVacancyOptionField,
+  normalizeVacancyOption,
+} from "./vacancy-options"
 
 export const vacancyTextFields = {
   title: { label: "Puesto", maxLength: 100, capitalize: true },
@@ -20,6 +25,13 @@ export const vacancyTextFields = {
   modality: { label: "Modalidad", maxLength: 60, capitalize: true },
   employmentType: { label: "Tipo de empleo", maxLength: 60, capitalize: true },
   description: { label: "Descripción", maxLength: 2400, capitalize: true },
+  education: { label: "Escolaridad", maxLength: 160, capitalize: true },
+  experience: { label: "Experiencia", maxLength: 400, capitalize: true },
+  requirements: {
+    label: "Conocimientos y habilidades",
+    maxLength: 1600,
+    capitalize: true,
+  },
   workSchedule: { label: "Horario laboral", maxLength: 120, capitalize: false },
   workDays: { label: "Días de trabajo", maxLength: 120, capitalize: true },
   restDays: { label: "Días de descanso", maxLength: 120, capitalize: true },
@@ -39,6 +51,9 @@ export const vacancyFieldOrder: (keyof VacancyFormValues)[] = [
   "employmentType",
   "status",
   "deadline",
+  "education",
+  "experience",
+  "requirements",
   "description",
   "workSchedule",
   "workDays",
@@ -56,11 +71,21 @@ const detailFields = new Set<VacancyTextField>([
   "salary",
   "benefits",
 ])
-const multilineFields = new Set<VacancyTextField>(["description"])
+const profileFields = new Set<VacancyTextField>([
+  "education",
+  "experience",
+  "requirements",
+])
+const multilineFields = new Set<VacancyTextField>([
+  "description",
+  "requirements",
+])
 const unsupportedCharacters = /[\p{Cc}\p{Cf}\p{Extended_Pictographic}]/u
 const meaningfulContent = /[\p{L}\p{N}]/u
 
 export function normalizeVacancyField(field: VacancyTextField, value: string) {
+  if (isVacancyOptionField(field)) return normalizeVacancyOption(field, value)
+  if (field === "salary") return formatVacancySalary(value)
   if (field === "benefits") {
     const selection = parseBenefitSelection(value)
     return serializeBenefitSelection({
@@ -122,13 +147,19 @@ export function validateVacancyForm(
   for (const field of Object.keys(vacancyTextFields) as VacancyTextField[]) {
     const value = values[field]
     const { label, maxLength } = vacancyTextFields[field]
-    if (field === "shift" && !value.trim()) continue
+    if (profileFields.has(field) && !value.trim()) continue
     if (
       !value.trim() ||
-      (detailFields.has(field) && !isMeaningfulVacancyDetail(value))
+      ((detailFields.has(field) ||
+        profileFields.has(field) ||
+        isVacancyOptionField(field)) &&
+        !isMeaningfulVacancyDetail(
+          field === "salary" ? value.replace(/^\$\s*/, "") : value
+        ))
     ) {
-      errors[field] =
-        `Escribe ${label.toLocaleLowerCase("es-MX")} con información concreta.`
+      errors[field] = isVacancyOptionField(field)
+        ? `Selecciona ${label.toLocaleLowerCase("es-MX")}.`
+        : `Escribe ${label.toLocaleLowerCase("es-MX")} con información concreta.`
     } else if (value.length > maxLength) {
       errors[field] = `Usa como máximo ${maxLength} caracteres.`
     } else if (

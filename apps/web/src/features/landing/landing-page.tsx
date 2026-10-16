@@ -2,6 +2,7 @@ import { PageBackground } from "@workspace/ui/components/page-background"
 import { LandingHeader } from "./landing-header"
 import { HeroSection } from "./hero-section"
 import { VacancyPreview } from "./vacancy-preview"
+import { ResponsibleHiringNotice } from "./responsible-hiring-notice"
 import "./landing.css"
 
 export function LandingPage() {
@@ -16,6 +17,7 @@ export function LandingPage() {
         <HeroSection />
         <VacancyPreview />
       </main>
+      <ResponsibleHiringNotice />
     </div>
   )
 }

@@ -11,6 +11,7 @@ import {
 } from "@workspace/ui/components/select"
 import { VacancyFieldError } from "./vacancy-field-error"
 import { getVacancyFieldId } from "./vacancy-form-steps"
+import { VacancyOptionSelect } from "./vacancy-option-select"
 import {
   vacancyTextFields,
   type VacancyFormErrors,
@@ -23,16 +24,8 @@ import {
   type VacancyFormValues,
 } from "./vacancy-types"
 
-type GeneralTextField =
-  "title" | "shift" | "area" | "location" | "modality" | "employmentType"
-
 const identityFields = ["title", "shift", "area", "location"] as const
 const conditionFields = ["modality", "employmentType"] as const
-const placeholders: Partial<Record<GeneralTextField, string>> = {
-  shift: "Turno 1, nocturno...",
-  modality: "Presencial, híbrida...",
-  employmentType: "Tiempo completo...",
-}
 
 type VacancyGeneralFieldsProps = {
   section: "identity" | "conditions"
@@ -71,22 +64,28 @@ export function VacancyGeneralFields({
             }
             key={field}
           >
-            <Label htmlFor={id}>
-              {vacancyTextFields[field].label}
-              {field === "shift" && " (opcional)"}
-            </Label>
-            <Input
-              aria-describedby={errors[field] ? `${id}-error` : undefined}
-              aria-invalid={Boolean(errors[field])}
-              autoFocus={field === "title"}
-              id={id}
-              maxLength={vacancyTextFields[field].maxLength}
-              onBlur={() => onBlur(field)}
-              onChange={(event) => onChange(field, event.target.value)}
-              placeholder={placeholders[field]}
-              required={field !== "shift"}
-              value={values[field]}
-            />
+            <Label htmlFor={id}>{vacancyTextFields[field].label}</Label>
+            {field === "title" ? (
+              <Input
+                aria-describedby={errors[field] ? `${id}-error` : undefined}
+                aria-invalid={Boolean(errors[field])}
+                autoFocus={field === "title"}
+                id={id}
+                maxLength={vacancyTextFields[field].maxLength}
+                onBlur={() => onBlur(field)}
+                onChange={(event) => onChange(field, event.target.value)}
+                required
+                value={values[field]}
+              />
+            ) : (
+              <VacancyOptionSelect
+                field={field}
+                value={values[field]}
+                error={errors[field]}
+                onChange={(value) => onChange(field, value)}
+                onBlur={() => onBlur(field)}
+              />
+            )}
             <VacancyFieldError field={id} message={errors[field]} />
           </div>
         )

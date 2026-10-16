@@ -30,6 +30,9 @@ export type Vacancy = Readonly<{
   modality: string
   employmentType: string
   description: string
+  education: string
+  experience: string
+  requirements: string
   workSchedule: string
   workDays: string
   restDays: string

@@ -16,6 +16,7 @@ import {
   serializeBenefitSelection,
 } from "./vacancy-benefits"
 import { VacancyGeneralFields } from "./vacancy-general-fields"
+import { VacancyRequirementsFields } from "./vacancy-requirements-fields"
 import {
   getFieldStep,
   getVacancyFieldId,
@@ -32,6 +33,12 @@ import {
 } from "./vacancy-form-validation"
 import type { Vacancy, VacancyFormValues } from "./vacancy-types"
 import { splitVacancyShiftFromTitle } from "./vacancy-shift"
+import {
+  vacancyOptions,
+  normalizeVacancyOption,
+  formatVacancySalary,
+  type VacancyOptionField,
+} from "./vacancy-options"
 import "./vacancy-form-dialog.css"
 
 type VacancyFormDialogProps = {
@@ -46,8 +53,11 @@ const emptyForm: VacancyFormValues = {
   area: "",
   location: "",
   modality: "",
-  employmentType: "",
+  employmentType: vacancyOptions.employmentType[0],
   description: "",
+  education: "",
+  experience: "",
+  requirements: "",
   workSchedule: "",
   workDays: "",
   restDays: "",
@@ -67,7 +77,7 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
       : value
   const position = splitVacancyShiftFromTitle(vacancy.title, vacancy.shift)
 
-  return {
+  const values = {
     title: position.title,
     shift: position.shift,
     area: vacancy.area,
@@ -75,6 +85,9 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
     modality: vacancy.modality,
     employmentType: vacancy.employmentType,
     description: vacancy.isDemo ? "" : vacancy.description,
+    education: vacancy.education,
+    experience: vacancy.experience,
+    requirements: vacancy.requirements,
     workSchedule: editableDetail(vacancy.workSchedule),
     workDays: editableDetail(vacancy.workDays),
     restDays: editableDetail(vacancy.restDays),
@@ -85,7 +98,12 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
     ),
     status: vacancy.status,
     deadline: vacancy.deadline,
+  } satisfies VacancyFormValues
+  for (const field of Object.keys(vacancyOptions) as VacancyOptionField[]) {
+    values[field] = normalizeVacancyOption(field, values[field])
   }
+  values.salary = formatVacancySalary(values.salary)
+  return values
 }
 
 function getTodayAsLocalDate() {
@@ -260,12 +278,19 @@ export function VacancyFormDialog({
                 section={step === 0 ? "identity" : "conditions"}
                 values={values}
               />
+            ) : step === 2 ? (
+              <VacancyRequirementsFields
+                errors={visibleErrors}
+                onBlur={handleBlur}
+                onChange={updateField}
+                values={values}
+              />
             ) : (
               <VacancyDetailsFields
                 errors={visibleErrors}
                 onBlur={handleBlur}
                 onChange={updateField}
-                section={step === 2 ? "work" : "compensation"}
+                section={step === 3 ? "work" : "compensation"}
                 values={values}
               />
             )}
