@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { ArrowUpRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { WhatsAppIcon } from "./whatsapp-icon"
 
 export type ContactPhone = Readonly<{
@@ -10,6 +12,7 @@ export type ContactPhone = Readonly<{
 const PHONE_ROTATION_MS = 4000
 
 function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
+  const reduceMotion = useReducedMotion()
   const phoneNumber = number.replace(/[^\d+]/g, "")
   const whatsappNumber = whatsapp?.replace(/\D/g, "")
 
@@ -19,16 +22,27 @@ function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
 
   if (whatsappNumber) {
     return (
-      <a
+      <motion.a
         aria-label={`Abrir WhatsApp con ${number}`}
-        className="contact-profile-phone-link"
+        className="contact-profile-phone-link contact-profile-whatsapp-link"
         href={`https://wa.me/${whatsappNumber}`}
         rel="noopener noreferrer"
         target="_blank"
+        whileHover={reduceMotion ? undefined : { y: -1 }}
+        whileFocus={reduceMotion ? undefined : { y: -1 }}
+        whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+        transition={{ duration: 0.16, ease: "easeOut" }}
       >
         <WhatsAppIcon className="contact-profile-whatsapp-icon" />
-        {number}
-      </a>
+        <span className="contact-profile-phone-copy">
+          <span>{number}</span>
+          <span className="contact-profile-phone-hint">Abrir WhatsApp</span>
+        </span>
+        <ArrowUpRight
+          aria-hidden="true"
+          className="contact-profile-phone-arrow"
+        />
+      </motion.a>
     )
   }
 
@@ -41,7 +55,11 @@ function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
   )
 }
 
-export function ContactPhoneRow({ phones }: { phones: readonly ContactPhone[] }) {
+export function ContactPhoneRow({
+  phones,
+}: {
+  phones: readonly ContactPhone[]
+}) {
   const numbers = phones.filter(({ number }) => number.trim() !== "")
   const reduceMotion = useReducedMotion()
   const [activeIndex, setActiveIndex] = useState(0)
@@ -60,13 +78,21 @@ export function ContactPhoneRow({ phones }: { phones: readonly ContactPhone[] })
     return () => window.clearInterval(interval)
   }, [isFocused, isHovered, numbers.length, reduceMotion])
 
-  const activePhone = numbers.length ? numbers[activeIndex % numbers.length] : undefined
+  const activePhone = numbers.length
+    ? numbers[activeIndex % numbers.length]
+    : undefined
+  const hasWhatsApp = numbers.some(({ whatsapp }) => /\d/.test(whatsapp ?? ""))
 
   return (
     <div className="contact-profile-field contact-profile-phone-field">
       <dt className="contact-profile-label">Teléfono</dt>
-      <dd
+      <motion.dd
         className="contact-profile-value contact-profile-phone-list"
+        whileInView={
+          hasWhatsApp && !reduceMotion ? { x: [0, -3, 0] } : undefined
+        }
+        viewport={{ once: true, amount: 0.8 }}
+        transition={{ duration: 0.6, delay: 0.3, repeat: 1, repeatDelay: 1 }}
         onBlurCapture={() => setIsFocused(false)}
         onFocusCapture={() => setIsFocused(true)}
         onMouseEnter={() => setIsHovered(true)}
@@ -75,13 +101,21 @@ export function ContactPhoneRow({ phones }: { phones: readonly ContactPhone[] })
         {reduceMotion && numbers.length ? (
           <span className="contact-profile-phone-static-list">
             {numbers.map((phone, index) => (
-              <span className="contact-profile-phone-item" key={`${phone.number}-${index}`}>
+              <span
+                className="contact-profile-phone-item"
+                key={`${phone.number}-${index}`}
+              >
                 <ContactPhoneLink {...phone} />
               </span>
             ))}
           </span>
         ) : activePhone ? (
-          <span className="contact-profile-phone-viewport">
+          <span
+            className={cn(
+              "contact-profile-phone-viewport",
+              hasWhatsApp && "contact-profile-phone-viewport-whatsapp"
+            )}
+          >
             <AnimatePresence initial={false}>
               <motion.span
                 animate={{ opacity: 1, y: "0%" }}
@@ -98,7 +132,7 @@ export function ContactPhoneRow({ phones }: { phones: readonly ContactPhone[] })
         ) : (
           <span>Por definir</span>
         )}
-      </dd>
+      </motion.dd>
     </div>
   )
 }

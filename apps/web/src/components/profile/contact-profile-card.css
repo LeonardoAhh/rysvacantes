@@ -107,6 +107,34 @@
   min-height: var(--space-11);
 }
 
+.contact-profile-phone-viewport-whatsapp {
+  height: var(--space-16);
+}
+
+.contact-profile-whatsapp-link {
+  min-height: var(--space-16);
+  gap: var(--space-2);
+}
+
+.contact-profile-phone-copy {
+  display: grid;
+  gap: var(--space-1);
+  text-align: left;
+}
+
+.contact-profile-phone-hint {
+  color: var(--brand-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.contact-profile-phone-arrow {
+  width: var(--space-4);
+  height: var(--space-4);
+  flex: 0 0 auto;
+  color: var(--brand-primary);
+}
+
 .contact-profile-phone-viewport .contact-profile-phone-link:focus-visible {
   outline-offset: calc(-1 * var(--space-1));
 }
