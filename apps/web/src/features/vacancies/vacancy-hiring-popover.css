@@ -51,12 +51,10 @@
 
 .vacancy-hiring-step-icon {
   display: grid;
-  width: var(--space-8);
-  height: var(--space-8);
+  width: var(--space-4);
+  height: var(--space-4);
   flex: 0 0 auto;
   place-items: center;
-  border-radius: var(--radius-squircle-token);
-  background: var(--surface-soft);
   color: var(--brand-primary);
 }
 

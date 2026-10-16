@@ -1,5 +1,11 @@
-import { CalendarDays, MapPin, Pencil, Trash2 } from "lucide-react"
+import { CalendarDays, Ellipsis, MapPin, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu"
 import { VacancyShiftBadge } from "./vacancy-shift-badge"
 import {
   hasCompleteVacancyDetails,
@@ -31,7 +37,6 @@ export function VacancyCard({
       <div className="vacancy-card-main">
         <div className="vacancy-card-title">
           <h3>{vacancy.title}</h3>
-          <VacancyShiftBadge shift={vacancy.shift} />
           {vacancy.isDemo && (
             <span className="vacancy-demo-badge">Ejemplo</span>
           )}
@@ -39,7 +44,10 @@ export function VacancyCard({
             <span className="vacancy-incomplete-badge">Datos pendientes</span>
           )}
         </div>
-        <p className="vacancy-area">{vacancy.area}</p>
+        <div className="vacancy-card-context">
+          <p className="vacancy-area">{vacancy.area}</p>
+          <VacancyShiftBadge shift={vacancy.shift} />
+        </div>
         <div className="vacancy-card-meta">
           <span>
             <MapPin aria-hidden="true" />
@@ -61,24 +69,34 @@ export function VacancyCard({
       </div>
 
       <div className="vacancy-card-actions">
-        <Button
-          aria-label={`Editar ${vacancy.title}`}
-          disabled={!editingEnabled}
-          onClick={() => onEdit(vacancy)}
-          size="icon"
-          variant="outline"
-        >
-          <Pencil aria-hidden="true" />
-        </Button>
-        <Button
-          aria-label={`Eliminar ${vacancy.title}`}
-          disabled={!editingEnabled}
-          onClick={() => onDelete(vacancy)}
-          size="icon"
-          variant="destructive"
-        >
-          <Trash2 aria-hidden="true" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                aria-label={`Acciones para ${vacancy.title}`}
+                disabled={!editingEnabled}
+                size="icon"
+                variant="ghost"
+              />
+            }
+          >
+            <Ellipsis aria-hidden="true" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" side="top">
+            <DropdownMenuItem className="min-h-11" onClick={() => onEdit(vacancy)}>
+              <Pencil aria-hidden="true" />
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="min-h-11"
+              onClick={() => onDelete(vacancy)}
+              variant="destructive"
+            >
+              <Trash2 aria-hidden="true" />
+              Eliminar
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </li>
   )

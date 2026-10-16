@@ -186,17 +186,17 @@ function DashboardContent() {
             ] as const
           ).map(([key, label, iconClass]) => (
             <div className="dashboard-summary-card" key={key}>
-              <span className={`dashboard-summary-icon ${iconClass}`}>
-                <BriefcaseBusiness aria-hidden="true" />
-              </span>
-              <div>
+              <div className="dashboard-summary-label">
+                <span className={`dashboard-summary-icon ${iconClass}`}>
+                  <BriefcaseBusiness aria-hidden="true" />
+                </span>
                 <p>{label}</p>
-                {counts ? (
-                  <strong>{counts[key]}</strong>
-                ) : (
-                  <Skeleton className="dashboard-summary-skeleton" />
-                )}
               </div>
+              {counts ? (
+                <strong>{counts[key]}</strong>
+              ) : (
+                <Skeleton className="dashboard-summary-skeleton" />
+              )}
             </div>
           ))}
         </section>
@@ -216,15 +216,15 @@ function DashboardContent() {
 
         <section aria-label="Listado de vacantes" className="dashboard-listing">
           <div className="dashboard-listing-heading">
-            <div>
+            <div className="dashboard-listing-title">
               <h2>Vacantes</h2>
-              <p aria-live="polite">
+              <div aria-live="polite" className="dashboard-listing-count">
                 {loading ? (
                   <Skeleton className="dashboard-count-skeleton" />
                 ) : (
                   `${listing.total} ${listing.total === 1 ? "resultado" : "resultados"}`
                 )}
-              </p>
+              </div>
             </div>
             <div className="dashboard-filters">
               <label className="dashboard-search">
@@ -235,7 +235,7 @@ function DashboardContent() {
                     setSearch(event.target.value)
                     setPage(0)
                   }}
-                  placeholder="Buscar vacantes"
+                  placeholder="Buscar"
                   type="search"
                   value={search}
                 />

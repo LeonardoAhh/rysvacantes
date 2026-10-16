@@ -459,11 +459,9 @@
 
 .floating-note-icon {
   display: grid;
-  width: var(--space-8);
-  height: var(--space-8);
+  width: var(--space-4);
+  height: var(--space-4);
   place-items: center;
-  border-radius: var(--radius-md-token);
-  background: var(--landing-soft);
   color: var(--brand-primary);
 }
 

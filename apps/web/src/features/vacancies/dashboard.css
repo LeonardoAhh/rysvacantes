@@ -48,7 +48,6 @@
 
 .dashboard-intro-actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-3);
@@ -76,21 +75,27 @@
   display: flex;
   min-height: calc(var(--space-10) + var(--space-8));
   align-items: center;
-  gap: var(--space-4);
+  justify-content: space-between;
+  gap: var(--space-3);
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg-token);
   background: var(--surface-default);
   padding: var(--space-4) var(--space-5);
 }
 
+.dashboard-summary-label {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+}
+
 .dashboard-summary-icon {
   display: grid;
-  width: var(--space-10);
-  height: var(--space-10);
+  width: var(--space-5);
+  height: var(--space-5);
   flex: 0 0 auto;
   place-items: center;
-  border-radius: var(--radius-md-token);
-  background: var(--muted);
   color: var(--text-secondary);
 }
 
@@ -100,34 +105,36 @@
 }
 
 .dashboard-summary-icon-active {
-  background: var(--surface-success-subtle);
   color: var(--status-success);
 }
 
 .dashboard-summary-icon-draft {
-  background: var(--surface-warning-subtle);
   color: var(--status-warning);
 }
 
 .dashboard-summary-card p {
+  max-width: 100%;
   margin: 0;
   color: var(--text-secondary);
   font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
 }
 
 .dashboard-summary-card strong {
-  display: block;
-  margin-top: var(--space-1);
+  flex: 0 0 auto;
   color: var(--text-primary);
   font-family: var(--font-heading-family);
   font-size: var(--font-size-2xl);
   font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
 }
 
 .dashboard-summary-skeleton {
-  width: var(--space-10);
-  height: var(--space-6);
-  margin-top: var(--space-1);
+  width: var(--space-8);
+  height: var(--space-8);
+  flex: 0 0 auto;
 }
 
 .dashboard-count-skeleton {
@@ -154,7 +161,7 @@
   font-weight: var(--weight-semibold);
 }
 
-.dashboard-listing-heading p {
+.dashboard-listing-count {
   margin: var(--space-1) 0 0;
   color: var(--text-secondary);
   font-size: var(--font-size-xs);
@@ -220,6 +227,7 @@
 
 .vacancy-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
   margin: 0;
   padding: 0;
@@ -228,16 +236,17 @@
 
 .vacancy-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: space-between;
+  gap: var(--space-3) var(--space-2);
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg-token);
   background: var(--surface-default);
-  padding: var(--space-6);
+  padding: var(--space-4) var(--space-5);
 }
 
 .vacancy-card-main {
+  grid-column: 1 / -1;
   min-width: 0;
 }
 
@@ -253,6 +262,27 @@
   font-size: var(--font-size-base);
   font-weight: var(--weight-semibold);
   overflow-wrap: anywhere;
+}
+
+.vacancy-card-context {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.vacancy-card-context [data-slot="badge"] {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 0;
+}
+
+.vacancy-card-context [data-slot="badge"]::before {
+  content: "·";
+  margin-right: var(--space-2);
 }
 
 .vacancy-demo-badge {
@@ -276,7 +306,7 @@
 }
 
 .vacancy-area {
-  margin: var(--space-1) 0 0;
+  margin: 0;
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
 }
@@ -285,7 +315,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-4);
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
   color: var(--text-secondary);
   font-size: var(--font-size-xs);
 }
@@ -305,10 +335,13 @@
 }
 
 .vacancy-card-status {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-2);
-  white-space: nowrap;
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  align-self: end;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
 }
 
 .vacancy-status {
@@ -344,8 +377,11 @@
 }
 
 .vacancy-card-actions {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
-  gap: var(--space-2);
+  align-self: end;
+  justify-content: flex-end;
 }
 
 .dashboard-empty-state {
@@ -379,26 +415,56 @@
 }
 
 @media (width < 64rem) {
-  .vacancy-card {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-4);
+  .vacancy-list {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .vacancy-card-status {
-    grid-column: 1;
-    grid-row: 2;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  .dashboard-filters {
+    display: grid;
+    width: min(100%, calc(var(--container-search) + var(--container-filter) + var(--space-3)));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
   }
 
-  .vacancy-card-actions {
-    grid-column: 2;
-    grid-row: 1 / span 2;
+  .dashboard-search,
+  .dashboard-status-filter {
+    width: 100%;
+    min-width: 0;
   }
+
+  .dashboard-search input {
+    min-width: 0;
+  }
+
 }
 
 @media (width < 48rem) {
+  .vacancy-card {
+    padding: var(--space-4);
+  }
+
+  .vacancy-card-context {
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .vacancy-card-meta {
+    gap: var(--space-1) var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .vacancy-card-meta span:first-child {
+    flex-basis: 100%;
+  }
+
+  .vacancy-card-meta span:nth-child(3)::before {
+    content: "·";
+    margin-right: var(--space-1);
+  }
+
+  .vacancy-card-status {
+    align-self: end;
+  }
+
   [data-slot="alert-dialog-content"][data-size].vacancy-delete-dialog-content {
     inset-inline: 0;
     top: auto;
@@ -428,17 +494,24 @@
   }
 
   .dashboard-intro-actions {
+    display: grid;
+    width: min(100%, var(--container-narrow));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .dashboard-intro-actions > [data-slot="button"] {
     width: 100%;
-    justify-content: space-between;
+    min-width: 0;
+    min-height: var(--space-11);
+    gap: var(--space-1);
+    padding-inline: var(--space-2);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
   }
 
   .dashboard-intro h1 {
     font-size: var(--font-size-2xl);
-  }
-
-  .dashboard-create-button {
-    min-height: var(--space-10);
-    padding-inline: var(--space-3);
   }
 
   .dashboard-summary {
@@ -447,13 +520,14 @@
 
   .dashboard-summary-card {
     min-height: unset;
-    gap: var(--space-2);
+    gap: var(--space-1);
     padding: var(--space-3);
   }
 
-  .dashboard-summary-icon {
-    width: var(--space-8);
-    height: var(--space-8);
+  .dashboard-summary-label {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
   .dashboard-summary-card p {
@@ -465,17 +539,22 @@
     flex-direction: column;
   }
 
+  .dashboard-listing-title {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .dashboard-listing-count {
+    margin-top: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
   .dashboard-filters {
     width: 100%;
-  }
-
-  .dashboard-search {
-    width: auto;
-    flex: 1;
-  }
-
-  .dashboard-status-filter {
-    width: min(100%, var(--container-filter-compact));
   }
 }
 
@@ -485,57 +564,15 @@
     gap: var(--space-4);
   }
 
-  .dashboard-create-button {
-    width: 100%;
+  .dashboard-summary-card {
+    padding: var(--space-2);
   }
 
-  .dashboard-summary-card {
-    align-items: start;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-2);
+  .dashboard-summary-label {
+    gap: var(--space-1);
   }
 
   .dashboard-summary-card strong {
     font-size: var(--font-size-xl);
-  }
-
-  .dashboard-filters {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .dashboard-search {
-    width: 100%;
-  }
-
-  .dashboard-status-filter {
-    width: 100%;
-  }
-
-  .dashboard-status-filter [data-slot="select-trigger"] {
-    min-height: var(--space-10);
-  }
-
-  .vacancy-card {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: var(--space-3);
-    padding: var(--space-4);
-  }
-
-  .vacancy-card-status {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .vacancy-card-actions {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .vacancy-card-meta {
-    flex-direction: column;
-    gap: var(--space-2);
   }
 }

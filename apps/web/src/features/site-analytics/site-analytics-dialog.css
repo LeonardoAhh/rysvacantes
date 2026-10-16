@@ -15,11 +15,9 @@
 
 .site-analytics-heading-icon {
   display: grid;
-  width: var(--space-10);
-  height: var(--space-10);
+  width: var(--space-5);
+  height: var(--space-5);
   place-items: center;
-  border-radius: var(--radius-md-token);
-  background: var(--muted);
 }
 
 .site-analytics-heading-icon svg {
@@ -40,6 +38,10 @@
 }
 
 .site-analytics-metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-2);
   min-width: 0;
   border-radius: var(--radius-md-token);
   background: var(--muted);
@@ -52,8 +54,6 @@
 }
 
 .site-analytics-metric strong {
-  display: block;
-  margin-top: var(--space-2);
   font-family: var(--font-heading-family);
   font-size: var(--font-size-2xl);
   font-weight: var(--weight-semibold);
@@ -76,7 +76,8 @@
 
 .site-analytics-page-list {
   display: grid;
-  gap: var(--space-4);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
   margin: var(--space-4) 0 0;
   padding: 0;
   list-style: none;
@@ -84,6 +85,11 @@
 
 .site-analytics-page-copy {
   font-size: var(--font-size-sm);
+}
+
+.site-analytics-page-copy > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .site-analytics-page-copy strong {
@@ -151,10 +157,22 @@
   }
 
   .site-analytics-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .site-analytics-metric:first-child {
-    grid-column: 1 / -1;
+  .site-analytics-metric {
+    padding: var(--space-2);
+  }
+
+  .site-analytics-metric > span {
+    overflow-wrap: anywhere;
+  }
+
+  .site-analytics-metric strong {
+    font-size: var(--font-size-xl);
+  }
+
+  .site-analytics-page-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
