@@ -157,7 +157,7 @@ export function TransportPage() {
           {matchingRoutes.map((route) => (
             <details
               className="transport-route"
-              defaultOpen={Boolean(normalizedQuery || shift !== null)}
+              open={Boolean(normalizedQuery || shift !== null)}
               id={route.id}
               key={`${route.id}-${normalizedQuery}-${shift}`}
             >
