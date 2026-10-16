@@ -20,7 +20,7 @@ export function AboutIntroduction() {
       <AboutReveal className="about-intro-copy">
         <p className="about-eyebrow">Empresa · Desde 1970</p>
         <h1 id="about-title" tabIndex={-1}>
-          Conoce ViñoPlastic
+          Conocenos
         </h1>
         <p className="about-lead">
           Transformamos plásticos mediante inyección para atender las

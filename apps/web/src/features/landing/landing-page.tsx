@@ -1,6 +1,7 @@
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { LandingHeader } from "./landing-header"
 import { HeroSection } from "./hero-section"
+import { VacancyPreview } from "./vacancy-preview"
 import "./landing.css"
 
 export function LandingPage() {
@@ -13,6 +14,7 @@ export function LandingPage() {
       <LandingHeader currentPage="home" />
       <main className="landing-main" id="main-content" tabIndex={-1}>
         <HeroSection />
+        <VacancyPreview />
       </main>
     </div>
   )

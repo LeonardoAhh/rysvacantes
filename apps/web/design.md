@@ -1,3 +1,9 @@
+## Adaptación de marca ViñoPlastic
+
+El primario del proyecto es azul marino `#103672`, elegido como aproximación al azul del logo de ViñoPlastic. Se aplica mediante `--brand-primary` a botones principales, tarjetas destacadas, enlaces de marca, indicadores y foco. Sobre fondos primarios se utiliza blanco `#ffffff`; los textos generales conservan `#141414` y el lienzo permanece blanco. Los estados hover de las acciones principales deben derivarse del azul primario.
+
+Esta adaptación reemplaza las indicaciones de primario negro y de interfaz estrictamente monocromática de la referencia Mobbin que aparece a continuación. Se conservan sus reglas de tipografía, espacio, geometría y jerarquía.
+
 ## Overview
 
 Mobbin is a reference library of real product interfaces, and its own interface is engineered to get out of the way. The system is strictly monochrome: near-black ink (`{colors.ink}` — #141414) on a pure white canvas (`{colors.canvas}`), with structure carried by a ladder of barely-perceptible neutral tints rather than by shadows or color. The thousands of app screenshots, icon tiles, and brand logos the site exists to show are the only saturated elements on any page — the chrome frames them the way a gallery wall frames paintings.

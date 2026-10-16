@@ -9,6 +9,7 @@ type VacancyPageOptions = {
   area?: string
   status?: VacancyStatus
   enabled?: boolean
+  pageSize?: number
 }
 
 type VacancyPageState = {
@@ -26,6 +27,7 @@ export function useVacancyPage({
   area,
   status,
   enabled = true,
+  pageSize,
 }: VacancyPageOptions) {
   const [state, setState] = useState<VacancyPageState>({
     key: "",
@@ -42,6 +44,7 @@ export function useVacancyPage({
     area,
     status,
     revision,
+    pageSize,
   ])
 
   useEffect(() => {
@@ -55,6 +58,7 @@ export function useVacancyPage({
       area,
       status,
       signal: controller.signal,
+      pageSize,
     })
       .then((result) => {
         if (!controller.signal.aborted) {
@@ -77,7 +81,17 @@ export function useVacancyPage({
       })
 
     return () => controller.abort()
-  }, [scope, page, search, area, status, enabled, revision, requestKey])
+  }, [
+    scope,
+    page,
+    search,
+    area,
+    status,
+    enabled,
+    revision,
+    requestKey,
+    pageSize,
+  ])
 
   return {
     ...state,

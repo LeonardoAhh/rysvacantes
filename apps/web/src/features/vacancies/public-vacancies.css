@@ -58,6 +58,13 @@
   height: var(--space-4);
 }
 
+.public-vacancies-transport-note {
+  max-width: var(--container-wide);
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
 .public-vacancies-listing {
   margin-top: var(--space-12);
 }
@@ -256,7 +263,7 @@
 }
 
 .public-vacancy-switch {
-  min-height: var(--space-10);
+  min-height: var(--space-11);
   color: var(--brand-primary-foreground);
   font-size: var(--font-size-xs);
   font-weight: var(--weight-semibold);
@@ -315,6 +322,54 @@
 .public-vacancy-card [data-slot="card-content"] {
   display: grid;
   gap: var(--space-4);
+}
+
+.public-vacancy-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--public-vacancy-muted);
+  font-size: var(--font-size-xs);
+}
+
+.public-vacancy-progress-marks {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.public-vacancy-progress-marks i {
+  width: var(--space-3);
+  height: var(--space-1);
+  border-radius: var(--radius-pill-token);
+  background: var(--public-vacancy-line);
+}
+
+.public-vacancy-progress-marks i[data-active="true"] {
+  background: var(--brand-primary-foreground);
+}
+
+.public-vacancy-section-content {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.public-vacancy-contact {
+  display: flex;
+  min-height: var(--space-11);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--brand-primary-foreground);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.public-vacancy-contact svg {
+  width: var(--space-4);
+  height: var(--space-4);
 }
 
 .public-vacancy-description h3,
@@ -413,7 +468,9 @@
     max-width: none;
     grid-template-areas:
       "eyebrow description"
-      "title description";
+      "title description"
+      "transport transport"
+      "transport-note transport-note";
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
     align-items: end;
     gap: var(--space-3) var(--space-12);
@@ -431,6 +488,15 @@
   .public-vacancies-description {
     grid-area: description;
     margin: 0 0 var(--space-1);
+  }
+
+  .public-vacancies-transport-link {
+    grid-area: transport;
+    justify-self: start;
+  }
+
+  .public-vacancies-transport-note {
+    grid-area: transport-note;
   }
 }
 

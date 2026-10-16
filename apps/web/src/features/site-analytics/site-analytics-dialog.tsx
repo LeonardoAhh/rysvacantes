@@ -9,7 +9,12 @@ import {
   DialogTitle,
 } from "@workspace/ui/components/dialog"
 import { routes } from "@/lib/routes"
-import { getSiteVisitSummary, type SiteVisitSummary } from "./site-analytics"
+import {
+  getSiteVisitSummary,
+  type SiteVisitSummary,
+  type SiteVisitPeriod,
+} from "./site-analytics"
+import { siteEventLabels } from "./site-events"
 import "./site-analytics-dialog.css"
 
 const pageLabels: Record<string, string> = {
@@ -22,7 +27,12 @@ const pageLabels: Record<string, string> = {
 const numberFormat = new Intl.NumberFormat("es-MX")
 
 export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
-  const [summary, setSummary] = useState<SiteVisitSummary | null>(null)
+  const [period, setPeriod] = useState<SiteVisitPeriod>(7)
+  const [loadedSummary, setLoadedSummary] = useState<{
+    period: SiteVisitPeriod
+    data: SiteVisitSummary
+  } | null>(null)
+  const summary = loadedSummary?.period === period ? loadedSummary.data : null
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const requestId = useRef(0)
@@ -32,8 +42,9 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
     setLoading(true)
     setError(null)
     try {
-      const result = await getSiteVisitSummary()
-      if (request === requestId.current) setSummary(result)
+      const result = await getSiteVisitSummary(period)
+      if (request === requestId.current)
+        setLoadedSummary({ period, data: result })
     } catch (cause) {
       if (request === requestId.current) {
         setError(
@@ -45,7 +56,7 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
     } finally {
       if (request === requestId.current) setLoading(false)
     }
-  }, [])
+  }, [period])
 
   useEffect(() => {
     const timer = window.setTimeout(() => void load(), 0)
@@ -74,9 +85,40 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
           </span>
           <DialogTitle>Visitas al sitio</DialogTitle>
           <DialogDescription>
-            Actividad de las páginas públicas desde que se activó el registro.
+            Actividad de las páginas públicas durante los últimos {period} días,
+            incluido hoy.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="site-analytics-toolbar">
+          <div
+            aria-label="Periodo de estadísticas"
+            className="site-analytics-period"
+            role="group"
+          >
+            {([7, 30] as const).map((days) => (
+              <Button
+                aria-pressed={period === days}
+                key={days}
+                onClick={() => setPeriod(days)}
+                type="button"
+                variant="ghost"
+              >
+                {days} días
+              </Button>
+            ))}
+          </div>
+          <Button
+            aria-label="Actualizar estadísticas"
+            disabled={loading}
+            onClick={() => void load()}
+            size="icon-sm"
+            type="button"
+            variant="ghost"
+          >
+            <RefreshCw aria-hidden="true" />
+          </Button>
+        </div>
 
         <section
           aria-label="Resumen de visitas"
@@ -84,7 +126,7 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
         >
           {(
             [
-              ["Vistas totales", summary?.totalViews],
+              ["Vistas del periodo", summary?.totalViews],
               ["Visitantes aprox.", summary?.uniqueVisitors],
               ["Vistas hoy", summary?.todayViews],
             ] as const
@@ -104,15 +146,6 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
         >
           <div className="site-analytics-section-heading">
             <h3 id="site-analytics-pages-title">Vistas por página</h3>
-            <Button
-              aria-label="Actualizar estadísticas"
-              disabled={loading}
-              onClick={() => void load()}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <RefreshCw aria-hidden="true" />
-            </Button>
           </div>
           {loading && !summary ? (
             <p className="site-analytics-status" role="status">
@@ -133,7 +166,8 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
                     <span>
                       {pageLabels[page.path] ?? page.path}
                       <small>
-                        {numberFormat.format(page.visitors)} navegadores
+                        {numberFormat.format(page.visitors)}{" "}
+                        {page.visitors === 1 ? "navegador" : "navegadores"}
                       </small>
                     </span>
                     <strong>{numberFormat.format(page.views)}</strong>
@@ -151,6 +185,40 @@ export function SiteAnalyticsDialog({ onClose }: { onClose: () => void }) {
               Todavía no hay visitas registradas.
             </p>
           )}
+        </section>
+
+        <section
+          aria-labelledby="site-analytics-events-title"
+          className="site-analytics-events"
+        >
+          <div className="site-analytics-section-heading">
+            <h3 id="site-analytics-events-title">Interacciones</h3>
+          </div>
+          <p className="site-analytics-status">
+            Son señales de interés; un clic a WhatsApp no confirma una
+            conversación ni una solicitud.
+          </p>
+          <ul className="site-analytics-event-list" aria-busy={loading}>
+            {Object.entries(siteEventLabels).map(([name, label]) => {
+              const event = summary?.events.find((item) => item.name === name)
+              const visitors = event?.visitors ?? 0
+              return (
+                <li key={name}>
+                  <span>
+                    {label}
+                    <small>
+                      {summary
+                        ? `${numberFormat.format(visitors)} ${visitors === 1 ? "navegador" : "navegadores"}`
+                        : "—"}
+                    </small>
+                  </span>
+                  <strong>
+                    {summary ? numberFormat.format(event?.clicks ?? 0) : "—"}
+                  </strong>
+                </li>
+              )
+            })}
+          </ul>
         </section>
 
         {error && summary && (

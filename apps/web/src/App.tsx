@@ -17,6 +17,7 @@ import { loadRoute, normalizePath } from "@/lib/route-loader"
 import { getPageTitle } from "@/lib/page-title"
 import { syncPwaMetadata } from "@/lib/pwa-metadata"
 import { publicSiteRoutes, routes } from "@/lib/routes"
+import { getPublicInteraction } from "@/features/site-analytics/site-events"
 import "./App.css"
 
 type ActiveRoute = {
@@ -254,6 +255,27 @@ export function App() {
       )
     }
 
+    function onInteraction(event: MouseEvent) {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return
+      const interaction = getPublicInteraction(event)
+      if (interaction) {
+        void import("@/features/site-analytics/site-analytics")
+          .then(({ recordPublicEvent }) =>
+            recordPublicEvent(interaction.name, interaction.path)
+          )
+          .catch(() => undefined)
+      }
+    }
+
+    document.addEventListener("click", onInteraction, true)
     document.addEventListener("click", onClick)
     document.addEventListener("pointerover", onWarmRoute)
     document.addEventListener("pointerdown", onWarmRoute)
@@ -261,6 +283,7 @@ export function App() {
     window.addEventListener("popstate", onPopState)
     return () => {
       window.history.scrollRestoration = previousRestoration
+      document.removeEventListener("click", onInteraction, true)
       document.removeEventListener("click", onClick)
       document.removeEventListener("pointerover", onWarmRoute)
       document.removeEventListener("pointerdown", onWarmRoute)

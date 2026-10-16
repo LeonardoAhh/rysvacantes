@@ -41,6 +41,7 @@ type ListOptions = {
   area?: string
   status?: VacancyStatus
   signal?: AbortSignal
+  pageSize?: number
 }
 
 function client() {
@@ -123,14 +124,16 @@ export async function listVacancies({
   area,
   status,
   signal,
+  pageSize = vacancyPageSize,
 }: ListOptions) {
-  const start = Math.max(0, page) * vacancyPageSize
+  const limit = Math.max(1, Math.min(vacancyPageSize, pageSize))
+  const start = Math.max(0, page) * limit
   let query = client()
     .from("vacancies")
     .select(columns, { count: "exact" })
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })
-    .range(start, start + vacancyPageSize - 1)
+    .range(start, start + limit - 1)
 
   if (scope === "public") query = query.eq("status", "published")
   if (status) query = query.eq("status", status)

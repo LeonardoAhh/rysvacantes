@@ -12,6 +12,7 @@ import {
 } from "@workspace/ui/components/select"
 import { LandingHeader } from "@/features/landing/landing-header"
 import { routes } from "@/lib/routes"
+import { cn } from "@/lib/utils"
 import { transportRoutes, type TransportStop } from "./transport-routes"
 import "@/features/landing/landing.css"
 import "./transport.css"
@@ -44,7 +45,10 @@ function StopItem({
         <span>{stop.reference}</span>
       </div>
       <div
-        className={`transport-stop-times${shift === null ? "" : "transport-stop-times-single"}`}
+        className={cn(
+          "transport-stop-times",
+          shift !== null && "transport-stop-times-single"
+        )}
       >
         {stop.times.map((time, timeIndex) =>
           shift === null || shift === timeIndex ? (

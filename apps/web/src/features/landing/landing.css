@@ -106,22 +106,6 @@
   letter-spacing: var(--letter-spacing-label);
 }
 
-.eyebrow-mark {
-  display: grid;
-  width: var(--space-8);
-  height: var(--space-8);
-  place-items: center;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-pill-token);
-  background: var(--landing-soft);
-  color: var(--brand-primary);
-}
-
-.eyebrow-mark svg {
-  width: var(--space-3);
-  height: var(--space-3);
-}
-
 .hero-copy h1 {
   max-width: 38rem;
   margin: 0;
@@ -152,6 +136,10 @@
   align-items: center;
   gap: var(--space-5);
   margin-top: var(--space-8);
+}
+
+.hero-actions .text-link {
+  min-height: var(--space-11);
 }
 
 .landing-primary-cta {
@@ -545,6 +533,11 @@
 }
 
 @media (width < 48rem) {
+  .hero-note,
+  .hero-visual {
+    display: none;
+  }
+
   .landing-main {
     align-items: flex-start;
   }
@@ -553,7 +546,7 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-8);
     margin-block: 0;
-    padding-block: var(--space-8) var(--space-10);
+    padding-block: var(--space-8) 0;
   }
 
   .hero-copy {
@@ -647,7 +640,7 @@
 
 @media (max-height: 38.75rem) and (width < 48rem) {
   .hero-section {
-    padding-block: var(--space-3) var(--space-2);
+    padding-block: var(--space-3) 0;
   }
 
   .eyebrow {

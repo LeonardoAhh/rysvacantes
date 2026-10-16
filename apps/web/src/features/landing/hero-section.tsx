@@ -20,12 +20,7 @@ export function HeroSection() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
           transition={motionTransition}
         >
-          <p className="eyebrow">
-            <span aria-hidden="true" className="eyebrow-mark">
-              <Sparkles />
-            </span>
-            Reclutamiento con propósito
-          </p>
+          <p className="eyebrow">Reclutamiento con propósito</p>
           <h1 id="hero-title">
             El talento indicado.
             <span>El futuro en marcha.</span>
@@ -42,7 +37,7 @@ export function HeroSection() {
               <ArrowRight aria-hidden="true" />
             </a>
             <a className="text-link" href={routes.about}>
-              Conoce ViñoPlastic
+              Conoce la empresa
               <ArrowRight aria-hidden="true" />
             </a>
           </div>

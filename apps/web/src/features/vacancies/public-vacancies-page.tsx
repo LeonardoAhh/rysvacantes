@@ -34,7 +34,11 @@ import { PublicVacancyCard } from "./public-vacancy-card"
 import "./public-vacancies.css"
 
 export function PublicVacanciesPage() {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("search")?.slice(0, 80) ??
+      ""
+  )
   const [area, setArea] = useState("all")
   const [page, setPage] = useState(0)
   const [areas, setAreas] = useState<string[]>([])
@@ -92,6 +96,10 @@ export function PublicVacanciesPage() {
             Consultar rutas de transporte
             <ArrowUpRight aria-hidden="true" />
           </a>
+          <p className="public-vacancies-transport-note">
+            Consulta las paradas y confirma con Reclutamiento la disponibilidad
+            para tu turno.
+          </p>
         </header>
 
         <section
