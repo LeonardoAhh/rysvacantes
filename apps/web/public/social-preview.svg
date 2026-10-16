@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#103672"/>
+  <circle cx="1090" cy="390" r="360" fill="none" stroke="#ffffff" stroke-opacity=".12"/>
+  <circle cx="1090" cy="390" r="270" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+  <g fill="#ffffff" font-family="Arial, Helvetica, sans-serif">
+    <text x="80" y="108" font-size="36" font-weight="700">ViñoPlastic</text>
+    <text x="80" y="266" font-size="72" font-weight="700">Tu próximo empleo,</text>
+    <text x="80" y="350" font-size="72" font-weight="700">en Querétaro.</text>
+    <text x="80" y="424" font-size="30" fill-opacity=".85">Consulta vacantes, turnos y prestaciones.</text>
+    <rect x="80" y="487" width="350" height="62" rx="31" fill="#ffffff"/>
+    <text x="118" y="527" font-size="26" font-weight="700" fill="#103672">Conoce las vacantes</text>
+    <text x="1120" y="529" text-anchor="end" font-size="24">vinoplasticrys.lat</text>
+  </g>
+</svg>

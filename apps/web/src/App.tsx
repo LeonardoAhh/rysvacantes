@@ -14,7 +14,7 @@ import {
   type NavigateOptions,
 } from "@/lib/navigation-context"
 import { loadRoute, normalizePath } from "@/lib/route-loader"
-import { getPageTitle } from "@/lib/page-title"
+import { syncPageSeo } from "@/lib/page-seo"
 import { syncPwaMetadata } from "@/lib/pwa-metadata"
 import { publicSiteRoutes, routes } from "@/lib/routes"
 import { getPublicInteraction } from "@/features/site-analytics/site-events"
@@ -136,7 +136,7 @@ export function App() {
 
   useEffect(() => {
     if (activeRoute) {
-      document.title = getPageTitle(
+      syncPageSeo(
         activeRoute.path,
         activeRoute.Page === RouteErrorPage
       )

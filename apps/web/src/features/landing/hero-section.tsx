@@ -26,7 +26,8 @@ export function HeroSection() {
             <span>El futuro en marcha.</span>
           </h1>
           <p className="hero-description" id="talent">
-            Conectamos personas para crear equipos que hacen la diferencia.
+            Consulta las vacantes de ViñoPlastic en Querétaro y encuentra una
+            oportunidad para crecer con nosotros.
           </p>
           <div className="hero-actions">
             <a

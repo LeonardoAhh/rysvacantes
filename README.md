@@ -29,7 +29,15 @@ Cada tarjeta pública presenta resumen, descripción, y jornada y prestaciones d
 
 Las URL y los identificadores internos son en inglés; el contenido visible, las etiquetas accesibles, los valores predeterminados de las primitivas y los mensajes de estado son en español. El calendario compartido usa español por defecto. Las rutas y enlaces internos están centralizados en `apps/web/src/lib/routes.ts`.
 
-En Vercel, `apps/web/vercel.json` reescribe las solicitudes de rutas de la SPA a `index.html`. Esto permite abrir o recargar directamente `/auth`, `/dashboard` y las demás rutas sin recibir un 404 del servidor estático.
+El build genera un HTML por ruta conocida. En Vercel, `apps/web/vercel.json` usa `cleanUrls` para servirlos sin extensión y conserva las URL actuales. Las direcciones desconocidas usan `404.html` con estado HTTP 404; no se reescriben todas las solicitudes al inicio.
+
+## SEO y enlaces compartidos
+
+`apps/web/src/lib/seo.ts` centraliza títulos, descripciones, canonical, Open Graph, tarjetas sociales y datos estructurados de la organización y las páginas. `seo-build.ts` genera estos metadatos y un resumen visible con enlaces públicos en el HTML inicial de cada ruta; React lo sustituye por la experiencia interactiva. No es una copia estática de las vacantes: sus datos siguen consultándose en Supabase y requieren JavaScript. La navegación interna actualiza los metadatos con la misma configuración.
+
+El build genera `sitemap.xml` con las cinco páginas públicas y `robots.txt` en la raíz. Auth, Dashboard, errores y la página sin conexión llevan `noindex`; las páginas administrativas mantienen sus controles de acceso. La imagen `public/social-preview.png` se comparte mediante los metadatos sociales. Si cambia el dominio, actualiza `siteOrigin` y recompila. Al añadir rutas, actualiza `routes.ts` y `seo.ts`.
+
+Después de desplegar, verifica el dominio en Google Search Console y envía `https://www.vinoplasticrys.lat/sitemap.xml`. Comprueba allí las URL publicadas y revisa sus vistas previas al compartirlas. Estas acciones requieren acceso a la cuenta del propietario. No se añade `JobPosting` al listado: ese marcado requiere páginas individuales de vacantes.
 
 ## Instalación como PWA
 

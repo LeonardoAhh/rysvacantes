@@ -97,3 +97,29 @@
   font-weight: var(--weight-semibold);
   text-underline-offset: var(--space-1);
 }
+.seo-initial-content {
+  padding-block: var(--space-12);
+}
+
+.seo-initial-content h1 {
+  font-size: var(--font-size-display-sm);
+}
+
+.seo-initial-content p {
+  max-width: var(--container-wide);
+  margin-block: var(--space-5);
+  color: var(--text-secondary);
+}
+
+.seo-initial-content nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.seo-initial-content a {
+  display: inline-flex;
+  min-height: var(--space-11);
+  align-items: center;
+  color: var(--brand-primary);
+}
