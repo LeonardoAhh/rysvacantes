@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import {
+  AnimatePresence,
+  motion,
+  useIsPresent,
+  useReducedMotion,
+} from "motion/react"
 import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { WhatsAppIcon } from "./whatsapp-icon"
@@ -10,6 +15,23 @@ export type ContactPhone = Readonly<{
 }>
 
 const PHONE_ROTATION_MS = 4000
+
+function AnimatedPhone({ phone }: { phone: ContactPhone }) {
+  const isPresent = useIsPresent()
+  return (
+    <motion.span
+      animate={{ opacity: 1, y: "0%" }}
+      aria-hidden={!isPresent}
+      inert={!isPresent}
+      className="contact-profile-phone-item"
+      exit={{ opacity: 0, y: "-100%" }}
+      initial={{ opacity: 0, y: "100%" }}
+      transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <ContactPhoneLink {...phone} />
+    </motion.span>
+  )
+}
 
 function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
   const reduceMotion = useReducedMotion()
@@ -117,16 +139,10 @@ export function ContactPhoneRow({
             )}
           >
             <AnimatePresence initial={false}>
-              <motion.span
-                animate={{ opacity: 1, y: "0%" }}
-                className="contact-profile-phone-item"
-                exit={{ opacity: 0, y: "-100%" }}
-                initial={{ opacity: 0, y: "100%" }}
+              <AnimatedPhone
                 key={`${activePhone.number}-${activeIndex}`}
-                transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <ContactPhoneLink {...activePhone} />
-              </motion.span>
+                phone={activePhone}
+              />
             </AnimatePresence>
           </span>
         ) : (

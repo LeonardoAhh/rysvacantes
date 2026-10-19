@@ -36,7 +36,7 @@ import {
 } from "./vacancy-types"
 import {
   createVacancy,
-  deleteVacancy,
+  setVacancyArchived,
   getVacancyCounts,
   updateVacancy,
 } from "./vacancy-repository"
@@ -46,10 +46,11 @@ import { VacancyListSkeleton } from "./vacancy-list-skeleton"
 import { VacancyPagination } from "./vacancy-pagination"
 import { VacancyFormDialog } from "./vacancy-form-dialog"
 import { VacancyCard } from "./vacancy-card"
+import { VacancyConflictError } from "./vacancy-conflict"
 import { SiteAnalyticsDialog } from "@/features/site-analytics/site-analytics-dialog"
 import "./dashboard.css"
 
-type StatusFilter = "all" | VacancyStatus
+type StatusFilter = "all" | "archived" | VacancyStatus
 type Counts = { total: number; published: number; draft: number }
 
 function DashboardContent() {
@@ -69,7 +70,11 @@ function DashboardContent() {
     scope: "editor",
     page,
     search: debouncedSearch,
-    status: statusFilter === "all" ? undefined : statusFilter,
+    status:
+      statusFilter === "all" || statusFilter === "archived"
+        ? undefined
+        : statusFilter,
+    archived: statusFilter === "archived",
     enabled: search === debouncedSearch,
   })
   const loading = listing.loading || search !== debouncedSearch
@@ -98,15 +103,19 @@ function DashboardContent() {
     void refreshCounts()
   }
 
-  async function handleSave(values: VacancyFormValues) {
+  async function handleSave(values: VacancyFormValues, requestId: string) {
     setBusy(true)
     setMutationError(null)
     try {
-      if (selectedVacancy) await updateVacancy(selectedVacancy.id, values)
-      else await createVacancy(values)
+      if (selectedVacancy)
+        await updateVacancy(selectedVacancy.id, selectedVacancy.version, values)
+      else await createVacancy(values, requestId)
       setFormOpen(false)
       setPage(0)
       refreshData()
+    } catch (error) {
+      if (error instanceof VacancyConflictError) refreshData()
+      throw error
     } finally {
       setBusy(false)
     }
@@ -117,16 +126,21 @@ function DashboardContent() {
     setBusy(true)
     setMutationError(null)
     try {
-      await deleteVacancy(vacancyToDelete.id)
+      await setVacancyArchived(
+        vacancyToDelete.id,
+        vacancyToDelete.version,
+        !vacancyToDelete.deletedAt
+      )
       setVacancyToDelete(null)
       if (page > 0 && listing.vacancies.length === 1) setPage(page - 1)
       else listing.reload()
       void refreshCounts()
     } catch (cause) {
+      if (cause instanceof VacancyConflictError) refreshData()
       setMutationError(
         cause instanceof Error
           ? cause.message
-          : "No se pudo eliminar la vacante."
+          : "No se pudo archivar o restaurar la vacante."
       )
     } finally {
       setBusy(false)
@@ -246,7 +260,9 @@ function DashboardContent() {
                   onValueChange={(value) => {
                     if (
                       typeof value === "string" &&
-                      (value === "all" || isVacancyStatus(value))
+                      (value === "all" ||
+                        value === "archived" ||
+                        isVacancyStatus(value))
                     ) {
                       setStatusFilter(value)
                       setPage(0)
@@ -258,13 +274,16 @@ function DashboardContent() {
                     <SelectValue>
                       {statusFilter === "all"
                         ? "Todos"
-                        : vacancyStatusLabels[statusFilter]}
+                        : statusFilter === "archived"
+                          ? "Archivadas"
+                          : vacancyStatusLabels[statusFilter]}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Estados</SelectLabel>
                       <SelectItem value="all">Todos</SelectItem>
+                      <SelectItem value="archived">Archivadas</SelectItem>
                       {vacancyStatuses.map((status) => (
                         <SelectItem key={status} value={status}>
                           {vacancyStatusLabels[status]}
@@ -360,10 +379,16 @@ function DashboardContent() {
       >
         <AlertDialogContent className="vacancy-delete-dialog-content">
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar esta vacante?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {vacancyToDelete?.deletedAt
+                ? "¿Restaurar esta vacante?"
+                : "¿Archivar esta vacante?"}
+            </AlertDialogTitle>
             <AlertDialogDescription>
               {vacancyToDelete
-                ? `Se eliminará “${vacancyToDelete.title}”. Esta acción no se puede deshacer.`
+                ? vacancyToDelete.deletedAt
+                  ? `“${vacancyToDelete.title}” volverá a Gestión. Solo aparecerá públicamente si está publicada y vigente.`
+                  : `“${vacancyToDelete.title}” dejará de mostrarse. Puedes recuperarla desde el filtro Archivadas.`
                 : ""}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -372,9 +397,11 @@ function DashboardContent() {
             <AlertDialogAction
               disabled={!editingEnabled}
               onClick={() => void handleDelete()}
-              variant="destructive"
+              variant={vacancyToDelete?.deletedAt ? "default" : "destructive"}
             >
-              Eliminar vacante
+              {vacancyToDelete?.deletedAt
+                ? "Restaurar vacante"
+                : "Archivar vacante"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

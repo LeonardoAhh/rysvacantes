@@ -20,7 +20,7 @@ type VacancyDetails = Pick<
 
 type StoredVacancy = Omit<
   Vacancy,
-  keyof VacancyDetails | "salaryPeriod" | "shift"
+  keyof VacancyDetails | "salaryPeriod" | "shift" | "version" | "deletedAt"
 > &
   Partial<VacancyDetails> & {
     salaryPeriod?: VacancySalaryPeriod | null
@@ -94,6 +94,8 @@ export function readLegacyVacancies(): {
         .filter((vacancy) => !vacancy.isDemo)
         .map((vacancy) => ({
           ...vacancy,
+          version: 1,
+          deletedAt: null,
           description: vacancy.description ?? "",
           education: vacancy.education ?? "",
           experience: vacancy.experience ?? "",

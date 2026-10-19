@@ -136,10 +136,7 @@ export function App() {
 
   useEffect(() => {
     if (activeRoute) {
-      syncPageSeo(
-        activeRoute.path,
-        activeRoute.Page === RouteErrorPage
-      )
+      syncPageSeo(activeRoute.path, activeRoute.Page === RouteErrorPage)
       syncPwaMetadata(activeRoute.path)
     }
   }, [activeRoute])
@@ -150,7 +147,9 @@ export function App() {
     if (!publicSiteRoutes.includes(path)) return
 
     void import("@/features/site-analytics/site-analytics")
-      .then(({ recordPublicPageView }) => recordPublicPageView(path))
+      .then(({ recordPublicPageView }) =>
+        recordPublicPageView(path, activeRoute)
+      )
       .catch(() => undefined)
   }, [activeRoute])
 

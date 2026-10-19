@@ -1,4 +1,6 @@
 import { supabase } from "@/lib/supabase"
+import { getBusinessDate } from "@/lib/business-date"
+import { VacancyConflictError } from "./vacancy-conflict"
 import { splitVacancyShiftFromTitle } from "./vacancy-shift"
 import {
   hasCompleteVacancyDetails,
@@ -12,10 +14,12 @@ export const vacancyPageSize = 12
 let publicAreasCache: Promise<string[]> | null = null
 
 const columns =
-  "id,title,shift,area,location,modality,employment_type,description,education,experience,requirements,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
+  "id,version,deleted_at,title,shift,area,location,modality,employment_type,description,education,experience,requirements,work_schedule,work_days,rest_days,salary,salary_period,benefits,status,deadline,created_at"
 
 type VacancyRow = {
   id: string
+  version: number
+  deleted_at: string | null
   title: string
   shift: string
   area: string
@@ -43,6 +47,7 @@ type ListOptions = {
   search?: string
   area?: string
   status?: VacancyStatus
+  archived?: boolean
   signal?: AbortSignal
   pageSize?: number
 }
@@ -54,6 +59,11 @@ function client() {
 }
 
 function dataError(code: string | undefined, action: string) {
+  if (code === "40001" || code === "PGRST116") return new VacancyConflictError()
+  if (code === "23514")
+    return new Error(
+      "Revisa el turno, el sueldo bruto y su período. La base de datos rechazó un valor inválido."
+    )
   if (
     code === "PGRST205" ||
     code === "PGRST204" ||
@@ -71,6 +81,8 @@ function dataError(code: string | undefined, action: string) {
 function fromRow(row: VacancyRow): Vacancy {
   return {
     id: row.id,
+    version: row.version,
+    deletedAt: row.deleted_at,
     title: row.title,
     shift: row.shift,
     area: row.area,
@@ -132,6 +144,7 @@ export async function listVacancies({
   search,
   area,
   status,
+  archived = false,
   signal,
   pageSize = vacancyPageSize,
 }: ListOptions) {
@@ -144,7 +157,15 @@ export async function listVacancies({
     .order("id", { ascending: false })
     .range(start, start + limit - 1)
 
-  if (scope === "public") query = query.eq("status", "published")
+  if (scope === "public")
+    query = query
+      .eq("status", "published")
+      .is("deleted_at", null)
+      .gte("deadline", getBusinessDate())
+  else
+    query = archived
+      ? query.not("deleted_at", "is", null)
+      : query.is("deleted_at", null)
   if (status) query = query.eq("status", status)
   if (area && area !== "all") query = query.eq("area", area)
 
@@ -207,22 +228,52 @@ export async function isVacancyEditor() {
   return data === true
 }
 
-export async function createVacancy(values: VacancyFormValues) {
+export async function createVacancy(
+  values: VacancyFormValues,
+  requestId: string = crypto.randomUUID()
+) {
   const { data, error } = await client()
     .from("vacancies")
-    .insert(toRow(values))
+    .insert({ id: requestId, ...toRow(values) })
     .select(columns)
     .single()
+  if (error?.code === "23505") {
+    const previous = await client()
+      .from("vacancies")
+      .select(columns)
+      .eq("id", requestId)
+      .single()
+    if (previous.error || !previous.data)
+      throw dataError(previous.error?.code, "crear")
+    const saved = previous.data as VacancyRow
+    if (
+      Object.entries(toRow(values)).some(
+        ([key, value]) => saved[key as keyof VacancyRow] !== value
+      )
+    ) {
+      throw new Error(
+        "La vacante ya se guardó en un intento anterior con otros datos. Cierra el formulario y revisa la vacante en Gestión antes de editarla."
+      )
+    }
+    invalidatePublicAreas()
+    return fromRow(saved)
+  }
   if (error || !data) throw dataError(error?.code, "crear")
   invalidatePublicAreas()
   return fromRow(data as VacancyRow)
 }
 
-export async function updateVacancy(id: string, values: VacancyFormValues) {
+export async function updateVacancy(
+  id: string,
+  version: number,
+  values: VacancyFormValues
+) {
   const { data, error } = await client()
     .from("vacancies")
-    .update(toRow(values))
+    .update({ ...toRow(values), version: version + 1 })
     .eq("id", id)
+    .eq("version", version)
+    .is("deleted_at", null)
     .select(columns)
     .single()
   if (error || !data) throw dataError(error?.code, "actualizar")
@@ -230,14 +281,23 @@ export async function updateVacancy(id: string, values: VacancyFormValues) {
   return fromRow(data as VacancyRow)
 }
 
-export async function deleteVacancy(id: string) {
+export async function setVacancyArchived(
+  id: string,
+  version: number,
+  archived: boolean
+) {
   const { data, error } = await client()
     .from("vacancies")
-    .delete()
+    .update({
+      deleted_at: archived ? new Date().toISOString() : null,
+      version: version + 1,
+    })
     .eq("id", id)
+    .eq("version", version)
     .select("id")
     .single()
-  if (error || !data) throw dataError(error?.code, "eliminar")
+  if (error || !data)
+    throw dataError(error?.code, archived ? "archivar" : "restaurar")
   invalidatePublicAreas()
 }
 
@@ -248,7 +308,11 @@ export async function importLegacyVacancies(vacancies: readonly Vacancy[]) {
       ...vacancy,
       ...splitVacancyShiftFromTitle(vacancy.title, vacancy.shift),
       status:
-        vacancy.status === "published" && !hasCompleteVacancyDetails(vacancy)
+        vacancy.status === "published" &&
+        (!hasCompleteVacancyDetails(vacancy) ||
+          !vacancy.shift.trim() ||
+          !vacancy.salaryPeriod ||
+          !/^\$[^$]*\d[^$]*$/.test(vacancy.salary))
           ? "draft"
           : vacancy.status,
     }),

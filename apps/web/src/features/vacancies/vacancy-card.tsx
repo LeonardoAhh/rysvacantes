@@ -1,5 +1,13 @@
-import { CalendarDays, Ellipsis, MapPin, Pencil, Trash2 } from "lucide-react"
+import {
+  Archive,
+  CalendarDays,
+  Ellipsis,
+  MapPin,
+  Pencil,
+  RotateCcw,
+} from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
+import { getBusinessDate } from "@/lib/business-date"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,8 +68,15 @@ export function VacancyCard({
       </div>
 
       <div className="vacancy-card-status">
-        <span className={`vacancy-status vacancy-status-${vacancy.status}`}>
-          {vacancyStatusLabels[vacancy.status]}
+        <span
+          className={`vacancy-status vacancy-status-${vacancy.deletedAt || vacancy.deadline < getBusinessDate() ? "paused" : vacancy.status}`}
+        >
+          {vacancy.deletedAt
+            ? "Archivada"
+            : vacancy.status === "published" &&
+                vacancy.deadline < getBusinessDate()
+              ? "Vencida"
+              : vacancyStatusLabels[vacancy.status]}
         </span>
         <span className="vacancy-deadline">
           <CalendarDays aria-hidden="true" />
@@ -84,20 +99,26 @@ export function VacancyCard({
             <Ellipsis aria-hidden="true" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" side="top">
-            <DropdownMenuItem
-              className="min-h-11"
-              onClick={() => onEdit(vacancy)}
-            >
-              <Pencil aria-hidden="true" />
-              Editar
-            </DropdownMenuItem>
+            {!vacancy.deletedAt && (
+              <DropdownMenuItem
+                className="min-h-11"
+                onClick={() => onEdit(vacancy)}
+              >
+                <Pencil aria-hidden="true" />
+                Editar
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               className="min-h-11"
               onClick={() => onDelete(vacancy)}
-              variant="destructive"
+              variant={vacancy.deletedAt ? "default" : "destructive"}
             >
-              <Trash2 aria-hidden="true" />
-              Eliminar
+              {vacancy.deletedAt ? (
+                <RotateCcw aria-hidden="true" />
+              ) : (
+                <Archive aria-hidden="true" />
+              )}
+              {vacancy.deletedAt ? "Restaurar" : "Archivar"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

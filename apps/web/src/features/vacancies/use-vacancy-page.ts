@@ -8,6 +8,7 @@ type VacancyPageOptions = {
   search: string
   area?: string
   status?: VacancyStatus
+  archived?: boolean
   enabled?: boolean
   pageSize?: number
 }
@@ -26,6 +27,7 @@ export function useVacancyPage({
   search,
   area,
   status,
+  archived = false,
   enabled = true,
   pageSize,
 }: VacancyPageOptions) {
@@ -43,6 +45,7 @@ export function useVacancyPage({
     search,
     area,
     status,
+    archived,
     revision,
     pageSize,
   ])
@@ -57,6 +60,7 @@ export function useVacancyPage({
       search,
       area,
       status,
+      archived,
       signal: controller.signal,
       pageSize,
     })
@@ -87,6 +91,7 @@ export function useVacancyPage({
     search,
     area,
     status,
+    archived,
     enabled,
     revision,
     requestKey,

@@ -1,11 +1,40 @@
 import { supabase } from "@/lib/supabase"
 import { publicSiteRoutes } from "@/lib/routes"
+import { siteOrigin } from "@/lib/seo"
 import type { SiteEventName } from "./site-events"
+import type { PublicActivity } from "./activity-contract"
 
 export type SiteVisitPeriod = 7 | 30
 
 const visitorStorageKey = "vinoplastic:site-visitor:v1"
 let fallbackVisitorId: string | null = null
+const pageRequests = new WeakMap<object, string>()
+let reportedFailure = false
+
+async function submitActivity(activity: PublicActivity) {
+  try {
+    const response = await fetch("/api/analytics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(activity),
+      keepalive: true,
+      credentials: "omit",
+    })
+    if (!response.ok) throw new Error("analytics_unavailable")
+  } catch {
+    // Report once without payloads, visitor IDs or contact information.
+    if (!reportedFailure)
+      console.warn("El registro de estadísticas no está disponible.")
+    reportedFailure = true
+  }
+}
+
+function canRecord(path: string) {
+  return (
+    publicSiteRoutes.includes(path) &&
+    window.location.origin === siteOrigin
+  )
+}
 
 function getVisitorId() {
   if (!globalThis.crypto?.randomUUID) return null
@@ -28,36 +57,30 @@ function getVisitorId() {
   }
 }
 
-export async function recordPublicPageView(path: string) {
-  if (
-    !supabase ||
-    !publicSiteRoutes.includes(path) ||
-    ["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname)
-  )
-    return
+export async function recordPublicPageView(path: string, navigation?: object) {
+  if (!canRecord(path)) return
 
   const visitorId = getVisitorId()
   if (!visitorId) return
 
-  await supabase.rpc("record_site_view", {
-    p_path: path,
-    p_visitor_id: visitorId,
-  })
+  let requestId = navigation ? pageRequests.get(navigation) : undefined
+  if (!requestId) {
+    requestId = crypto.randomUUID()
+    if (navigation) pageRequests.set(navigation, requestId)
+  }
+  await submitActivity({ kind: "view", path, visitorId, requestId })
 }
 
 export async function recordPublicEvent(name: SiteEventName, path: string) {
-  if (
-    !supabase ||
-    !publicSiteRoutes.includes(path) ||
-    ["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname)
-  )
-    return
+  if (!canRecord(path)) return
   const visitorId = getVisitorId()
   if (!visitorId) return
-  await supabase.rpc("record_site_event", {
-    p_event: name,
-    p_path: path,
-    p_visitor_id: visitorId,
+  await submitActivity({
+    kind: "event",
+    event: name,
+    path,
+    visitorId,
+    requestId: crypto.randomUUID(),
   })
 }
 

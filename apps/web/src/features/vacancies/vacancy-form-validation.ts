@@ -192,6 +192,11 @@ export function validateVacancyForm(
     errors.salaryPeriod = "Selecciona si el sueldo bruto es semanal o mensual."
   }
 
+  if (!errors.salary && !/^\$[^$]*[0-9][^$]*$/.test(values.salary)) {
+    errors.salary =
+      "Escribe un sueldo bruto con importe y un solo signo $ al inicio."
+  }
+
   if (!isVacancyStatus(values.status)) {
     errors.status = "Selecciona un estado válido."
   }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
+import { getBusinessDate } from "@/lib/business-date"
 import { Button } from "@workspace/ui/components/button"
 import { Spinner } from "@workspace/ui/components/spinner"
 import {
@@ -44,7 +45,7 @@ import "./vacancy-form-dialog.css"
 type VacancyFormDialogProps = {
   vacancy: Vacancy | null
   onClose: () => void
-  onSave: (values: VacancyFormValues) => Promise<void>
+  onSave: (values: VacancyFormValues, requestId: string) => Promise<void>
 }
 
 const emptyForm: VacancyFormValues = {
@@ -106,20 +107,13 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
   return values
 }
 
-function getTodayAsLocalDate() {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, "0")
-  const day = String(date.getDate()).padStart(2, "0")
-  return `${year}-${month}-${day}`
-}
-
 export function VacancyFormDialog({
   vacancy,
   onClose,
   onSave,
 }: VacancyFormDialogProps) {
   const [values, setValues] = useState(() => getInitialForm(vacancy))
+  const [requestId] = useState(() => crypto.randomUUID())
   const [step, setStep] = useState<VacancyFormStep>(0)
   const [touched, setTouched] = useState<
     Partial<Record<keyof VacancyFormValues, boolean>>
@@ -133,7 +127,7 @@ export function VacancyFormDialog({
   const stepFieldsRef = useRef<HTMLDivElement>(null)
   const firstRender = useRef(true)
   const isEditing = vacancy !== null
-  const today = getTodayAsLocalDate()
+  const today = getBusinessDate()
   const minimumDeadline =
     vacancy && vacancy.deadline < today ? vacancy.deadline : today
   const errors = validateVacancyForm(values, minimumDeadline)
@@ -206,7 +200,7 @@ export function VacancyFormDialog({
     setSaving(true)
     setSaveError("")
     try {
-      await onSave(normalizedValues)
+      await onSave(normalizedValues, requestId)
     } catch (error) {
       setSaveError(
         error instanceof Error

@@ -23,6 +23,8 @@ export function isVacancySalaryPeriod(
 
 export type Vacancy = Readonly<{
   id: string
+  version: number
+  deletedAt: string | null
   title: string
   shift: string
   area: string
@@ -44,7 +46,10 @@ export type Vacancy = Readonly<{
   isDemo: boolean
 }>
 
-export type VacancyFormValues = Omit<Vacancy, "id" | "isDemo">
+export type VacancyFormValues = Omit<
+  Vacancy,
+  "id" | "isDemo" | "version" | "deletedAt"
+>
 
 export function isMeaningfulVacancyDetail(value: string): boolean {
   const normalized = value.trim().toLocaleLowerCase("es")
