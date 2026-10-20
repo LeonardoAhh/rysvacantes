@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ArrowRight, BadgeCheck, ClipboardList, FileText, X } from "lucide-react"
+import { BadgeCheck, ClipboardList, FileText, X } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import {
   Dialog,
@@ -39,20 +39,21 @@ const hiringDocuments = [
   "Semanas cotizadas en el IMSS",
 ] as const
 
-export function VacancyHiringPopover() {
+export function VacancyHiringPopover({ kind }: { kind: "process" | "documents" }) {
   const [open, setOpen] = useState(false)
-  const [view, setView] = useState<"process" | "documents">("process")
   const isMobile = useIsMobile()
 
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen)
-    if (!nextOpen) setView("process")
   }
 
-  const title = view === "process" ? "Proceso de selección" : "Documentos para contratación"
+  const isProcess = kind === "process"
+  const label = isProcess ? "Proceso" : "Documentos"
+  const title = isProcess ? "Proceso de selección" : "Documentos para contratación"
+  const Icon = isProcess ? ClipboardList : FileText
   const trigger = (
     <Button
-      aria-label="Ver proceso de selección y documentos para contratación"
+      aria-label={`Ver ${title.toLowerCase()}`}
       className="public-vacancies-action"
       size="default"
       type="button"
@@ -61,69 +62,45 @@ export function VacancyHiringPopover() {
   )
 
   const details = (
-    <>
-      <div className="vacancy-hiring-body">
-        {view === "process" ? (
-          <ol className="vacancy-hiring-steps">
-            {selectionSteps.map(({ label, Icon }, index) => (
-              <li key={label}>
-                <span className="vacancy-hiring-step-icon">
-                  <Icon aria-hidden="true" />
-                </span>
-                <span>
-                  {index + 1}. {label}
-                </span>
-              </li>
+    <div className="vacancy-hiring-body">
+      {isProcess ? (
+        <ol className="vacancy-hiring-steps">
+          {selectionSteps.map(({ label, Icon }, index) => (
+            <li key={label}>
+              <span className="vacancy-hiring-step-icon">
+                <Icon aria-hidden="true" />
+              </span>
+              <span>
+                {index + 1}. {label}
+              </span>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <>
+          <ul className="vacancy-hiring-documents">
+            {hiringDocuments.map((document) => (
+              <li key={document}>{document}</li>
             ))}
-          </ol>
-        ) : (
-          <>
-            <ul className="vacancy-hiring-documents">
-              {hiringDocuments.map((document) => (
-                <li key={document}>{document}</li>
-              ))}
-            </ul>
-            <p className="vacancy-hiring-note">
-              <strong>Dato importante:</strong> Realizamos pruebas antidopaje.
-            </p>
-          </>
-        )}
-      </div>
-
-      <div className="vacancy-hiring-actions">
-        {view === "process" ? (
-          <Button onClick={() => setView("documents")} size="sm" type="button">
-            Avanzar <ArrowRight aria-hidden="true" />
-          </Button>
-        ) : (
-          <>
-            <Button
-              onClick={() => setView("process")}
-              size="sm"
-              type="button"
-              variant="outline"
-            >
-              Volver
-            </Button>
-            <Button onClick={() => handleOpenChange(false)} size="sm" type="button">
-              Cerrar
-            </Button>
-          </>
-        )}
-      </div>
-    </>
+          </ul>
+          <p className="vacancy-hiring-note">
+            <strong>Dato importante:</strong> Realizamos pruebas antidopaje.
+          </p>
+        </>
+      )}
+    </div>
   )
 
   if (isMobile) {
     return (
       <Dialog onOpenChange={handleOpenChange} open={open}>
         <DialogTrigger render={trigger}>
-          Proceso
-          <ClipboardList aria-hidden="true" />
+          {label}
+          <Icon aria-hidden="true" />
         </DialogTrigger>
         <DialogContent className="vacancy-hiring-sheet" showCloseButton={false}>
           <DialogHeader className="vacancy-hiring-sheet-header">
-            <DialogTitle aria-live="polite">{title}</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <Button
               aria-label="Cerrar"
               onClick={() => handleOpenChange(false)}
@@ -143,8 +120,8 @@ export function VacancyHiringPopover() {
   return (
     <Popover onOpenChange={handleOpenChange} open={open}>
       <PopoverTrigger render={trigger}>
-        Proceso
-        <ClipboardList aria-hidden="true" />
+        {label}
+        <Icon aria-hidden="true" />
       </PopoverTrigger>
       <PopoverContent
         align="end"
@@ -153,7 +130,7 @@ export function VacancyHiringPopover() {
         sideOffset={8}
       >
         <PopoverHeader>
-          <PopoverTitle aria-live="polite">{title}</PopoverTitle>
+          <PopoverTitle>{title}</PopoverTitle>
         </PopoverHeader>
         {details}
       </PopoverContent>

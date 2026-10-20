@@ -180,7 +180,8 @@ export function PublicVacanciesPage() {
                   Pedir información
                   <ArrowUpRight aria-hidden="true" />
                 </a>
-                <VacancyHiringPopover />
+                <VacancyHiringPopover kind="process" />
+                <VacancyHiringPopover kind="documents" />
               </div>
             </div>
           </div>
