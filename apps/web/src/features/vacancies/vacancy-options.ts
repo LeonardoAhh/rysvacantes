@@ -24,7 +24,7 @@ export const vacancyOptions = {
     "Ingeniería",
     "Recién egresado",
   ],
-  workSchedule: ["6:00 - 14:00", "14:00 - 22:00", "22:00 - 6:00"],
+  workSchedule: ["6:00 - 14:00", "14:00 - 22:00", "22:00 - 6:00", "8:00 -18:00"],
   workDays: ["Lun - Sab", "Mie - Dom", "Vie - Mar"],
   restDays: ["Dom", "Lun - Mar", "Mie - Jue"],
 } as const
