@@ -9,6 +9,7 @@ export const vacancyOptions = {
     "Recursos Humanos",
     "Sistema",
     "Calidad",
+    "Proyectos",
   ],
   location: ["Parque Industrial Querétaro", "Iztapalapa"],
   modality: ["Presencial", "Híbrida"],
