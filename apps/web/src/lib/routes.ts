@@ -15,3 +15,6 @@ export const publicSiteRoutes: readonly string[] = [
   routes.transport,
   routes.vacancies,
 ]
+
+export const vacanciesListAnchorId = "vacancies-list-title"
+export const vacancyQueryParam = "vacancy"

@@ -1,0 +1,215 @@
+/* Lock the page before Base UI can reserve a stable scrollbar gutter. */
+html:has([data-slot="sheet-content"].public-vacancy-sheet) {
+  overflow: hidden;
+}
+
+html:has([data-slot="sheet-content"].public-vacancy-sheet) body {
+  padding-inline-end: var(--vacancy-sheet-scrollbar-width, 0px);
+}
+
+[data-slot="sheet-content"].public-vacancy-sheet {
+  width: min(100%, var(--container-form));
+  max-height: calc(100dvh - var(--space-4));
+  margin-inline: auto;
+  overflow: hidden;
+  border: var(--border-width) solid var(--border-subtle);
+  border-bottom: 0;
+  border-radius: var(--radius-lg-token) var(--radius-lg-token) 0 0;
+  background: var(--background);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card);
+  --public-vacancy-muted: var(--text-secondary);
+}
+
+.public-vacancy-sheet-header {
+  flex: 0 0 auto;
+  gap: var(--space-3);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  padding: var(--space-4) var(--page-gutter);
+}
+
+.public-vacancy-sheet-heading,
+.public-vacancy-step-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.public-vacancy-sheet-heading-copy {
+  min-width: 0;
+}
+
+.public-vacancy-sheet-heading-copy p,
+.public-vacancy-sheet-heading-copy span,
+.public-vacancy-step-heading span {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.public-vacancy-sheet-heading-copy [data-slot="sheet-title"] {
+  margin-block: var(--space-1);
+  font-size: var(--font-size-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--line-height-tight);
+  overflow-wrap: anywhere;
+}
+
+.public-vacancy-sheet-heading [data-slot="button"] {
+  flex: 0 0 auto;
+}
+
+.public-vacancy-step-heading {
+  align-items: center;
+}
+
+.public-vacancy-step-heading strong {
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.public-vacancy-steps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.public-vacancy-steps li {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.public-vacancy-steps li:not(:last-child)::after {
+  width: 100%;
+  height: var(--border-width);
+  background: var(--border-subtle);
+  content: "";
+}
+
+.public-vacancy-steps button {
+  display: grid;
+  width: var(--space-11);
+  height: var(--space-11);
+  flex: 0 0 auto;
+  place-items: center;
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-pill-token);
+  background: var(--surface-default);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.public-vacancy-steps button.is-current {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: var(--brand-primary-foreground);
+}
+
+.public-vacancy-steps button:focus-visible {
+  outline: var(--outline-width) solid var(--brand-primary);
+  outline-offset: var(--space-1);
+}
+
+.public-vacancy-steps svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.public-vacancy-sheet-body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5) var(--page-gutter);
+}
+
+.public-vacancy-sheet-body h3 {
+  margin: 0 0 var(--space-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  letter-spacing: normal;
+}
+
+.public-vacancy-sheet-body .public-vacancy-description p {
+  font-size: var(--font-size-base);
+}
+
+.public-vacancy-sheet-body .public-vacancy-benefits li svg {
+  color: var(--brand-primary);
+}
+
+.public-vacancy-sheet-footer {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  border-top: var(--border-width) solid var(--border-subtle);
+  padding: var(--space-3) var(--page-gutter)
+    calc(var(--space-3) + env(safe-area-inset-bottom));
+}
+
+.public-vacancy-sheet-footer [data-slot="button"],
+.public-vacancy-sheet-contact {
+  min-height: var(--space-11);
+  white-space: nowrap;
+}
+
+.public-vacancy-sheet-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-pill-token);
+  background: var(--brand-primary);
+  padding: var(--space-2) var(--space-4);
+  color: var(--brand-primary-foreground);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.public-vacancy-sheet-contact:hover {
+  color: var(--brand-primary-foreground);
+}
+
+.public-vacancy-sheet-contact:focus-visible {
+  outline: var(--outline-width) solid var(--brand-primary);
+  outline-offset: var(--space-1);
+}
+
+.public-vacancy-sheet-contact svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  flex: 0 0 auto;
+}
+
+@media (width < 48rem) {
+  .public-vacancy-sheet-footer > :last-child {
+    flex: 1 1 auto;
+  }
+}
+
+@media (width < 26.25rem) {
+  .public-vacancy-sheet-footer [data-slot="button"] span {
+    display: none;
+  }
+
+  .public-vacancy-sheet-contact {
+    padding-inline: var(--space-2);
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="sheet-content"].public-vacancy-sheet {
+    animation: none;
+    transition: none;
+  }
+}

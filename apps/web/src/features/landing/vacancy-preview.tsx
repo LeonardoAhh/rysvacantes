@@ -3,7 +3,7 @@ import { Button } from "@workspace/ui/components/button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { useVacancyPage } from "@/features/vacancies/use-vacancy-page"
 import { vacancySalaryPeriodLabels } from "@/features/vacancies/vacancy-types"
-import { routes } from "@/lib/routes"
+import { routes, vacancyQueryParam, vacanciesListAnchorId } from "@/lib/routes"
 import "./vacancy-preview.css"
 
 export function VacancyPreview() {
@@ -53,7 +53,7 @@ export function VacancyPreview() {
             <li key={vacancy.id}>
               <a
                 className="home-vacancy-preview"
-                href={`${routes.vacancies}?search=${encodeURIComponent(vacancy.title)}`}
+                href={`${routes.vacancies}?search=${encodeURIComponent(vacancy.title)}&${vacancyQueryParam}=${encodeURIComponent(vacancy.id)}#${vacanciesListAnchorId}`}
               >
                 <span className="home-vacancy-meta">
                   {vacancy.area}

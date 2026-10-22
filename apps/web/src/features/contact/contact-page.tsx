@@ -4,6 +4,7 @@ import { ContactProfileCard } from "@/components/profile/contact-profile-card"
 import { LandingHeader } from "@/features/landing/landing-header"
 import { routes } from "@/lib/routes"
 import { companyAddress } from "@/lib/company-location"
+import { recruitmentPhones } from "@/lib/recruitment-contact"
 import "@/features/landing/landing.css"
 import "./contact.css"
 
@@ -36,11 +37,7 @@ export function ContactPage() {
             email="reclutamientoqro@vinoplastic.com.mx"
             location={companyAddress}
             name="Departamento de Reclutamiento"
-            phones={[
-              { number: "442 509 5534", whatsapp: "5214425095534" },
-              { number: "55 1525 4782", whatsapp: "5215515254782" },
-              { number: "55 1406 3167", whatsapp: "5215514063167" }
-            ]}
+            phones={recruitmentPhones}
             title="Información de contacto"
           />
         </section>

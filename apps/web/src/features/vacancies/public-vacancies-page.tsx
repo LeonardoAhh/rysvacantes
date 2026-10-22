@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ArrowUpRight, BriefcaseBusiness, BusFront, Search } from "lucide-react"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
-import { Button, buttonVariants } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui/components/button"
 import {
   Empty,
   EmptyDescription,
@@ -22,14 +22,12 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select"
 import { LandingHeader } from "@/features/landing/landing-header"
-import { routes } from "@/lib/routes"
-import { cn } from "@/lib/utils"
+import { routes, vacanciesListAnchorId } from "@/lib/routes"
 import { listPublicAreas } from "./vacancy-repository"
 import { useDebouncedValue, useVacancyPage } from "./use-vacancy-page"
 import { useVacancyMasonry } from "./use-vacancy-masonry"
 import { VacancyListSkeleton } from "./vacancy-list-skeleton"
 import { VacancyPagination } from "./vacancy-pagination"
-import { VacancyHiringPopover } from "./vacancy-hiring-popover"
 import { PublicVacancyCard } from "./public-vacancy-card"
 import "./public-vacancies.css"
 
@@ -103,12 +101,12 @@ export function PublicVacanciesPage() {
         </header>
 
         <section
-          aria-labelledby="vacancies-list-title"
+          aria-labelledby={vacanciesListAnchorId}
           className="public-vacancies-listing"
         >
           <div className="public-vacancies-toolbar">
             <div className="public-vacancies-results-heading">
-              <h2 id="vacancies-list-title">Resultados</h2>
+              <h2 id={vacanciesListAnchorId}>Resultados</h2>
               <div aria-live="polite" className="public-vacancies-count">
                 {loading ? (
                   <Skeleton className="public-vacancies-count-skeleton" />
@@ -168,20 +166,6 @@ export function PublicVacanciesPage() {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              <div className="public-vacancies-actions">
-                <a
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "public-vacancies-action"
-                  )}
-                  href={routes.contact}
-                >
-                  Pedir información
-                  <ArrowUpRight aria-hidden="true" />
-                </a>
-                <VacancyHiringPopover kind="process" />
-                <VacancyHiringPopover kind="documents" />
               </div>
             </div>
           </div>
