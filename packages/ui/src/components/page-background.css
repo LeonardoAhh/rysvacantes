@@ -7,51 +7,16 @@
   pointer-events: none;
 }
 
-.page-background::before,
-.page-background::after {
+.page-background::before {
   position: absolute;
   content: "";
-}
-
-.page-background::before {
-  inset: 0 0 auto;
-  height: min(100svh, 52rem);
+  top: 0;
+  right: 0;
+  width: min(100%, var(--container-max));
+  height: min(100svh, var(--container-wide));
   background: radial-gradient(
-    ellipse at 82% 24%,
-    var(--surface-field),
-    var(--surface-soft) 38%,
-    transparent 72%
+    ellipse at 100% 0,
+    var(--surface-soft),
+    transparent 70%
   );
-}
-
-.page-background::after {
-  top: clamp(var(--space-8), 10vh, var(--space-16));
-  right: max(var(--page-gutter), calc((100vw - var(--container-max)) / 2));
-  width: min(42vw, 32rem);
-  aspect-ratio: 1;
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-pill-token);
-  outline: var(--border-width) solid var(--border-subtle);
-  outline-offset: var(--space-12);
-}
-
-@media (width < 48rem) {
-  .page-background {
-    position: fixed;
-  }
-
-  .page-background::before {
-    background: radial-gradient(
-      ellipse at 88% 18%,
-      var(--surface-field),
-      var(--surface-soft) 42%,
-      transparent 78%
-    );
-  }
-
-  .page-background::after {
-    top: var(--space-16);
-    right: calc(-1 * var(--space-8));
-    width: min(72vw, 24rem);
-  }
 }

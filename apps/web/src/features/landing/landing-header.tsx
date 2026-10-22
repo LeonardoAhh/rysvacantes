@@ -17,11 +17,9 @@ type LandingHeaderProps = {
 export function LandingHeader({ currentPage }: LandingHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const action =
-    currentPage === "contact" ||
-    currentPage === "about" ||
-    currentPage === "transport"
-      ? { href: routes.vacancies, label: "Vacantes" }
-      : { href: routes.contact, label: "Contacto" }
+    currentPage === "vacancies"
+      ? { href: routes.contact, label: "Contacto" }
+      : { href: routes.vacancies, label: "Vacantes" }
 
   const links = [
     { page: "home", href: routes.home, label: "Inicio" },

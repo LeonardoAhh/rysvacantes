@@ -20,13 +20,13 @@ function AnimatedPhone({ phone }: { phone: ContactPhone }) {
   const isPresent = useIsPresent()
   return (
     <motion.span
-      animate={{ opacity: 1, y: "0%" }}
+      animate={{ opacity: 1 }}
       aria-hidden={!isPresent}
       inert={!isPresent}
       className="contact-profile-phone-item"
-      exit={{ opacity: 0, y: "-100%" }}
-      initial={{ opacity: 0, y: "100%" }}
-      transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 0.16, ease: "easeOut" }}
     >
       <ContactPhoneLink {...phone} />
     </motion.span>
@@ -34,7 +34,6 @@ function AnimatedPhone({ phone }: { phone: ContactPhone }) {
 }
 
 function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
-  const reduceMotion = useReducedMotion()
   const phoneNumber = number.replace(/[^\d+]/g, "")
   const whatsappNumber = whatsapp?.replace(/\D/g, "")
 
@@ -44,16 +43,12 @@ function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
 
   if (whatsappNumber) {
     return (
-      <motion.a
+      <a
         aria-label={`Abrir WhatsApp con ${number}`}
         className="contact-profile-phone-link contact-profile-whatsapp-link"
         href={`https://wa.me/${whatsappNumber}`}
         rel="noopener noreferrer"
         target="_blank"
-        whileHover={reduceMotion ? undefined : { y: -1 }}
-        whileFocus={reduceMotion ? undefined : { y: -1 }}
-        whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-        transition={{ duration: 0.16, ease: "easeOut" }}
       >
         <WhatsAppIcon className="contact-profile-whatsapp-icon" />
         <span className="contact-profile-phone-copy">
@@ -64,7 +59,7 @@ function ContactPhoneLink({ number, whatsapp }: ContactPhone) {
           aria-hidden="true"
           className="contact-profile-phone-arrow"
         />
-      </motion.a>
+      </a>
     )
   }
 
@@ -108,13 +103,8 @@ export function ContactPhoneRow({
   return (
     <div className="contact-profile-field contact-profile-phone-field">
       <dt className="contact-profile-label">Teléfono</dt>
-      <motion.dd
+      <dd
         className="contact-profile-value contact-profile-phone-list"
-        whileInView={
-          hasWhatsApp && !reduceMotion ? { x: [0, -3, 0] } : undefined
-        }
-        viewport={{ once: true, amount: 0.8 }}
-        transition={{ duration: 0.6, delay: 0.3, repeat: 1, repeatDelay: 1 }}
         onBlurCapture={() => setIsFocused(false)}
         onFocusCapture={() => setIsFocused(true)}
         onMouseEnter={() => setIsHovered(true)}
@@ -148,7 +138,7 @@ export function ContactPhoneRow({
         ) : (
           <span>Por definir</span>
         )}
-      </motion.dd>
+      </dd>
     </div>
   )
 }

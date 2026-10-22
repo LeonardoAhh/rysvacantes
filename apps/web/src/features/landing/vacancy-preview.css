@@ -1,11 +1,12 @@
 .landing-page .landing-main {
+  --landing-support-gap: var(--space-12);
   display: block;
 }
 
 .home-vacancies {
   position: relative;
   min-width: 0;
-  padding-block: var(--space-8) var(--space-16);
+  padding-block: var(--space-8) var(--landing-support-gap);
 }
 
 .home-vacancies-heading {
@@ -63,11 +64,24 @@
   border-color: var(--text-primary);
 }
 
+.home-vacancy-preview:focus-visible {
+  outline: var(--outline-width) solid var(--brand-primary);
+  outline-offset: var(--space-1);
+}
+
 .home-vacancy-meta,
+.home-vacancy-location,
 .home-vacancy-pay {
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
   overflow-wrap: anywhere;
+}
+
+.home-vacancy-location {
+  display: inline-flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: var(--space-2);
 }
 
 .home-vacancy-preview h3 {
@@ -96,6 +110,10 @@
   gap: var(--space-2);
   font-size: var(--font-size-sm);
   font-weight: var(--weight-semibold);
+}
+
+.home-vacancy-open {
+  white-space: nowrap;
 }
 
 .home-vacancies svg {
@@ -133,6 +151,10 @@
 }
 
 @media (width < 48rem) {
+  .landing-page .landing-main {
+    --landing-support-gap: var(--space-8);
+  }
+
   .home-vacancies {
     padding-top: var(--space-12);
   }
@@ -143,10 +165,6 @@
 
   .home-vacancies-heading h2 {
     font-size: var(--font-size-2xl);
-  }
-
-  .home-vacancy-preview {
-    padding: var(--space-5);
   }
 }
 

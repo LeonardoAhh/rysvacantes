@@ -1,8 +1,11 @@
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, MapPin } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { useVacancyPage } from "@/features/vacancies/use-vacancy-page"
-import { vacancySalaryPeriodLabels } from "@/features/vacancies/vacancy-types"
+import {
+  isMeaningfulVacancyDetail,
+  vacancySalaryPeriodLabels,
+} from "@/features/vacancies/vacancy-types"
 import { routes, vacancyQueryParam, vacanciesListAnchorId } from "@/lib/routes"
 import "./vacancy-preview.css"
 
@@ -21,9 +24,13 @@ export function VacancyPreview() {
       <div className="home-vacancies-heading">
         <div>
           <p className="eyebrow">Tu próximo paso</p>
-          <h2 id="home-vacancies-title">Oportunidades actuales</h2>
+          <h2 id="home-vacancies-title">Vacantes</h2>
         </div>
-        <a className="text-link" href={routes.vacancies}>
+        <a
+          aria-label="Ver todas las vacantes"
+          className="text-link"
+          href={routes.vacancies}
+        >
           Ver todas <ArrowRight aria-hidden="true" />
         </a>
       </div>
@@ -60,6 +67,12 @@ export function VacancyPreview() {
                   {vacancy.shift && ` · ${vacancy.shift}`}
                 </span>
                 <h3>{vacancy.title}</h3>
+                {isMeaningfulVacancyDetail(vacancy.location) && (
+                  <span className="home-vacancy-location">
+                    <MapPin aria-hidden="true" />
+                    {vacancy.location}
+                  </span>
+                )}
                 <span className="home-vacancy-pay">
                   Sueldo bruto{" "}
                   <strong>
@@ -70,7 +83,7 @@ export function VacancyPreview() {
                   </strong>
                 </span>
                 <span className="home-vacancy-open">
-                  Consultar vacante <ArrowRight aria-hidden="true" />
+                  Ver detalles <ArrowRight aria-hidden="true" />
                 </span>
               </a>
             </li>

@@ -18,6 +18,7 @@ html:has([data-slot="sheet-content"].public-vacancy-sheet) body {
   background: var(--background);
   color: var(--text-primary);
   box-shadow: var(--shadow-card);
+  transition-property: opacity, transform;
   --public-vacancy-muted: var(--text-secondary);
 }
 

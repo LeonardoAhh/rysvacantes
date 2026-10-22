@@ -6,18 +6,25 @@ type VacancyPaginationProps = {
   page: number
   total: number
   onPageChange: (page: number) => void
+  busy?: boolean
 }
 
 export function VacancyPagination({
   page,
   total,
   onPageChange,
+  busy = false,
 }: VacancyPaginationProps) {
   const pages = Math.ceil(total / vacancyPageSize)
   if (pages <= 1) return null
 
   return (
-    <nav aria-label="Páginas de vacantes" className="vacancy-pagination">
+    <nav
+      aria-label="Páginas de vacantes"
+      className="vacancy-pagination"
+      data-busy={busy || undefined}
+      inert={busy}
+    >
       <Button
         disabled={page === 0}
         onClick={() => onPageChange(page - 1)}

@@ -16,8 +16,8 @@ export function LandingPage() {
       <main className="landing-main" id="main-content" tabIndex={-1}>
         <HeroSection />
         <VacancyPreview />
+        <ResponsibleHiringNotice />
       </main>
-      <ResponsibleHiringNotice />
     </div>
   )
 }

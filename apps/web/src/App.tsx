@@ -6,7 +6,6 @@ import {
   useState,
 } from "react"
 import type { ComponentType, ReactNode } from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import {
@@ -89,8 +88,6 @@ function getInternalUrl(anchor: HTMLAnchorElement) {
 }
 
 function RouteView({ route }: { route: ActiveRoute }) {
-  const reduceMotion = useReducedMotion()
-
   useLayoutEffect(() => {
     if (route.scrollTo === undefined) return
     let focusTarget: HTMLElement | null =
@@ -116,16 +113,7 @@ function RouteView({ route }: { route: ActiveRoute }) {
     }
   }, [route])
 
-  return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      exit={reduceMotion ? undefined : { opacity: 0 }}
-      initial={reduceMotion ? false : { opacity: 0 }}
-      transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
-    >
-      <route.Page />
-    </motion.div>
-  )
+  return <route.Page />
 }
 
 export function App() {
@@ -178,7 +166,7 @@ export function App() {
       const currentPath = normalizePath(window.location.pathname)
 
       if (path === currentPath && url.search === window.location.search) {
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        window.scrollTo({ top: 0, behavior: "instant" })
         return
       }
 
@@ -293,13 +281,11 @@ export function App() {
 
   return (
     <NavigationContext.Provider value={navigate}>
-      <AnimatePresence initial={false} mode="wait">
-        {activeRoute ? (
-          <RouteView key={activeRoute.path} route={activeRoute} />
-        ) : (
-          <InitialRouteSkeleton key="initial" />
-        )}
-      </AnimatePresence>
+      {activeRoute ? (
+        <RouteView key={activeRoute.path} route={activeRoute} />
+      ) : (
+        <InitialRouteSkeleton />
+      )}
     </NavigationContext.Provider>
   )
 }

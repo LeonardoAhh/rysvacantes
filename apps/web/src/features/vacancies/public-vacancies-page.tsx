@@ -50,9 +50,10 @@ export function PublicVacanciesPage() {
     enabled: search === debouncedSearch,
   })
   const loading = listing.loading || search !== debouncedSearch
+  const showListSkeleton = loading && listing.vacancies.length === 0
   const masonryRef = useVacancyMasonry(
     listing.vacancies,
-    !loading && !listing.error && listing.vacancies.length > 2
+    !listing.error && listing.vacancies.length > 2
   )
 
   useEffect(() => {
@@ -102,13 +103,14 @@ export function PublicVacanciesPage() {
 
         <section
           aria-labelledby={vacanciesListAnchorId}
+          aria-busy={loading}
           className="public-vacancies-listing"
         >
           <div className="public-vacancies-toolbar">
             <div className="public-vacancies-results-heading">
               <h2 id={vacanciesListAnchorId}>Resultados</h2>
               <div aria-live="polite" className="public-vacancies-count">
-                {loading ? (
+                {showListSkeleton ? (
                   <Skeleton className="public-vacancies-count-skeleton" />
                 ) : (
                   <>
@@ -188,10 +190,10 @@ export function PublicVacanciesPage() {
             </Alert>
           )}
 
-          {loading ? (
+          {showListSkeleton ? (
             <VacancyListSkeleton className="public-vacancies-grid" />
           ) : listing.error ? null : listing.vacancies.length > 0 ? (
-            <ul className="public-vacancies-grid" ref={masonryRef}>
+            <ul className="public-vacancies-grid" inert={loading} ref={masonryRef}>
               {listing.vacancies.map((vacancy) => (
                 <PublicVacancyCard key={vacancy.id} vacancy={vacancy} />
               ))}
@@ -215,8 +217,9 @@ export function PublicVacanciesPage() {
               </EmptyHeader>
             </Empty>
           )}
-          {!loading && !listing.error && (
+          {!showListSkeleton && !listing.error && (
             <VacancyPagination
+              busy={loading}
               onPageChange={setPage}
               page={page}
               total={listing.total}

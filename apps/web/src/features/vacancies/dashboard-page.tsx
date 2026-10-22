@@ -228,12 +228,16 @@ function DashboardContent() {
         )}
         <LegacyVacancyImport onImported={refreshData} />
 
-        <section aria-label="Listado de vacantes" className="dashboard-listing">
+        <section
+          aria-busy={loading}
+          aria-label="Listado de vacantes"
+          className="dashboard-listing"
+        >
           <div className="dashboard-listing-heading">
             <div className="dashboard-listing-title">
               <h2>Vacantes</h2>
               <div aria-live="polite" className="dashboard-listing-count">
-                {loading ? (
+                {loading && listing.vacancies.length === 0 ? (
                   <Skeleton className="dashboard-count-skeleton" />
                 ) : (
                   `${listing.total} ${listing.total === 1 ? "resultado" : "resultados"}`
@@ -306,11 +310,11 @@ function DashboardContent() {
               )}
             </p>
           )}
-          {loading ? (
+          {loading && listing.vacancies.length === 0 ? (
             <VacancyListSkeleton className="vacancy-list" />
           ) : listing.error ? null : listing.vacancies.length > 0 ? (
             <>
-              <ul className="vacancy-list">
+              <ul className="vacancy-list" inert={loading}>
                 {listing.vacancies.map((vacancy) => (
                   <VacancyCard
                     editingEnabled={editingEnabled}
@@ -325,6 +329,7 @@ function DashboardContent() {
                 ))}
               </ul>
               <VacancyPagination
+                busy={loading}
                 onPageChange={setPage}
                 page={page}
                 total={listing.total}

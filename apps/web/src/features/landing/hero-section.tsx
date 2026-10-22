@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight, Check, Sparkles } from "lucide-react"
 import { buttonVariants } from "@workspace/ui/components/button"
 import { routes } from "@/lib/routes"
 
-const motionTransition = { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const }
+const motionTransition = { duration: 0.3, ease: "easeOut" as const }
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion()
@@ -15,19 +15,19 @@ export function HeroSection() {
     >
       <div className="hero-copy" id="companies">
         <motion.div
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1 }}
           className="hero-copy-content"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          initial={shouldReduceMotion ? false : { opacity: 0 }}
           transition={motionTransition}
         >
-          <p className="eyebrow">Reclutamiento con propósito</p>
+          <p className="eyebrow">Trabaja con nosotros</p>
           <h1 id="hero-title">
-            El talento indicado.
-            <span>El futuro en marcha.</span>
+            Trabaja en{" "}
+            <span>ViñoPlastic.</span>
           </h1>
           <p className="hero-description" id="talent">
-            Consulta las vacantes de ViñoPlastic en Querétaro y encuentra una
-            oportunidad para crecer con nosotros.
+            Explora las vacantes y conoce sueldo, ubicación, horario y requisitos
+            antes de escribir a Reclutamiento.
           </p>
           <div className="hero-actions">
             <a
@@ -37,8 +37,12 @@ export function HeroSection() {
               Ver vacantes
               <ArrowRight aria-hidden="true" />
             </a>
-            <a className="text-link" href={routes.about}>
-              Conoce la empresa
+            <a
+              aria-label="Conoce la empresa"
+              className="text-link"
+              href={routes.about}
+            >
+              Empresa
               <ArrowRight aria-hidden="true" />
             </a>
           </div>
@@ -62,14 +66,12 @@ export function HeroSection() {
       <motion.aside
         aria-label="Conexión entre vacantes y talento"
         className="hero-visual"
-        initial={
-          shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: 12 }
-        }
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
         transition={{
           ...motionTransition,
-          delay: shouldReduceMotion ? 0 : 0.12,
+          delay: shouldReduceMotion ? 0 : 0.08,
         }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        animate={{ opacity: 1 }}
       >
         <div aria-hidden="true" className="visual-sun" />
         <div aria-hidden="true" className="visual-orbit visual-orbit-one" />

@@ -52,8 +52,7 @@
   color: var(--primary-foreground);
   text-decoration: none;
   transition:
-    background-color var(--duration-fast) var(--easing-standard),
-    transform var(--duration-fast) var(--easing-standard);
+    background-color var(--duration-fast) var(--easing-standard);
 }
 
 .landing-primary-cta svg {
@@ -64,7 +63,6 @@
 .landing-primary-cta:hover {
   background: var(--landing-hover);
   color: var(--primary-foreground);
-  transform: translateY(-1px);
 }
 
 .landing-main {

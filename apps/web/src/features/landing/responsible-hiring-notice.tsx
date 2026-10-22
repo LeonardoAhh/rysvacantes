@@ -1,14 +1,4 @@
-import { useRef, useState } from "react"
-import { Button } from "@workspace/ui/components/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@workspace/ui/components/dialog"
+import { ChevronDown } from "lucide-react"
 import "./responsible-hiring-notice.css"
 
 const commitments = [
@@ -30,27 +20,23 @@ const commitments = [
 ] as const
 
 export function ResponsibleHiringNotice() {
-  // Each visit to Inicio mounts a new notice; dismissing it is not consent.
-  const [open, setOpen] = useState(true)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        className="responsible-hiring-notice"
-        initialFocus={titleRef}
-        finalFocus={() => document.getElementById("main-content")}
-      >
-        <DialogHeader>
-          <p className="responsible-hiring-eyebrow">Nuestro compromiso</p>
-          <DialogTitle ref={titleRef} tabIndex={-1}>
-            Reclutamiento libre y seguro
-          </DialogTitle>
-          <DialogDescription>
-            Prevenimos el trabajo forzado, el trabajo infantil y la trata de
-            personas con una selección responsable.
-          </DialogDescription>
-        </DialogHeader>
+    <section
+      aria-labelledby="responsible-hiring-title"
+      className="responsible-hiring-notice page-container"
+    >
+      <p className="responsible-hiring-eyebrow">Nuestro compromiso</p>
+      <h2 id="responsible-hiring-title">Reclutamiento libre y seguro</h2>
+      <p className="responsible-hiring-description">
+        Prevenimos el trabajo forzado, el trabajo infantil y la trata de
+        personas con una selección responsable.
+      </p>
+      <details className="responsible-hiring-details">
+        <summary>
+          <span className="responsible-hiring-show">Ver compromisos</span>
+          <span className="responsible-hiring-hide">Ocultar compromisos</span>
+          <ChevronDown aria-hidden="true" />
+        </summary>
         <ul className="responsible-hiring-commitments">
           {commitments.map(({ title, description }) => (
             <li key={title}>
@@ -59,10 +45,7 @@ export function ResponsibleHiringNotice() {
             </li>
           ))}
         </ul>
-        <DialogFooter>
-          <DialogClose render={<Button type="button" />}>Continuar</DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </details>
+    </section>
   )
 }
