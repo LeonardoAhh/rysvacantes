@@ -4,7 +4,8 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { SiteHeader } from "@/components/site-header"
 import { useNavigate } from "@/lib/navigation-context"
-import { routes } from "@/lib/routes"
+import { normalizePath } from "@/lib/route-loader"
+import { authReturnQueryParam, routes } from "@/lib/routes"
 import { useAuthUser } from "./use-auth-user"
 import { isVacancyEditor } from "@/features/vacancies/vacancy-repository"
 import "./dashboard-access.css"
@@ -19,7 +20,11 @@ export function DashboardAccess({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (auth.status === "anonymous") {
-      navigate(routes.auth, { replace: true })
+      const destination =
+        normalizePath(window.location.pathname) === routes.analytics
+          ? `${routes.auth}?${authReturnQueryParam}=${encodeURIComponent(routes.analytics)}`
+          : routes.auth
+      navigate(destination, { replace: true })
     }
   }, [auth.status, navigate])
 

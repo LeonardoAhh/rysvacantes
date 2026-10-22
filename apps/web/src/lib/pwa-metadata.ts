@@ -1,7 +1,8 @@
 import { routes } from "./routes"
 
 export function syncPwaMetadata(path: string) {
-  const isAdmin = path === routes.auth || path === routes.dashboard
+  const isAdmin =
+    path === routes.auth || path === routes.dashboard || path === routes.analytics
   const manifestHref = isAdmin ? "/admin.webmanifest" : "/app.webmanifest"
   const faviconHref = isAdmin ? "/admin-icon.svg" : "/favicon.svg"
   const appleIconHref = isAdmin

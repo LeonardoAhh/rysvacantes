@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="ViñoPlastic" />
     <script>
-      const adminPage = /^\/(?:auth|dashboard)\/?$/.test(location.pathname)
+      const adminPage = /^\/(?:auth|dashboard|analytics)\/?$/.test(location.pathname)
       const manifest = document.createElement("link")
       manifest.rel = "manifest"
       manifest.href = adminPage ? "/admin.webmanifest" : "/app.webmanifest"

@@ -5,7 +5,7 @@ import { Label } from "@workspace/ui/components/label"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { useNavigate } from "@/lib/navigation-context"
-import { routes } from "@/lib/routes"
+import { authReturnQueryParam, routes } from "@/lib/routes"
 import { supabase } from "@/lib/supabase"
 import { emailForUsername } from "./auth-credentials"
 import { useAuthUser } from "./use-auth-user"
@@ -18,6 +18,11 @@ export function AuthPage() {
   const [password, setPassword] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [feedback, setFeedback] = useState("")
+  const afterAuthPath =
+    new URLSearchParams(window.location.search).get(authReturnQueryParam) ===
+    routes.analytics
+      ? routes.analytics
+      : routes.dashboard
   const notice =
     feedback ||
     (auth.status === "unavailable"
@@ -28,9 +33,9 @@ export function AuthPage() {
 
   useEffect(() => {
     if (auth.status === "authenticated") {
-      navigate(routes.dashboard, { replace: true })
+      navigate(afterAuthPath, { replace: true })
     }
-  }, [auth.status, navigate])
+  }, [afterAuthPath, auth.status, navigate])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -58,7 +63,7 @@ export function AuthPage() {
           "No pudimos iniciar sesión. Revisa tu usuario y contraseña."
         )
       } else {
-        navigate(routes.dashboard, { replace: true })
+        navigate(afterAuthPath, { replace: true })
       }
     } catch {
       setFeedback("No pudimos conectar con el servicio. Inténtalo de nuevo.")

@@ -4,7 +4,7 @@ import { siteOrigin } from "@/lib/seo"
 import type { SiteEventName } from "./site-events"
 import type { PublicActivity } from "./activity-contract"
 
-export type SiteVisitPeriod = 7 | 30
+export type SiteVisitPeriod = 7 | 30 | "all"
 
 const visitorStorageKey = "vinoplastic:site-visitor:v1"
 let fallbackVisitorId: string | null = null
@@ -90,22 +90,34 @@ export type SiteVisitSummary = {
   todayViews: number
   pages: { path: string; views: number; visitors: number }[]
   events: { name: SiteEventName; clicks: number; visitors: number }[]
+  trend: {
+    day: string
+    views: number
+    visitors: number
+    interactions: number
+  }[]
 }
 
 export async function getSiteVisitSummary(
-  period: SiteVisitPeriod = 7
+  period: SiteVisitPeriod = "all"
 ): Promise<SiteVisitSummary> {
   if (!supabase) throw new Error("La conexión de visitas no está configurada.")
 
   const { data, error } = await supabase.rpc("site_engagement_summary", {
-    p_days: period,
+    p_days: period === "all" ? null : period,
   })
   if (error) {
-    if (["PGRST202", "42883", "42P01"].includes(error.code)) {
+    if (
+      ["PGRST202", "42883", "42P01"].includes(error.code) ||
+      (period === "all" && error.code === "22023")
+    ) {
       throw new Error("Falta aplicar la migración de estadísticas en Supabase.")
     }
     throw new Error("No pudimos cargar las estadísticas. Inténtalo de nuevo.")
   }
 
+  if (!data || !Array.isArray(data.trend)) {
+    throw new Error("Falta aplicar la migración de estadísticas en Supabase.")
+  }
   return data as SiteVisitSummary
 }

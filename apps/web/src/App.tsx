@@ -8,6 +8,7 @@ import {
 import type { ComponentType, ReactNode } from "react"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { PageBackground } from "@workspace/ui/components/page-background"
+import { SiteHeader } from "@/components/site-header"
 import {
   NavigationContext,
   type NavigateOptions,
@@ -25,10 +26,22 @@ type ActiveRoute = {
   scrollTo?: string | number
 }
 
-function RouteStatusPage({ children }: { children: ReactNode }) {
+function RouteStatusPage({
+  children,
+  breadcrumbLabel,
+}: {
+  children: ReactNode
+  breadcrumbLabel: string
+}) {
   return (
     <div className="route-status-page">
       <PageBackground />
+      <SiteHeader
+        breadcrumb={[
+          { href: routes.home, label: "Inicio" },
+          { label: breadcrumbLabel },
+        ]}
+      />
       <main className="not-found-page page-container">{children}</main>
     </div>
   )
@@ -36,21 +49,19 @@ function RouteStatusPage({ children }: { children: ReactNode }) {
 
 function NotFoundPage() {
   return (
-    <RouteStatusPage>
+    <RouteStatusPage breadcrumbLabel="Página no encontrada">
       <p className="not-found-code">404</p>
       <h1>Página no encontrada</h1>
       <p>La dirección que buscas no existe.</p>
-      <a href={routes.home}>Volver al inicio</a>
     </RouteStatusPage>
   )
 }
 
 function RouteErrorPage() {
   return (
-    <RouteStatusPage>
+    <RouteStatusPage breadcrumbLabel="Error al abrir página">
       <h1>No pudimos abrir esta página</h1>
       <p>Vuelve a intentarlo en un momento.</p>
-      <a href={routes.home}>Volver al inicio</a>
     </RouteStatusPage>
   )
 }

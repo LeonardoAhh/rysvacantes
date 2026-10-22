@@ -29,9 +29,15 @@ export function SignOutButton() {
 
   return (
     <span className="dashboard-sign-out">
-      <Button disabled={busy} onClick={handleSignOut} size="sm" variant="ghost">
+      <Button
+        aria-label="Cerrar sesión"
+        disabled={busy}
+        onClick={handleSignOut}
+        size="sm"
+        variant="ghost"
+      >
         <LogOut aria-hidden="true" />
-        Cerrar sesión
+        <span className="dashboard-sign-out-label">Cerrar sesión</span>
       </Button>
       {error && <span role="alert">{error}</span>}
     </span>

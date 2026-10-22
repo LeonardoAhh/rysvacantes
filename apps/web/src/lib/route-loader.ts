@@ -29,6 +29,10 @@ const loaders: Record<string, RouteLoader> = {
     import("@/features/vacancies/dashboard-page").then(
       (module) => module.DashboardPage
     ),
+  [routes.analytics]: () =>
+    import("@/features/site-analytics/site-analytics-page").then(
+      (module) => module.SiteAnalyticsPage
+    ),
 }
 
 const cache = new Map<string, Promise<PageComponent>>()

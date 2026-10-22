@@ -68,6 +68,13 @@ export const seoPages: Record<string, SeoPage> = {
     label: "Administración",
     indexable: false,
   },
+  [routes.analytics]: {
+    title: "Visitas al sitio | ViñoPlastic Administración",
+    description: "Estadísticas del sitio de ViñoPlastic para cuentas autorizadas.",
+    heading: "Visitas al sitio",
+    label: "Estadísticas",
+    indexable: false,
+  },
 }
 
 export function getSeoPage(path: string, hasError = false): SeoPage {

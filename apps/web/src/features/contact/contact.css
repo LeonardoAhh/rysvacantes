@@ -46,28 +46,6 @@
   line-height: var(--line-height-relaxed);
 }
 
-.contact-back-link {
-  display: inline-flex;
-  min-height: var(--space-11);
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-8);
-  color: var(--brand-primary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--weight-semibold);
-  text-decoration: none;
-  text-underline-offset: var(--space-1);
-}
-
-.contact-back-link:hover {
-  text-decoration: underline;
-}
-
-.contact-back-link svg {
-  width: var(--space-4);
-  height: var(--space-4);
-}
-
 @media (width < 48rem) {
   .contact-main {
     place-items: start center;
@@ -87,9 +65,5 @@
   .contact-description {
     margin-top: var(--space-3);
     font-size: var(--font-size-base);
-  }
-
-  .contact-back-link {
-    margin-top: var(--space-5);
   }
 }

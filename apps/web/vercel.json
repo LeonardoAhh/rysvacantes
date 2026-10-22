@@ -23,7 +23,7 @@
       ]
     },
     {
-      "source": "/(auth|dashboard|offline)(.*)",
+      "source": "/(auth|dashboard|analytics|offline)(.*)",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ]

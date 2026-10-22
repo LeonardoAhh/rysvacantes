@@ -6,6 +6,7 @@ export const routes = {
   transport: "/transporte",
   vacancies: "/vacancies",
   dashboard: "/dashboard",
+  analytics: "/analytics",
 } as const
 
 export const publicSiteRoutes: readonly string[] = [
@@ -18,3 +19,4 @@ export const publicSiteRoutes: readonly string[] = [
 
 export const vacanciesListAnchorId = "vacancies-list-title"
 export const vacancyQueryParam = "vacancy"
+export const authReturnQueryParam = "next"

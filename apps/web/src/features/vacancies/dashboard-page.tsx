@@ -3,7 +3,7 @@ import { BarChart3, BriefcaseBusiness, Plus, Search } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { DashboardAccess } from "@/features/auth/dashboard-access"
 import { SignOutButton } from "@/features/auth/sign-out-button"
-import { Button } from "@workspace/ui/components/button"
+import { Button, buttonVariants } from "@workspace/ui/components/button"
 import { Input } from "@workspace/ui/components/input"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { Skeleton } from "@workspace/ui/components/skeleton"
@@ -47,7 +47,7 @@ import { VacancyPagination } from "./vacancy-pagination"
 import { VacancyFormDialog } from "./vacancy-form-dialog"
 import { VacancyCard } from "./vacancy-card"
 import { VacancyConflictError } from "./vacancy-conflict"
-import { SiteAnalyticsDialog } from "@/features/site-analytics/site-analytics-dialog"
+import { routes } from "@/lib/routes"
 import "./dashboard.css"
 
 type StatusFilter = "all" | "archived" | VacancyStatus
@@ -62,7 +62,6 @@ function DashboardContent() {
   const [mutationError, setMutationError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [formOpen, setFormOpen] = useState(false)
-  const [analyticsOpen, setAnalyticsOpen] = useState(false)
   const [selectedVacancy, setSelectedVacancy] = useState<Vacancy | null>(null)
   const [vacancyToDelete, setVacancyToDelete] = useState<Vacancy | null>(null)
   const debouncedSearch = useDebouncedValue(search)
@@ -153,7 +152,13 @@ function DashboardContent() {
       <a className="skip-link" href="#dashboard-content">
         Saltar al contenido
       </a>
-      <SiteHeader actionSlot={<SignOutButton />} />
+      <SiteHeader
+        actionSlot={<SignOutButton />}
+        breadcrumb={[
+          { href: routes.home, label: "Inicio" },
+          { label: "Gestión de vacantes" },
+        ]}
+      />
       <main
         className="dashboard-content page-container"
         id="dashboard-content"
@@ -168,14 +173,13 @@ function DashboardContent() {
             </p>
           </div>
           <div className="dashboard-intro-actions">
-            <Button
-              onClick={() => setAnalyticsOpen(true)}
-              size="lg"
-              variant="outline"
+            <a
+              className={`${buttonVariants({ size: "lg", variant: "outline" })} dashboard-analytics-link`}
+              href={routes.analytics}
             >
               <BarChart3 aria-hidden="true" />
               Visitas al sitio
-            </Button>
+            </a>
             <Button
               className="dashboard-create-button"
               disabled={!editingEnabled}
@@ -372,9 +376,6 @@ function DashboardContent() {
           onSave={handleSave}
           vacancy={selectedVacancy}
         />
-      )}
-      {analyticsOpen && (
-        <SiteAnalyticsDialog onClose={() => setAnalyticsOpen(false)} />
       )}
       <AlertDialog
         onOpenChange={(open) => {

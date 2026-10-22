@@ -58,6 +58,8 @@
 
 .route-status-page {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
   background: var(--background);
 }
@@ -66,7 +68,8 @@
   position: relative;
   z-index: 1;
   display: grid;
-  min-height: 100svh;
+  min-height: 0;
+  flex: 1;
   align-content: center;
   justify-items: start;
   gap: var(--space-4);
@@ -92,11 +95,6 @@
   font-weight: var(--weight-bold);
 }
 
-.not-found-page a {
-  color: var(--brand-primary);
-  font-weight: var(--weight-semibold);
-  text-underline-offset: var(--space-1);
-}
 .seo-initial-content {
   padding-block: var(--space-12);
 }

@@ -1,8 +1,6 @@
-import { ArrowLeft } from "lucide-react"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { ContactProfileCard } from "@/components/profile/contact-profile-card"
 import { LandingHeader } from "@/features/landing/landing-header"
-import { routes } from "@/lib/routes"
 import { companyAddress } from "@/lib/company-location"
 import { recruitmentPhones } from "@/lib/recruitment-contact"
 import "@/features/landing/landing.css"
@@ -27,10 +25,6 @@ export function ContactPage() {
             <p className="contact-description">
               Contáctanos para pedir información sobre nuestras vacantes.
             </p>
-            <a className="contact-back-link" href={routes.home}>
-              <ArrowLeft aria-hidden="true" />
-              Volver al inicio
-            </a>
           </div>
           <ContactProfileCard
             catalogRef="CONTACTO / VIÑOPLASTIC"

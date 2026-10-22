@@ -31,6 +31,14 @@ export function LandingHeader({ currentPage }: LandingHeaderProps) {
 
   return (
     <SiteHeader
+      breadcrumb={
+        currentPage === "contact"
+          ? [
+              { href: routes.home, label: "Inicio" },
+              { label: "Contacto" },
+            ]
+          : undefined
+      }
       homeIsCurrent={currentPage === "home"}
       actionSlot={
         <div className="public-header-actions">
