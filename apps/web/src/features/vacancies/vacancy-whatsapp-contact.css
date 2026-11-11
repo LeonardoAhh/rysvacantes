@@ -95,21 +95,23 @@
 
 @media (width < 37.5rem) {
   [data-slot="dialog-content"].vacancy-whatsapp-dialog {
-    inset-inline-start: max(var(--page-gutter), env(safe-area-inset-left));
-    inset-inline-end: max(var(--page-gutter), env(safe-area-inset-right));
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     top: auto;
     bottom: 0;
-    width: auto;
-    max-width: var(--container-narrow);
+    width: 100%;
+    max-width: none;
     height: auto;
     max-height: calc(100dvh - var(--page-gutter) - var(--page-gutter));
-    margin-inline: auto;
+    margin-inline: 0;
     grid-template-rows: max-content max-content;
     align-content: start;
-    transform: none;
-    translate: 0 0;
+    translate: none;
     border-bottom: 0;
     border-radius: var(--radius-modal-token) var(--radius-modal-token) 0 0;
+    padding-inline:
+      max(var(--space-5), env(safe-area-inset-left))
+      max(var(--space-5), env(safe-area-inset-right));
     padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
     transition:
       translate var(--duration-fast) var(--easing-standard),
