@@ -95,14 +95,17 @@
 
 @media (width < 37.5rem) {
   [data-slot="dialog-content"].vacancy-whatsapp-dialog {
-    inset-inline-start: 0;
+    inset-inline-start: max(var(--page-gutter), env(safe-area-inset-left));
+    inset-inline-end: max(var(--page-gutter), env(safe-area-inset-right));
     top: auto;
     bottom: 0;
-    width: min(100%, var(--container-narrow));
+    width: auto;
     max-width: var(--container-narrow);
     height: auto;
     max-height: calc(100dvh - var(--page-gutter) - var(--page-gutter));
     margin-inline: auto;
+    grid-template-rows: max-content max-content;
+    align-content: start;
     transform: none;
     translate: 0 0;
     border-bottom: 0;
