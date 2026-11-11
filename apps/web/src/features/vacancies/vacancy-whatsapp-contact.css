@@ -93,6 +93,40 @@
   flex: 0 0 auto;
 }
 
+@media (width < 37.5rem) {
+  [data-slot="dialog-content"].vacancy-whatsapp-dialog {
+    inset-inline-start: 0;
+    top: auto;
+    bottom: 0;
+    width: min(100%, var(--container-narrow));
+    max-width: var(--container-narrow);
+    height: auto;
+    max-height: calc(100dvh - var(--page-gutter) - var(--page-gutter));
+    margin-inline: auto;
+    transform: none;
+    translate: 0 0;
+    border-bottom: 0;
+    border-radius: var(--radius-modal-token) var(--radius-modal-token) 0 0;
+    padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
+    transition:
+      translate var(--duration-fast) var(--easing-standard),
+      opacity var(--duration-fast) var(--easing-standard);
+  }
+
+  .vacancy-whatsapp-options {
+    align-content: start;
+  }
+
+  .vacancy-whatsapp-options a {
+    min-height: var(--space-16);
+  }
+
+  [data-slot="dialog-content"].vacancy-whatsapp-dialog[data-starting-style],
+  [data-slot="dialog-content"].vacancy-whatsapp-dialog[data-ending-style] {
+    translate: 0 calc(100% + var(--page-gutter));
+  }
+}
+
 .vacancy-whatsapp-preview {
   display: none;
 }
@@ -126,5 +160,17 @@
 
   .vacancy-whatsapp-preview-line-short {
     width: var(--space-12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="dialog-content"].vacancy-whatsapp-dialog {
+    animation: none;
+    transition: none;
+  }
+
+  [data-slot="dialog-content"].vacancy-whatsapp-dialog[data-starting-style],
+  [data-slot="dialog-content"].vacancy-whatsapp-dialog[data-ending-style] {
+    translate: 0 0;
   }
 }
