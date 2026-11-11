@@ -180,7 +180,7 @@ export function TransportPage() {
 
             return (
               <article
-                className={`transport-route${isOpen ? "is-open" : ""}`}
+                className={cn("transport-route", isOpen && "is-open")}
                 id={route.id}
                 key={route.id}
               >
