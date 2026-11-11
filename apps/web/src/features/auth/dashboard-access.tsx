@@ -8,6 +8,7 @@ import { normalizePath } from "@/lib/route-loader"
 import { authReturnQueryParam, routes } from "@/lib/routes"
 import { useAuthUser } from "./use-auth-user"
 import { isVacancyEditor } from "@/features/vacancies/vacancy-repository"
+import { AdminDataCacheProvider } from "./admin-data-cache"
 import "./dashboard-access.css"
 
 export function DashboardAccess({ children }: { children: ReactNode }) {
@@ -53,7 +54,11 @@ export function DashboardAccess({ children }: { children: ReactNode }) {
     editor?.userId === auth.user.id &&
     editor.status === "allowed"
   )
-    return children
+    return (
+      <AdminDataCacheProvider key={auth.user.id}>
+        {children}
+      </AdminDataCacheProvider>
+    )
 
   if (
     auth.status === "unavailable" ||

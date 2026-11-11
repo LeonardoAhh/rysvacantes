@@ -1,12 +1,12 @@
 .landing-page .landing-main {
-  --landing-support-gap: var(--space-12);
+  --landing-support-gap: var(--page-section-space);
   display: block;
 }
 
 .home-vacancies {
   position: relative;
   min-width: 0;
-  padding-block: var(--space-8) var(--landing-support-gap);
+  padding-block: var(--page-section-space) var(--landing-support-gap);
 }
 
 .home-vacancies-heading {
@@ -23,9 +23,9 @@
 
 .home-vacancies-heading h2 {
   margin: 0;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--weight-semibold);
-  line-height: var(--line-height-tight);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
 }
 
 .home-vacancies-heading > a {
@@ -53,7 +53,7 @@
   gap: var(--space-3);
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-lg-token);
-  padding: var(--space-6);
+  padding: var(--space-5);
   background: var(--surface-default);
   color: var(--text-primary);
   text-decoration: none;
@@ -86,8 +86,9 @@
 
 .home-vacancy-preview h3 {
   margin: 0;
-  font-size: var(--font-size-xl);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h3);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h3);
   overflow-wrap: anywhere;
 }
 
@@ -130,7 +131,7 @@
 .home-vacancy-status {
   margin: 0;
   border-radius: var(--radius-lg-token);
-  padding: var(--space-6);
+  padding: var(--space-5);
   background: var(--surface-soft);
   color: var(--text-secondary);
 }
@@ -152,19 +153,15 @@
 
 @media (width < 48rem) {
   .landing-page .landing-main {
-    --landing-support-gap: var(--space-8);
+    --landing-support-gap: var(--page-section-space);
   }
 
   .home-vacancies {
-    padding-top: var(--space-12);
+    padding-top: var(--page-section-space);
   }
 
   .home-vacancy-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .home-vacancies-heading h2 {
-    font-size: var(--font-size-2xl);
   }
 }
 

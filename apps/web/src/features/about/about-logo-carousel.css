@@ -1,11 +1,11 @@
 .about-clients {
   display: grid;
   grid-template-columns: minmax(0, 0.3fr) minmax(0, 1fr);
-  gap: var(--space-8);
+  gap: var(--page-content-gap);
   align-items: center;
-  margin-top: var(--space-12);
+  margin-top: var(--page-section-space);
   border-top: 1px solid var(--border-default);
-  padding-top: var(--space-8);
+  padding-top: var(--page-content-gap);
 }
 
 .about-carousel-viewport {

@@ -69,7 +69,6 @@ export function VacancyGeneralFields({
               <Input
                 aria-describedby={errors[field] ? `${id}-error` : undefined}
                 aria-invalid={Boolean(errors[field])}
-                autoFocus={field === "title"}
                 id={id}
                 maxLength={vacancyTextFields[field].maxLength}
                 onBlur={() => onBlur(field)}

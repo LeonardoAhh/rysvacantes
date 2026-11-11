@@ -70,7 +70,8 @@ export const seoPages: Record<string, SeoPage> = {
   },
   [routes.analytics]: {
     title: "Visitas al sitio | ViñoPlastic Administración",
-    description: "Estadísticas del sitio de ViñoPlastic para cuentas autorizadas.",
+    description:
+      "Estadísticas del sitio de ViñoPlastic para cuentas autorizadas.",
     heading: "Visitas al sitio",
     label: "Estadísticas",
     indexable: false,
@@ -211,27 +212,6 @@ export function getStructuredData(path: string, hasError = false) {
         isPartOf: { "@id": website },
         about: { "@id": organization },
       },
-      ...(path === routes.home
-        ? []
-        : [
-            {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Inicio",
-                  item: `${siteOrigin}/`,
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: page.label,
-                  item: url,
-                },
-              ],
-            },
-          ]),
     ],
   }
 }

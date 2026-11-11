@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
-import { BarChart3, BriefcaseBusiness, Plus, Search } from "lucide-react"
-import { SiteHeader } from "@/components/site-header"
-import { DashboardAccess } from "@/features/auth/dashboard-access"
-import { SignOutButton } from "@/features/auth/sign-out-button"
-import { Button, buttonVariants } from "@workspace/ui/components/button"
+import { BriefcaseBusiness, Plus, Search } from "lucide-react"
+import { AdminSidebar } from "@/components/admin-sidebar"
+import { useAdminDataCache } from "@/features/auth/admin-data-cache"
+import { Button } from "@workspace/ui/components/button"
 import { Input } from "@workspace/ui/components/input"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { Skeleton } from "@workspace/ui/components/skeleton"
@@ -47,6 +46,7 @@ import { VacancyPagination } from "./vacancy-pagination"
 import { VacancyFormDialog } from "./vacancy-form-dialog"
 import { VacancyCard } from "./vacancy-card"
 import { VacancyConflictError } from "./vacancy-conflict"
+import { DashboardIntro } from "./dashboard-intro"
 import { routes } from "@/lib/routes"
 import "./dashboard.css"
 
@@ -54,10 +54,13 @@ type StatusFilter = "all" | "archived" | VacancyStatus
 type Counts = { total: number; published: number; draft: number }
 
 function DashboardContent() {
+  const cache = useAdminDataCache()
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
   const [page, setPage] = useState(0)
-  const [counts, setCounts] = useState<Counts | null>(null)
+  const [counts, setCounts] = useState<Counts | null>(
+    () => cache?.get<Counts>("vacancies:counts") ?? null
+  )
   const [countsError, setCountsError] = useState<string | null>(null)
   const [mutationError, setMutationError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -81,7 +84,9 @@ function DashboardContent() {
 
   const refreshCounts = useCallback(async () => {
     try {
-      setCounts(await getVacancyCounts())
+      const result = await getVacancyCounts()
+      cache?.set("vacancies:counts", result)
+      setCounts(result)
       setCountsError(null)
     } catch (cause) {
       setCountsError(
@@ -90,14 +95,16 @@ function DashboardContent() {
           : "No se pudo consultar el resumen."
       )
     }
-  }, [])
+  }, [cache])
 
   useEffect(() => {
+    if (cache?.get<Counts>("vacancies:counts")) return
     const timer = window.setTimeout(() => void refreshCounts(), 0)
     return () => window.clearTimeout(timer)
-  }, [refreshCounts])
+  }, [cache, refreshCounts])
 
   function refreshData() {
+    cache?.invalidate("vacancies:")
     listing.reload()
     void refreshCounts()
   }
@@ -131,6 +138,7 @@ function DashboardContent() {
         !vacancyToDelete.deletedAt
       )
       setVacancyToDelete(null)
+      cache?.invalidate("vacancies:")
       if (page > 0 && listing.vacancies.length === 1) setPage(page - 1)
       else listing.reload()
       void refreshCounts()
@@ -152,223 +160,199 @@ function DashboardContent() {
       <a className="skip-link" href="#dashboard-content">
         Saltar al contenido
       </a>
-      <SiteHeader
-        actionSlot={<SignOutButton />}
-        breadcrumb={[
-          { href: routes.home, label: "Inicio" },
-          { label: "Gestión de vacantes" },
-        ]}
-      />
-      <main
-        className="dashboard-content page-container"
-        id="dashboard-content"
-        tabIndex={-1}
-      >
-        <section aria-labelledby="dashboard-title" className="dashboard-intro">
-          <div>
-            <p className="dashboard-eyebrow">Panel de administración</p>
-            <h1 id="dashboard-title">Gestión de vacantes</h1>
-            <p className="dashboard-description">
-              Crea y organiza las oportunidades de tu equipo.
-            </p>
-          </div>
-          <div className="dashboard-intro-actions">
-            <a
-              className={`${buttonVariants({ size: "lg", variant: "outline" })} dashboard-analytics-link`}
-              href={routes.analytics}
-            >
-              <BarChart3 aria-hidden="true" />
-              Visitas al sitio
-            </a>
-            <Button
-              className="dashboard-create-button"
-              disabled={!editingEnabled}
-              onClick={() => {
-                setSelectedVacancy(null)
-                setFormOpen(true)
-              }}
-              size="lg"
-            >
-              <Plus aria-hidden="true" />
-              Nueva vacante
-            </Button>
-          </div>
-        </section>
-
-        <section aria-label="Resumen de vacantes" className="dashboard-summary">
-          {(
-            [
-              ["total", "Total de vacantes", ""],
-              ["published", "Publicadas", "dashboard-summary-icon-active"],
-              ["draft", "Borradores", "dashboard-summary-icon-draft"],
-            ] as const
-          ).map(([key, label, iconClass]) => (
-            <div className="dashboard-summary-card" key={key}>
-              <div className="dashboard-summary-label">
-                <span className={`dashboard-summary-icon ${iconClass}`}>
-                  <BriefcaseBusiness aria-hidden="true" />
-                </span>
-                <p>{label}</p>
-              </div>
-              {counts ? (
-                <strong>{counts[key]}</strong>
-              ) : (
-                <Skeleton className="dashboard-summary-skeleton" />
-              )}
-            </div>
-          ))}
-        </section>
-        {countsError && (
-          <p className="dashboard-storage-error" role="alert">
-            {countsError}{" "}
-            <Button
-              onClick={() => void refreshCounts()}
-              size="sm"
-              variant="link"
-            >
-              Reintentar
-            </Button>
-          </p>
-        )}
-        <LegacyVacancyImport onImported={refreshData} />
-
-        <section
-          aria-busy={loading}
-          aria-label="Listado de vacantes"
-          className="dashboard-listing"
+      <div className="admin-layout">
+        <AdminSidebar activePath={routes.dashboard} />
+        <main
+          className="dashboard-content admin-content page-container"
+          id="dashboard-content"
+          tabIndex={-1}
         >
-          <div className="dashboard-listing-heading">
-            <div className="dashboard-listing-title">
-              <h2>Vacantes</h2>
-              <div aria-live="polite" className="dashboard-listing-count">
-                {loading && listing.vacancies.length === 0 ? (
-                  <Skeleton className="dashboard-count-skeleton" />
+          <DashboardIntro
+            editingEnabled={editingEnabled}
+            onCreate={() => {
+              setSelectedVacancy(null)
+              setFormOpen(true)
+            }}
+          />
+
+          <section
+            aria-label="Resumen de vacantes"
+            className="dashboard-summary"
+          >
+            {(
+              [
+                ["total", "Total de vacantes", ""],
+                ["published", "Publicadas", "dashboard-summary-icon-active"],
+                ["draft", "Borradores", "dashboard-summary-icon-draft"],
+              ] as const
+            ).map(([key, label, iconClass]) => (
+              <div className="dashboard-summary-card" key={key}>
+                <div className="dashboard-summary-label">
+                  <span className={`dashboard-summary-icon ${iconClass}`}>
+                    <BriefcaseBusiness aria-hidden="true" />
+                  </span>
+                  <p>{label}</p>
+                </div>
+                {counts ? (
+                  <strong>{counts[key]}</strong>
                 ) : (
-                  `${listing.total} ${listing.total === 1 ? "resultado" : "resultados"}`
+                  <Skeleton className="dashboard-summary-skeleton" />
                 )}
               </div>
-            </div>
-            <div className="dashboard-filters">
-              <label className="dashboard-search">
-                <Search aria-hidden="true" />
-                <span className="sr-only">Buscar vacante</span>
-                <Input
-                  onChange={(event) => {
-                    setSearch(event.target.value)
-                    setPage(0)
-                  }}
-                  placeholder="Buscar"
-                  type="search"
-                  value={search}
-                />
-              </label>
-              <div className="dashboard-status-filter">
-                <Select
-                  modal={false}
-                  onValueChange={(value) => {
-                    if (
-                      typeof value === "string" &&
-                      (value === "all" ||
-                        value === "archived" ||
-                        isVacancyStatus(value))
-                    ) {
-                      setStatusFilter(value)
-                      setPage(0)
-                    }
-                  }}
-                  value={statusFilter}
-                >
-                  <SelectTrigger aria-label="Filtrar por estado">
-                    <SelectValue>
-                      {statusFilter === "all"
-                        ? "Todos"
-                        : statusFilter === "archived"
-                          ? "Archivadas"
-                          : vacancyStatusLabels[statusFilter]}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Estados</SelectLabel>
-                      <SelectItem value="all">Todos</SelectItem>
-                      <SelectItem value="archived">Archivadas</SelectItem>
-                      {vacancyStatuses.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {vacancyStatusLabels[status]}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-
-          {(listing.error || mutationError) && (
+            ))}
+          </section>
+          {countsError && (
             <p className="dashboard-storage-error" role="alert">
-              {listing.error ?? mutationError}{" "}
-              {listing.error && (
-                <Button onClick={listing.reload} size="sm" variant="link">
-                  Reintentar
-                </Button>
-              )}
+              {countsError}{" "}
+              <Button
+                onClick={() => void refreshCounts()}
+                size="sm"
+                variant="link"
+              >
+                Reintentar
+              </Button>
             </p>
           )}
-          {loading && listing.vacancies.length === 0 ? (
-            <VacancyListSkeleton className="vacancy-list" />
-          ) : listing.error ? null : listing.vacancies.length > 0 ? (
-            <>
-              <ul className="vacancy-list" inert={loading}>
-                {listing.vacancies.map((vacancy) => (
-                  <VacancyCard
-                    editingEnabled={editingEnabled}
-                    key={vacancy.id}
-                    onDelete={setVacancyToDelete}
-                    onEdit={(item) => {
-                      setSelectedVacancy(item)
+          <LegacyVacancyImport onImported={refreshData} />
+
+          <section
+            aria-busy={loading}
+            aria-label="Listado de vacantes"
+            className="dashboard-listing"
+          >
+            <div className="dashboard-listing-heading">
+              <div className="dashboard-listing-title">
+                <h2>Vacantes</h2>
+                <div aria-live="polite" className="dashboard-listing-count">
+                  {loading && listing.vacancies.length === 0 ? (
+                    <Skeleton className="dashboard-count-skeleton" />
+                  ) : (
+                    `${listing.total} ${listing.total === 1 ? "resultado" : "resultados"}`
+                  )}
+                </div>
+              </div>
+              <div className="dashboard-filters">
+                <label className="dashboard-search">
+                  <Search aria-hidden="true" />
+                  <span className="sr-only">Buscar vacante</span>
+                  <Input
+                    onChange={(event) => {
+                      setSearch(event.target.value)
+                      setPage(0)
+                    }}
+                    placeholder="Buscar"
+                    type="search"
+                    value={search}
+                  />
+                </label>
+                <div className="dashboard-status-filter">
+                  <Select
+                    modal={false}
+                    onValueChange={(value) => {
+                      if (
+                        typeof value === "string" &&
+                        (value === "all" ||
+                          value === "archived" ||
+                          isVacancyStatus(value))
+                      ) {
+                        setStatusFilter(value)
+                        setPage(0)
+                      }
+                    }}
+                    value={statusFilter}
+                  >
+                    <SelectTrigger aria-label="Filtrar por estado">
+                      <SelectValue>
+                        {statusFilter === "all"
+                          ? "Todos"
+                          : statusFilter === "archived"
+                            ? "Archivadas"
+                            : vacancyStatusLabels[statusFilter]}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Estados</SelectLabel>
+                        <SelectItem value="all">Todos</SelectItem>
+                        <SelectItem value="archived">Archivadas</SelectItem>
+                        {vacancyStatuses.map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {vacancyStatusLabels[status]}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {(listing.error || mutationError) && (
+              <p className="dashboard-storage-error" role="alert">
+                {listing.error ?? mutationError}{" "}
+                {listing.error && (
+                  <Button onClick={listing.reload} size="sm" variant="link">
+                    Reintentar
+                  </Button>
+                )}
+              </p>
+            )}
+            {loading && listing.vacancies.length === 0 ? (
+              <VacancyListSkeleton className="vacancy-list" />
+            ) : listing.error ? null : listing.vacancies.length > 0 ? (
+              <>
+                <ul className="vacancy-list" inert={loading}>
+                  {listing.vacancies.map((vacancy) => (
+                    <VacancyCard
+                      editingEnabled={editingEnabled}
+                      key={vacancy.id}
+                      onDelete={setVacancyToDelete}
+                      onEdit={(item) => {
+                        setSelectedVacancy(item)
+                        setFormOpen(true)
+                      }}
+                      vacancy={vacancy}
+                    />
+                  ))}
+                </ul>
+                <VacancyPagination
+                  busy={loading}
+                  onPageChange={setPage}
+                  page={page}
+                  total={listing.total}
+                />
+              </>
+            ) : (
+              <div className="dashboard-empty-state">
+                <BriefcaseBusiness aria-hidden="true" />
+                <h3>
+                  {counts?.total === 0
+                    ? "Aún no hay vacantes"
+                    : "No encontramos vacantes"}
+                </h3>
+                <p>
+                  {counts?.total === 0
+                    ? "Crea una vacante para empezar a organizar tus oportunidades."
+                    : "Prueba con otra búsqueda o cambia el filtro de estado."}
+                </p>
+                {counts?.total === 0 && (
+                  <Button
+                    disabled={!editingEnabled}
+                    onClick={() => {
+                      setSelectedVacancy(null)
                       setFormOpen(true)
                     }}
-                    vacancy={vacancy}
-                  />
-                ))}
-              </ul>
-              <VacancyPagination
-                busy={loading}
-                onPageChange={setPage}
-                page={page}
-                total={listing.total}
-              />
-            </>
-          ) : (
-            <div className="dashboard-empty-state">
-              <BriefcaseBusiness aria-hidden="true" />
-              <h3>
-                {counts?.total === 0
-                  ? "Aún no hay vacantes"
-                  : "No encontramos vacantes"}
-              </h3>
-              <p>
-                {counts?.total === 0
-                  ? "Crea una vacante para empezar a organizar tus oportunidades."
-                  : "Prueba con otra búsqueda o cambia el filtro de estado."}
-              </p>
-              {counts?.total === 0 && (
-                <Button
-                  disabled={!editingEnabled}
-                  onClick={() => {
-                    setSelectedVacancy(null)
-                    setFormOpen(true)
-                  }}
-                  variant="outline"
-                >
-                  <Plus aria-hidden="true" />
-                  Crear vacante
-                </Button>
-              )}
-            </div>
-          )}
-        </section>
-      </main>
+                    variant="outline"
+                  >
+                    <Plus aria-hidden="true" />
+                    Crear vacante
+                  </Button>
+                )}
+              </div>
+            )}
+          </section>
+        </main>
+      </div>
       {formOpen && (
         <VacancyFormDialog
           key={selectedVacancy?.id ?? "new-vacancy"}
@@ -417,9 +401,5 @@ function DashboardContent() {
 }
 
 export function DashboardPage() {
-  return (
-    <DashboardAccess>
-      <DashboardContent />
-    </DashboardAccess>
-  )
+  return <DashboardContent />
 }

@@ -7,7 +7,7 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  padding-block: var(--space-12) var(--space-16);
+  padding-block: var(--page-section-space);
 }
 
 .transport-intro {
@@ -24,17 +24,17 @@
 .transport-intro h1 {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-display-sm);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h1);
+  font-weight: var(--weight-bold);
   letter-spacing: var(--letter-spacing-tight);
-  line-height: var(--line-height-display);
+  line-height: var(--line-height-h1);
 }
 
 .transport-intro > p:not(.transport-eyebrow) {
   margin: var(--space-4) 0 0;
   color: var(--text-secondary);
   font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+  line-height: var(--line-height-lead);
 }
 
 .transport-note svg {
@@ -57,8 +57,8 @@
   min-width: 0;
   min-height: var(--space-12);
   align-items: center;
-  border: var(--border-width) solid transparent;
-  border-radius: var(--radius-pill-token);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-control);
   background: var(--surface-field);
 }
 
@@ -76,14 +76,14 @@
   width: 100%;
   min-width: 0;
   min-height: var(--space-12);
-  border: 0;
-  border-radius: var(--radius-pill-token);
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-primary);
   font: inherit;
 }
 
 .transport-search input {
+  border: 0;
   padding: 0 var(--space-4) 0 var(--space-10);
 }
 
@@ -106,7 +106,7 @@
 }
 
 .transport-result-count {
-  margin: var(--space-8) 0 var(--space-4);
+  margin: var(--page-content-gap) 0 var(--space-4);
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
 }
@@ -175,8 +175,9 @@
 .transport-route-heading h2 {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-xl);
-  line-height: var(--line-height-tight);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
 }
 
 .transport-route-heading p {
@@ -253,7 +254,7 @@
 }
 
 .transport-empty {
-  padding: var(--space-8);
+  padding: var(--page-content-gap);
   border: var(--border-width) solid var(--border-default);
   border-radius: var(--radius-lg-token);
   color: var(--text-secondary);
@@ -264,7 +265,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  margin-top: var(--space-8);
+  margin-top: var(--page-content-gap);
   padding: var(--space-5);
   border-radius: var(--radius-lg-token);
   background: var(--surface-field);
@@ -289,16 +290,16 @@
 
 @media (max-width: 760px) {
   .transport-main {
-    padding-block: var(--space-8) var(--space-12);
+    padding-block: var(--page-section-space);
   }
 
   .transport-search input,
   .transport-shift-filter [data-slot="select-trigger"] {
-    font-size: 16px;
+    font-size: var(--font-size-base);
   }
 
   .transport-search input {
-    padding-left: var(--space-9);
+    padding-left: var(--space-10);
   }
 
   .transport-stop {
@@ -332,7 +333,7 @@
   .transport-search-panel {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: var(--space-2);
-    margin-top: var(--space-8);
+    margin-top: var(--page-content-gap);
   }
 
   .transport-search > svg {
@@ -340,7 +341,7 @@
   }
 
   .transport-search input {
-    padding-inline: var(--space-9) var(--space-2);
+    padding-inline: var(--space-10) var(--space-2);
   }
 
   .transport-search input::placeholder {

@@ -37,7 +37,7 @@ export function SignOutButton() {
         variant="ghost"
       >
         <LogOut aria-hidden="true" />
-        <span className="dashboard-sign-out-label">Cerrar sesión</span>
+        <span className="dashboard-sign-out-label">Salir</span>
       </Button>
       {error && <span role="alert">{error}</span>}
     </span>

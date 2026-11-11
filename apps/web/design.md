@@ -1,291 +1,334 @@
-## Adaptación de marca ViñoPlastic
+# design.md — Sistema de diseño · Sitio de reclutamiento ViñoPlastic
+
+> Fuente de verdad visual. Cualquier color, tamaño, espacio, radio o fuente que use la interfaz **debe salir de los tokens de** `packages/ui/src/styles/tokens.css`. Si un valor no existe como token, se agrega aquí primero; nunca se escribe suelto en un componente.
+
+## 1. Principios
+
+1. **Claro antes que bonito.** Una persona que busca empleo desde su celular debe encontrar vacante, ruta y botón de postularse sin pensar.
+2. **Móvil primero.** Se diseña desde 320 px hacia arriba. Escritorio es una ampliación, no el diseño base.
+3. **Contraste alto por defecto.** Todo texto cumple **≥ 8.1:1** contra su fondo (ver sección 3). Si se pidió otro criterio, este documento se ajusta, no el código.
+4. **Plano y sobrio.** Sin sombras ni degradados en la interfaz; la jerarquía se hace con relleno, borde y tipografía.
+5. **El contenido no se inventa.** Vacantes, rutas, horarios y datos de contacto vienen de la fuente de datos o de configuración, nunca del componente.
+
+## 2. Marca
+
+- **Primario:** azul marino `#103672`, aproximación al azul del logo. _Pendiente: validar contra el archivo oficial del logo; si cambia, solo se edita `--color-brand` y derivados._
+- Se usa en: botón principal, enlaces, indicadores activos, foco, tarjeta destacada.
+- Sobre primario siempre texto blanco.
+- Los hover y pressed del primario se derivan del azul (más oscuros), nunca de otro matiz.
+- Esta adaptación **reemplaza** el primario negro y el acento azul eléctrico (`#0066ff`) de la referencia Mobbin. Se conservan el espacio, la jerarquía y la ausencia de sombras.
+
+## 3. Color y contraste
+
+### 3.1 Tokens
+
+```css
+:root {
+  /* Superficies */
+  --color-canvas: #ffffff;
+  --color-surface: #f3f3f3; /* nav, tarjetas destacadas, filas */
+  --color-field: #ffffff; /* fondo de inputs */
+  --color-brand-tint: #e8eef8; /* selección, fila activa */
+
+  /* Texto */
+  --color-ink: #141414; /* títulos y cuerpo */
+  --color-ink-soft: #262626;
+  --color-text-muted: #444444; /* texto secundario (sí cumple 8.1:1) */
+
+  /* Marca */
+  --color-brand: #103672;
+  --color-brand-hover: #0b2a5e;
+  --color-brand-active: #081f47;
+  --color-on-brand: #ffffff;
+
+  /* Bordes */
+  --color-border-strong: #707070; /* inputs, controles (no texto ≥3:1) */
+  --color-hairline: #d9d9d9; /* solo divisores decorativos */
+
+  /* Estados (siempre con ícono + texto, nunca solo color) */
+  --color-error: #7f1d1d;
+  --color-error-tint: #fdecec;
+  --color-success: #0f4526;
+  --color-success-tint: #e8f5ec;
+  --color-warning: #5c3b00;
+  --color-warning-tint: #fff4d6;
+
+  /* Inverso (footer, overlays) */
+  --color-inverse-bg: #141414;
+  --color-on-inverse: #ffffff;
+  --color-on-inverse-muted: #e0e0e0;
 
-El primario del proyecto es azul marino `#103672`, elegido como aproximación al azul del logo de ViñoPlastic. Se aplica mediante `--brand-primary` a botones principales, tarjetas destacadas, enlaces de marca, indicadores y foco. Sobre fondos primarios se utiliza blanco `#ffffff`; los textos generales conservan `#141414` y el lienzo permanece blanco. Los estados hover de las acciones principales deben derivarse del azul primario.
+  /* Foco */
+  --color-focus: var(--color-text-muted);
+  --color-focus-on-dark: #ffffff;
+}
+```
 
-Esta adaptación reemplaza las indicaciones de primario negro y de interfaz estrictamente monocromática de la referencia Mobbin que aparece a continuación. Se conservan sus reglas de tipografía, espacio, geometría y jerarquía.
+### 3.2 Pares permitidos y contraste
 
-## Overview
+Valores calculados con la fórmula WCAG; el agente debe **re-verificarlos con script** (ver `agents.md`) antes de cerrar cualquier tarea.
 
-Mobbin is a reference library of real product interfaces, and its own interface is engineered to get out of the way. The system is strictly monochrome: near-black ink (`{colors.ink}` — #141414) on a pure white canvas (`{colors.canvas}`), with structure carried by a ladder of barely-perceptible neutral tints rather than by shadows or color. The thousands of app screenshots, icon tiles, and brand logos the site exists to show are the only saturated elements on any page — the chrome frames them the way a gallery wall frames paintings.
+| Texto              | Fondo                     | Ratio      | ¿≥ 8.1? |
+| ------------------ | ------------------------- | ---------- | ------- |
+| `ink`              | `canvas`                  | 18.4       | Sí      |
+| `text-muted`       | `canvas`                  | 9.7        | Sí      |
+| `text-muted`       | `surface`                 | 8.8        | Sí      |
+| `brand` (enlaces)  | `canvas`                  | 11.7       | Sí      |
+| `brand`            | `surface`                 | 10.6       | Sí      |
+| `brand`            | `brand-tint`              | 10.0       | Sí      |
+| `on-brand`         | `brand`                   | 11.7       | Sí      |
+| `on-brand`         | `brand-hover`             | 13.9       | Sí      |
+| `error`            | `canvas` / `error-tint`   | 10.0 / 8.8 | Sí      |
+| `success`          | `canvas` / `success-tint` | 11.1 / 9.9 | Sí      |
+| `warning`          | `canvas` / `warning-tint` | 10.1 / 9.3 | Sí      |
+| `on-inverse`       | `inverse-bg`              | 18.4       | Sí      |
+| `on-inverse-muted` | `inverse-bg`              | 13.9       | Sí      |
 
-The geometry does the brand work that color refuses to do. Every interactive element is a stadium pill (`{rounded.full}`): the floating navigation bar, every button, the segmented billing toggle, the overlay badges. Containers sit at a calm `{rounded.md}` (24px), media tiles at `{rounded.sm}` (16px), and app icons render as iOS-style squircles at 30% corner radius. Type is set in Saans at deliberately non-standard variable weights — a chunky 652 for every heading, a bookish 456 for text, an airy 300 for hero subtitles — which gives the monochrome pages a strong typographic voice without a single decorative flourish.
+**Elementos no textuales** (bordes de input, íconos con significado, foco): ≥ 3:1. `border-strong` sobre blanco = 4.95:1.
 
-One color is allowed to interrupt: an electric blue accent (`{colors.accent}` — #0066ff), used exclusively for commercial signals — the "Popular" plan badge and the yearly-savings callout on pricing. Its scarcity is the point; when blue appears, it is asking for a decision.
+**Cambios respecto a la referencia, por contraste:**
 
-**Key Characteristics:**
-- Gallery-white monochrome palette — `{colors.ink}` on `{colors.canvas}`, zero brand chroma outside the single `{colors.accent}` blue
-- Stadium-pill interaction language: nav bar, buttons, toggles, and badges all at `{rounded.full}`
-- Shadow-free elevation — hierarchy built from a neutral tint ladder (`{colors.canvas-soft}`, `{colors.field}`, `{colors.hairline}`) and 1px hairlines
-- Saans at signature variable weights: 652 headings with tight 1.0–1.13 line-height, 456 body, 300 light subtitles
-- iOS-style squircle icon tiles (30% radius) as a recurring visual motif across library counters and brand marquees
-- Content supplies the color: app screenshots, brand icons, and grayscale curator portraits carry all visual richness
-- Full-bleed near-black `{colors.ink}` footer with rounded top corners closes every page in polarity inversion
+- Se elimina el gris claro `#adadad` (placeholders, footer, letra pequeña). Ya no existe token "faint".
+- El gris `#707070` ya no se usa para texto; solo como borde.
+- Los inputs **ya no van sin borde**: llevan borde de 1 px `border-strong`.
+- El badge translúcido sobre imágenes se sustituye por relleno sólido `inverse-bg` con texto `on-inverse`.
+- No hay modo oscuro en esta versión. Si se agrega, requiere su propia tabla de contraste.
 
-## Colors
+### 3.3 Reglas
 
-Source pages: home, pricing, awards, signup.
+- Nunca transmitir información solo con color (vacante "cerrada", error de campo, ruta activa): siempre texto o ícono además.
+- Enlaces en texto corrido: color `brand` **y subrayado**.
+- Texto sobre imágenes: solo sobre un bloque sólido, no sobre la foto.
 
-### Brand & Accent
-- **Ink Black** (`{colors.primary}` — #141414): The brand color. Fills every primary CTA pill, the footer band, and all display typography. Mobbin's identity is this near-black, softened just off pure black to sit comfortably next to photography.
-- **Electric Blue** (`{colors.accent}` — #0066ff): The only chromatic accent in the system. Reserved for commercial emphasis — the "Popular" pricing badge and savings callouts. Never used decoratively, never used for CTAs.
+## 4. Tipografía
 
-### Surface
-- **Canvas** (`{colors.canvas}` — #ffffff): Default page and card background across all pages.
-- **Soft Canvas** (`{colors.canvas-soft}` — #f3f3f3): The workhorse tint — a 6% ink wash over white. Fills the floating nav pill, the featured pricing card, FAQ accordion rows, soft utility pills, segmented-control tracks, and the highlighted comparison-table column.
-- **Field** (`{colors.field}` — #f0f0f0): An 8% ink wash used as the fill for form inputs, giving fields presence without borders.
-- **Soft Hairline** (`{colors.hairline-soft}` — #f0f0f0): 1px card outlines — the faintest possible edge, used on white-on-white cards (pricing, testimonials).
-- **Hairline** (`{colors.hairline}` — #e0e0e0): The stronger 16% control border, used on outlined pill buttons and interactive chrome.
+### 4.1 Fuente única: **Familjen Grotesk**
 
-### Text
-- **Ink** (`{colors.ink}` — #141414): Headings, body copy, and nav links.
-- **Soft Ink** (`{colors.ink-soft}` — #262626): Slightly lifted dark used for secondary lockups and the awards wordmark.
-- **Muted** (`{colors.text-muted}` — #707070): Secondary copy — supporting paragraphs, plan descriptions, vote counts, underlined inline links.
-- **Faint** (`{colors.text-faint}` — #adadad): Tertiary text — placeholders, de-emphasized footer links, fine print.
+- Grotesca contemporánea de uso poco extendido, de licencia **SIL Open Font License 1.1** (gratuita, uso comercial permitido, se puede alojar en tu servidor).
+- Variable, pesos 400–700, con cursiva. Soporta acentos y ñ del español.
+- Descarga: Google Fonts (familia "Familjen Grotesk"). Incluir el archivo `OFL.txt` junto a la fuente en el repositorio.
+- **Se aloja localmente** (`apps/web/public/fonts/`), no se carga desde CDN: más rápido y sin enviar la IP del candidato a terceros.
+- Los subconjuntos `latin` y `latin-ext`, y sus declaraciones `@font-face`, viven en `packages/ui/src/styles/tokens.css`. El archivo `OFL.txt` acompaña a las fuentes.
 
-### Semantic
-- The system ships no dedicated success/warning/error palette on its marketing surfaces; state communication stays within the monochrome ladder, with `{colors.accent}` as the sole positive-emphasis signal.
+El token `--font-family` define la familia y sus fuentes de respaldo.
 
-## Typography
+No se mezcla otra fuente. Tampoco monoespaciada, salvo bloques de código en el admin si fueran necesarios (usar `ui-monospace`).
 
-### Font Family
+### 4.2 Escala (móvil → escritorio ≥ 840 px)
 
-**Saans** — a contemporary neo-grotesque used exclusively, across every page and every role. It is loaded as a variable font, and the brand's voice comes from where it sits on the weight axis: headings render at an unusual 652 (heavier than semibold, lighter than bold), running text at 456 (a hair over regular), and hero subtitles at a genuinely light 300. Fallback stack: system sans (`-apple-system, "Helvetica Neue", Arial, sans-serif`).
+| Token            | Móvil    | Escritorio | Peso | Interlineado | Uso                          |
+| ---------------- | -------- | ---------- | ---- | ------------ | ---------------------------- |
+| `--type-display` | 2.5rem   | 4.5rem     | 700  | 1.05         | Hero de aterrizaje           |
+| `--type-h1`      | 2rem     | 3rem       | 700  | 1.1          | Título de página             |
+| `--type-h2`      | 1.75rem  | 2.25rem    | 700  | 1.15         | Secciones                    |
+| `--type-h3`      | 1.5rem   | 1.75rem    | 700  | 1.2          | Tarjetas, detalle de vacante |
+| `--type-h4`      | 1.25rem  | 1.375rem   | 600  | 1.25         | Subsecciones                 |
+| `--type-lead`    | 1.125rem | 1.25rem    | 400  | 1.5          | Subtítulo bajo el título     |
+| `--type-body`    | 1rem     | 1rem       | 400  | 1.5          | Texto base                   |
+| `--type-body-sm` | 0.875rem | 0.875rem   | 400  | 1.5          | Metadatos, ayudas            |
+| `--type-label`   | 0.875rem | 0.875rem   | 600  | 1.4          | Etiquetas de campo y chips   |
 
-### Hierarchy
+Pesos compartidos: regular `400`, medium `500`, semibold `600` y bold `700`. Los títulos H1–H3 usan sus tokens de rol y peso bold; el hero de inicio usa `--type-display`.
 
-| Token | Size | Weight | Line Height | Letter Spacing | Use |
-|---|---|---|---|---|---|
-| `{typography.display}` | 80px | 652 | 1.0 | 0 | Homepage hero statements and library counters |
-| `{typography.heading-1}` | 56px | 652 | 1.0 | 0 | Page heroes ("Design like a Pro.", "The votes are in.") |
-| `{typography.heading-2}` | 44px | 652 | 1.13 | 0 | Section headings on content pages |
-| `{typography.heading-3}` | 32px | 652 | 1.13 | 0 | Card-level headlines, award winner names, auth headings |
-| `{typography.heading-4}` | 24px | 652 | 1.25 | 0 | Sub-section headings, plan names |
-| `{typography.title}` | 20px | 600 | 1.3 | 0 | Feature titles, emphasized rows |
-| `{typography.body-lg}` | 20px | 300 | 1.38 | 0 | Hero subtitles and lead paragraphs — the light counterpoint to 652 headings |
-| `{typography.body}` | 16px | 456 | 1.38 | 0 | Default body copy, testimonial quotes |
-| `{typography.body-sm}` | 14px | 456 | 1.43 | 0 | Supporting copy, plan feature lists, legal text |
-| `{typography.link}` | 16px | 600 | 1.38 | 0 | Nav links and button labels |
-| `{typography.label}` | 12px | 600 | 1.33 | 0 | Badge and pill labels |
-| `{typography.caption}` | 12px | 456 | 1.33 | 0 | Captions, metadata, form fine print |
+Reglas:
 
-### Principles
+- Mínimo absoluto 14 px; texto de lectura y campos de formulario, **16 px o más** (evita el zoom automático de iOS).
+- Sin mayúsculas forzadas ni espaciado entre letras. Español en oración normal.
+- Largo de línea de lectura: 45–75 caracteres (`max-width: 68ch`).
+- Debe resistir el espaciado de texto de WCAG 1.4.12 (interlineado 1.5, párrafos 2×, letras 0.12em, palabras 0.16em) sin cortar contenido.
+- Los títulos por defecto **no** llevan punto final (los datos vienen de contenido real y no siempre son frases).
 
-- **Weight contrast is the drama.** Pairing 652 headings against 300 light subtitles at the same scale step (e.g. 80px display over 20px light lead) creates hierarchy without color or ornament.
-- **Tight leading up top.** Display and heading-1 sit at line-height 1.0; headings never breathe more than 1.25. Body text opens up to 1.38–1.43.
-- **Zero letter-spacing everywhere.** The grotesque is trusted at its natural fit; no tracking adjustments at any size.
-- **Sentence case with terminal periods.** Headlines read as declarative sentences: "Discover real-world design inspiration." — the period is part of the voice.
+## 5. Espacio, forma y elevación
 
-### Note on Font Substitutes
+### Espacio (base 4 px)
 
-Saans is a commercial typeface. The closest widely-available substitutes are **Inter** (variable, supports the 300/450/650 weight positions via its variable axis) or **Hanken Grotesk**. When substituting, map weight 652 → 650 (or 700 at static weights), 456 → 450 (or 500), and keep line-heights as specified — Saans has a compact x-height, so substitutes may need line-height reduced by ~0.05.
+`--space-1` 4 · `--space-2` 8 · `--space-3` 12 · `--space-4` 16 · `--space-5` 24 · `--space-6` 32 · `--space-7` 48 · `--space-8` 64 · `--space-9` 96
 
-## Layout
+- Margen lateral de página: 16 px (móvil), 24 px (≥ 600), 32 px (≥ 1024).
+- Separación entre secciones: `--page-section-space` (32 px en móvil, 48 px desde 840 px).
+- Separación entre contenidos relacionados: `--page-content-gap` (24 px en móvil, 32 px desde 840 px).
+- Contenedor máximo: 1200 px, centrado.
 
-### Spacing System
-- **Base unit**: 8px, with 4px half-steps for fine rhythm
-- **Tokens**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 80px · `{spacing.section-lg}` 120px
-- Buttons are fixed-height pills padded horizontally at `{spacing.md}`; inputs pad `{spacing.sm} {spacing.md}`
-- Universal rhythm constants: 28px and 80px vertical steps recur on every page; 120px separates major homepage acts
+### Radios
 
-### Grid & Container
-- Content rides a centered column: single-column centered lockups for heroes and award winners, a 2-up card grid for pricing plans, 3-up for portrait tiles, and a 4-column masonry for testimonials.
-- The floating nav pill is detached from the viewport edge and horizontally centered, rather than a full-width bar — the page canvas visibly wraps around it.
-- Marquee strips (brand logos, app screenshots) run full-bleed beyond the content column.
+`--radius-control` 8 px (botones, campos, chips y badges) · `--radius-card` 12 px (tarjetas y menús) · `--radius-modal` 16 px (modales) · `--radius-full` 9999 px (avatares y controles inherentemente circulares).
 
-### Whitespace Philosophy
+### Elevación
 
-Whitespace is the primary grouping device. Sections are separated by `{spacing.section}` to `{spacing.section-lg}` of empty canvas with no divider rules; within cards, generous `{spacing.lg}` padding keeps content off the hairline edges. The homepage alternates dense collage moments (icon clouds, screenshot grids) with near-empty typographic interludes — compression and release.
+Sin sombras. Niveles: 0 plano sobre `canvas` · 1 relleno `surface` · 2 borde 1 px `hairline` · modal = borde `border-strong` + velo `rgb(20 20 20 / 0.6)`.
 
-### Responsive Strategy
+## 6. Accesibilidad (obligatorio)
 
-#### Breakpoints
-
-| Name | Width | Key Changes |
-|---|---|---|
-| 2xl | 1536px | Max content width engaged; marquees widen |
-| xl | 1280px | Default desktop grid |
-| lg | 1024px | Comparison table condenses; testimonial masonry drops to 3 columns |
-| md | 840px / 768px | Pricing cards stack to 1-up; portrait grid drops to 2-up; nav links collapse |
-| sm | 719px / 640px | Single-column layouts; display type scales down from 80px |
-| xs | 600px | Minimum layout; auth split-panel drops its screenshot marquee |
+Base: **WCAG 2.2 nivel AA**, endurecida con el contraste ≥ 8.1:1 de este documento.
 
-#### Touch Targets
-- Pill buttons and nav CTAs are fixed-height stadium shapes comfortably above the 44px minimum; form inputs pad to a similar height via `{spacing.sm} {spacing.md}`.
-- The segmented billing toggle presents each option as a full pill target, not a small radio dot.
+**Estructura**
 
-#### Collapsing Strategy
-- The floating `nav-pill` persists on scroll and across breakpoints, tightening to logomark + CTA on narrow screens.
-- Multi-column grids (pricing 2-up, portraits 3-up, testimonials 4-up) collapse column-by-column rather than reflowing horizontally.
-- The signup page's two-panel split (form left, angled screenshot marquee right) drops the marquee panel entirely on narrow viewports, keeping the centered form column.
+- `<html lang="es-MX">`; un solo `<h1>` por página; jerarquía de títulos sin saltos.
+- Landmarks: `header`, `nav`, `main`, `footer`; `aside` para filtros/vista previa.
+- Enlace "Saltar al contenido" como primer elemento enfocable.
+- Título de página (`<title>`) único y descriptivo.
 
-#### Image Behavior
-- App screenshots and device mockups keep fixed aspect ratios and `{rounded.md}` corners at all sizes.
-- Marquee strips overflow the viewport intentionally and animate horizontally; they crop rather than scale.
-- Curator portraits stay square-ish tiles, lazily loaded, always grayscale.
+**Teclado y foco**
 
-## Elevation & Depth
+- Todo es operable con teclado, en orden visual lógico.
+- Foco visible: anillo de 2 px `--color-focus` (`--focus-ring-width`) con separación de 2 px (`--focus-ring-offset`) (en footer: `--color-focus-on-dark`). En inputs, selects y textareas, el anillo de 2 px va hacia dentro para no desbordar; nunca `outline: none` sin reemplazo visible.
+- Los diálogos atrapan el foco, cierran con `Esc` y devuelven el foco al disparador.
 
-| Level | Treatment | Use |
-|---|---|---|
-| 0 | Flat on `{colors.canvas}` | Default — most of every page |
-| 1 | `{colors.canvas-soft}` fill, no border | Nav pill, featured pricing card, FAQ rows, soft pills |
-| 2 | 1px `{colors.hairline-soft}` outline on white | Pricing and testimonial cards |
-| 3 | 1px inset ring | Comparison-table highlight column edge |
-| Inverse | `{colors.ink}` fill, `{colors.on-primary}` text | Footer band, primary CTAs |
+**Objetivos táctiles**
 
-The system is essentially shadow-free: no drop shadows appear on any card, button, or nav element. Elevation is communicated by *fill difference* (white vs. 6–8% ink tints) and by hairlines, which keeps every surface print-flat and lets the screenshot content supply all depth cues. The one soft-shadow exception is the active segment of the segmented control, which lifts off its `{colors.canvas-soft}` track as a white pill.
+- Mínimo **48 × 48 px** en botones, filtros, filas clicables y navegación móvil (WCAG pide 24, aquí se exige más). Separación ≥ 8 px entre objetivos.
 
-### Decorative Depth
-- **Glass monoliths** — the awards hero renders tall trophy pillars in a white-to-gray vertical gradient, reading as frosted glass against the `{colors.canvas-soft}` band; the page's only atmospheric gradient.
-- **Photography as depth** — floating app-icon squircles, angled screenshot collages (signup's rotated marquee panel), and device mockups create parallax-like layering on a flat canvas.
-- **Polarity inversion** — the `{colors.ink}` footer with `{rounded.md}` top corners acts as a heavy baseboard, giving each page a physical end-stop.
+**Formularios**
 
-## Shapes
+- Etiqueta visible siempre arriba del campo (el placeholder nunca sustituye la etiqueta).
+- Campos obligatorios marcados con texto "(obligatorio)", no solo con asterisco.
+- Errores: junto al campo, con ícono y texto, enlazados con `aria-describedby`; además un resumen de errores al inicio del formulario con enlaces a cada campo.
+- `autocomplete` correcto (`name`, `email`, `tel`).
+- No usar CAPTCHA visual; protección con límite de envíos y campo trampa.
 
-### Border Radius Scale
+**Contenido dinámico**
 
-| Token | Value | Use |
-|---|---|---|
-| `{rounded.none}` | 0px | Full-bleed media strips and marquee images |
-| `{rounded.sm}` | 16px | Inputs, video tiles, testimonial cards, FAQ rows |
-| `{rounded.md}` | 24px | Content cards, device mockups, portrait tiles, footer top corners |
-| `{rounded.full}` | 9999px | Every pill: nav, buttons, badges, toggles |
+- Mensajes de éxito/estado: `role="status"`; errores críticos: `role="alert"`.
+- Resultados filtrados: anunciar el total ("12 vacantes encontradas") en una región `aria-live="polite"`.
 
-### Photography Geometry
-- App screenshots render inside device-shaped frames at `{rounded.md}`.
-- App icons use the signature 30% squircle radius (`app-icon-squircle`) — the iOS icon silhouette — at every size from 32px chips to 96px hero tiles.
-- Curator portraits are near-square tiles at `{rounded.md}`, always black-and-white, with name captions overlaid in `{colors.on-primary}` on a `badge-overlay` scrim near the lower edge.
-- Avatars in testimonial cards are small circles (`{rounded.full}`) with a tiny company logo badge overlapping the bottom-right corner.
+**Imágenes, mapas y tablas**
 
-## Components
+- Texto alternativo real (vacío `alt=""` si es decorativa). Los mapas de rutas **siempre** tienen alternativa textual (lista de paradas y horarios).
+- Tablas con `<th scope>`; en móvil se transforman a tarjetas conservando las etiquetas.
 
-### Buttons
+**Movimiento y zoom**
 
-**`button-primary`** — "Join for free", "Get started", "Continue", "View winners"
-- Fill `{colors.primary}`, label `{colors.on-primary}` in `{typography.link}`, shape `{rounded.full}`, padding `0px {spacing.md}` on a fixed-height pill
-- The single CTA style everywhere: nav, pricing cards, auth form, awards hero
+- Respetar `prefers-reduced-motion`; transiciones ≤ 200 ms, sin animaciones que parpadeen.
+- El mockup decorativo del hero puede flotar en un ciclo suave de `6s` (`--duration-hero-float`), sin cambiar su contenido ni su posición de lectura. Con movimiento reducido permanece estático.
+- El nombre de marca del hero se revela letra por letra, cambia al primario y pulsa suavemente con `--duration-brand-pulse` y `--scale-brand-pulse`. El bucle se detiene fuera de pantalla o cuando la pestaña está oculta; con movimiento reducido queda estático.
+- Al salir del inicio por navegación, la página hace fade-out usando `--duration-fast`; con movimiento reducido no se anima.
+- Sin bloqueo de zoom (`user-scalable` nunca en `no`). Debe funcionar al 200 % y reflujar a 320 px sin scroll horizontal (400 % de zoom).
 
-**`button-outline`** — "Continue with Google", secondary "Get started"
-- Fill `{colors.canvas}`, label `{colors.ink}`, 1px `{colors.hairline}` border, shape `{rounded.full}`
-- The de-emphasized twin of the primary pill; used when two actions sit side by side or for third-party auth
+## 7. Responsive (móvil completo)
 
-**`button-pill-soft`** — "Explore ↗", "Mobbin ↗", "Read more"
-- Fill `{colors.canvas-soft}`, label `{colors.ink}`, shape `{rounded.full}`
-- Tertiary utility pill for outbound and in-page links; no border, relies on its tint fill
+Enfoque _mobile-first_: los estilos base son los de móvil; las media queries solo agregan.
 
-### Cards & Containers
+| Nombre | Desde   | Cambios                                                     |
+| ------ | ------- | ----------------------------------------------------------- |
+| base   | 320 px  | Una columna, menú en hamburguesa, tablas → tarjetas         |
+| sm     | 600 px  | Cuadrícula de 2 columnas en tarjetas                        |
+| md     | 840 px  | Nav horizontal, filtros en barra lateral, admin con sidebar |
+| lg     | 1024 px | 3 columnas, editor con vista previa en paralelo             |
+| xl     | 1280 px | Contenedor máximo 1200 px                                   |
 
-**`pricing-card`** — default plan tier (Team)
-- `{colors.canvas}` fill, 1px `{colors.hairline-soft}` outline, `{rounded.md}` corners
-- Plan name in `{typography.heading-4}`, price figure large with stacked `{typography.caption}` qualifiers, feature list rows in `{typography.body-sm}` with `{colors.text-muted}` icons
+Reglas móviles:
 
-**`pricing-card-featured`** — highlighted plan tier (Pro)
-- `{colors.canvas-soft}` fill, borderless, `{rounded.md}` corners — emphasis by tint, not by outline or polarity flip
-- Carries the `badge-popular` chip beside the plan name and a full-width `button-primary` CTA, while the default tier gets `button-outline`
+- Cero scroll horizontal a 320 px de ancho.
+- Navegación: barra superior con logo + botón de menú (≥ 48 px) que abre panel a pantalla completa.
+- CTA principal de cada página visible sin desplazarse mucho; en detalle de vacante, botón "Postularme" fijo al borde inferior.
+- Usar `100dvh` (no `100vh`) y `env(safe-area-inset-*)` en barras fijas.
+- Teclado móvil correcto: `inputmode`, `type="tel"`, `type="email"`.
+- Imágenes con `max-width: 100%`, proporción fija y carga diferida (excepto la primera).
+- Texto nunca se trunca para ocultar información esencial (título de vacante, ruta, horario).
 
-**`testimonial-card`** — user quote tile
-- `{colors.canvas}` fill, 1px `{colors.hairline-soft}` outline, `{rounded.sm}` corners
-- Circular avatar with overlapping company mini-badge, name in `{typography.link}`, company in `{colors.text-muted}` `{typography.body-sm}`, quote in `{typography.body}`
-- Laid out as a 4-column masonry of varying heights
+## 8. Componentes
 
-**`faq-row`** — accordion item
-- Full-width `{colors.canvas-soft}` bar, `{rounded.sm}` corners, question in `{typography.body}` with a trailing chevron; rows stack with `{spacing.sm}` gaps
+Todos usan solo tokens. Nombres de referencia (BEM o equivalente del proyecto).
 
-**`portrait-tile`** — curator/juror grid cell
-- Grayscale photograph at `{rounded.md}`, name + role caption overlaid at bottom center in `{colors.on-primary}`
-- The strict black-and-white treatment keeps the people grid inside the monochrome system
+### Botones
 
-### Inputs & Forms
+- **button-primary**: relleno `brand`, texto `on-brand`, `radius-control`, alto 48 px, padding horizontal `space-5`. Hover `brand-hover`, pressed `brand-active`. Deshabilitado: relleno `surface`, texto `text-muted`, borde `border-strong`, con `aria-disabled`.
+- **button-outline**: fondo `canvas`, texto `brand`, borde 2 px `brand`. Hover: fondo `brand-tint`.
+- **button-soft**: fondo `surface`, texto `ink`. Para acciones terciarias.
+- **button-danger** (solo admin): relleno `error`, texto blanco; siempre pide confirmación.
 
-**`text-input`**
-- `{colors.field}` fill, no border, `{colors.ink}` text with `{colors.text-faint}` placeholder, `{rounded.sm}` corners, padding `{spacing.sm} {spacing.md}`
+### Campos
 
-**`text-input-focused`**
-- Same chrome plus a 2px `{colors.ink}` ring — focus is signaled in ink, consistent with the monochrome system
+- **text-input / select / textarea**: fondo `field`, borde 1 px `border-strong`, `radius-control`, alto mínimo 48 px, texto 16 px, placeholder `text-muted`.
+- Foco: borde `muted` + anillo interno de 2 px. Error: borde `error` + mensaje debajo con ícono.
+- **checkbox / radio / switch**: área táctil de 48 px; etiqueta clicable.
 
-### Navigation
+### Chips y badges
 
-**`nav-pill`** — Top Nav (Desktop)
-- A floating, horizontally-centered stadium bar in `{colors.canvas-soft}`: logomark + wordmark left, text links ("Pricing", "Awards", "Log in") in `{typography.link}` right, capped by a `button-primary` CTA
-- Detaches from the page edge with visible canvas above it; persists as a sticky element on scroll
+- **chip-filter**: `radius-control`, 48 px de alto táctil (visual 36 px + área extendida), seleccionado = `brand-tint` + borde `brand` + ícono de check.
+- **badge-status**: `radius-control`, con ícono + texto. Estados de vacante: Borrador (`surface`), Publicada (`success`), Pausada (`warning`), Cerrada (`error`).
 
-**Top Nav (Mobile)**
-- The pill tightens to logomark + CTA; links collapse behind the pill
+### Tarjetas
 
-**Sub-nav (Awards)**
-- Minimal corner marks instead of a bar: logomark + section name top-left, a `button-pill-soft` "Mobbin ↗" return link top-right
+- **card**: `canvas`, borde 1 px `hairline`, `radius-card`, padding `space-5`.
+- **card-featured**: fondo `surface`, sin borde.
+- **vacancy-card**: título (h3), área, ubicación, tipo de jornada, enlace "Ver vacante". Toda la tarjeta es un solo enlace al detalle; sin enlaces anidados.
+- **route-card**: nombre de ruta, zona, turnos, enlace "Ver paradas y horarios".
 
-### Signature Components
+### Navegación
 
-**`app-icon-squircle`** — the recurring 30%-radius icon tile; floats in loose clouds around library counters, lines up in "Other nominees" rows, and anchors `brand-chip` entries
+- **nav** (≥ 840 px): barra `surface`, logo + enlaces + botón primario "Ver vacantes".
+- **nav-mobile**: barra superior fija + panel completo; enlace activo con `aria-current="page"` y marcador no solo de color.
+- La navegación de cada vista se expresa mediante el encabezado principal y sus títulos, sin rutas jerárquicas.
 
-**`brand-chip`** — marquee lockup of squircle icon + brand name in `{typography.heading-3}` ink; scrolls horizontally in full-bleed strips of recognizable products
+### Otros
 
-**`badge-popular`** — compact `{colors.accent}` chip with `{colors.on-primary}` label marking the featured pricing tier; the only blue element on the page
+- **accordion** (FAQ): botón con `aria-expanded`, fila `surface`, `radius-control`.
+- **toast**: `surface` con borde y ícono, `role="status"`, no desaparece solo en menos de 8 s ni si tiene acción.
+- **modal**: borde `border-strong`, `radius-modal`, título, botón cerrar de 48 px.
+- **footer**: `inverse-bg`, esquinas superiores `radius-card`, texto `on-inverse`/`on-inverse-muted`, enlaces subrayados.
 
-**`badge-overlay`** — translucent gray pill (rgba(115, 115, 115, 0.56)) with `{colors.on-primary}` `{typography.label}` text, laid over photography and screenshots (category tags, portrait captions)
+## 9. Páginas
 
-**`segmented-control`** + **`segmented-control-active`** — billing-period toggle: a `{colors.canvas-soft}` stadium track holding two pill options; the active option is a `{colors.canvas}` white pill, the inactive label sits in `{colors.text-muted}`
+> Estructura de UI. **Los datos reales (vacantes, rutas, horarios, contactos, textos legales) no se definen aquí**: vienen de la fuente de datos o de `config/site`.
 
-**`award-lockup`** — centered winner presentation: laurel-flanked category eyebrow in `{colors.text-muted}`, winner name in `{typography.heading-3}`, description in `{colors.text-muted}` `{typography.body}`, vote share in `{typography.body-sm}`, closed by a `button-pill-soft` "Explore ↗"
+### 9.1 Aterrizaje
 
-**`compare-table`** — the pricing comparison grid: feature rows divided by 1px `{colors.canvas-soft}` rules, the recommended plan's column washed in `{colors.canvas-soft}` with an inset ring edge
+1. Hero: título (`display`), subtítulo (`lead`), botón primario "Ver vacantes" y botón outline "Ver rutas de transporte".
+2. Vacantes destacadas (máx. 3–6, dinámicas) con enlace a la lista completa.
+3. Cómo es el proceso de selección (pasos numerados, contenido configurable).
+4. Rutas de transporte: resumen con enlace a la página.
+5. Preguntas frecuentes (acordeón).
+6. Llamado final a postularse + footer.
 
-**`footer`** — full-width `{colors.ink}` band with `{rounded.md}` top corners: white wordmark at display scale, tagline in `{colors.text-faint}`, two columns of `{colors.text-faint}` links that read in `{colors.on-primary}` for emphasis rows
+### 9.2 Rutas de transporte
 
-### Examples (illustrative)
+- Buscador/filtro por zona o colonia y por turno.
+- Lista de `route-card`; al abrir: paradas en orden, horarios por turno y mapa **opcional** con alternativa textual completa.
+- Estado vacío: "No hay rutas para este filtro" + botón para limpiar filtros.
+- Fecha de última actualización visible si el dato existe.
 
-> Kit-mirror demonstration surfaces. Each `ex-*` entry references brand-native primitives via token syntax so downstream consumers re-skin the same 10 surfaces consistently; none carries invented literal values.
+### 9.3 Vacantes
 
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
-- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
+- Barra de búsqueda y filtros (área, ubicación, jornada). En móvil: botón "Filtros" que abre panel; resultado con contador anunciado.
+- Lista de `vacancy-card` con paginación o "Cargar más" (con foco administrado).
+- **Detalle**: título, resumen, descripción, requisitos, prestaciones, ruta de transporte asociada (enlace), botón "Postularme" (fijo abajo en móvil).
+- Estados: cargando (esqueleto sin animación parpadeante), vacío, error con botón de reintento, vacante cerrada (mensaje y alternativas).
 
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
-- Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
+### 9.4 Contacto
 
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
-- Properties: `backgroundColor`, `rounded`, `padding`
+- Formulario (nombre, correo, teléfono opcional, asunto, mensaje) con validación accesible y confirmación `role="status"`.
+- Datos de contacto y horarios **leídos de configuración**, con enlaces `tel:` y `mailto:` de objetivo táctil amplio.
+- Enlace al aviso de privacidad antes del botón de enviar; casilla de aceptación si el área legal lo requiere.
 
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
-- Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
+### 9.5 Admin · Editor de vacantes
 
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
-- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
+Acceso protegido por autenticación y roles (definidos en el proyecto, no en este archivo).
 
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
-- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
+- **Layout**: ≥ 840 px sidebar de 13 rem + contenido; < 840 px barra superior + menú desplegable o navegación inferior de hasta 4 elementos.
+- **Lista de vacantes**: tabla con orden, búsqueda y filtro por estatus; en móvil, tarjetas con las mismas etiquetas. Acciones por fila: Editar, Duplicar, Pausar/Publicar, Eliminar (con confirmación).
+- **Editor**: formulario por secciones (datos generales, descripción, requisitos, prestaciones, ruta asociada, publicación).
+  - ≥ 1024 px: formulario a la izquierda, **vista previa** del detalle público a la derecha.
+  - < 1024 px: pestañas "Editar" / "Vista previa".
+  - Barra de acciones fija abajo: Guardar borrador, Publicar, Cancelar.
+  - Indicador de estado en texto ("Guardado hace 1 min", "Cambios sin guardar"); advertencia al salir con cambios.
+  - Validación antes de publicar, con resumen de errores.
+  - Eliminar o despublicar siempre pide confirmación en modal.
+- Campos del editor: **los define el esquema de datos del proyecto**. Esta lista es solo referencia de UI y debe confirmarse contra el esquema: título, área, ubicación, jornada, descripción, requisitos, prestaciones, ruta asociada, estatus, fechas de publicación/cierre.
 
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
-- Properties: `backgroundColor`, `rounded`, `padding`
+## 10. Hacer / No hacer
 
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`
+**Hacer**
 
-**`ex-empty-state-card`** — Empty-state illustration frame.
-- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
+- Usar tokens para todo valor visual.
+- Verificar contraste de cada par nuevo antes de usarlo.
+- Probar a 320 px, 375 px, 768 px y 1280 px, y con teclado.
+- Escribir interfaz en español de México, claro y sin tecnicismos.
 
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
+**No hacer**
 
-
-## Do's and Don'ts
-
-### Do
-- Keep the canvas `{colors.canvas}` white and let imported content (screenshots, icons, logos) supply all saturation.
-- Use `{rounded.full}` for every interactive element — a rectangular button does not exist in this system.
-- Build emphasis with the tint ladder: `{colors.canvas-soft}` fill for featured surfaces, `{colors.hairline-soft}` outlines for resting cards.
-- Reserve `{colors.accent}` for commercial signals (featured badges, savings callouts) — one or two blue elements per page at most.
-- Set every heading in Saans 652 with line-height 1.0–1.13 and end headline sentences with a period.
-- Pair heavy 652 headings with 300-weight `{typography.body-lg}` subtitles for hierarchy without color.
-- Render app icons as 30% squircles and portraits in grayscale to keep third-party imagery inside the system.
-- Close pages with the inverse `{colors.ink}` footer, rounded at the top.
-
-### Don't
-- Don't add drop shadows — elevation is fills and hairlines only.
-- Don't use `{colors.accent}` for CTAs; primary actions are always `{colors.primary}` ink pills.
-- Don't introduce additional accent hues, gradients on UI chrome, or colored section bands.
-- Don't outline the featured pricing tier — feature it with the `{colors.canvas-soft}` fill and `badge-popular` instead.
-- Don't apply letter-spacing or all-caps styling; the type system runs at natural tracking in sentence case.
-- Don't put borders on form fields at rest — inputs are `{colors.field}` tint fills; the border appears only as the 2px ink focus ring.
-- Don't let full-color photography of people into the curator/juror grids; portraits are strictly black-and-white.
-- Don't square off pill geometry at small sizes — badges, chips, and toggles stay stadium-shaped.
+- Sombras, degradados en la interfaz, bandas de color extra o más acentos.
+- Texto gris claro, placeholders como etiqueta, color como única señal.
+- Botones o filtros menores a 48 px de área táctil.
+- Contenido, cifras, salarios, rutas o teléfonos escritos dentro de componentes.
+- Cargar la fuente desde un CDN o mezclar otra familia tipográfica.

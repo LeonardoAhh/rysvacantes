@@ -21,10 +21,10 @@
   margin: var(--space-4) 0 0;
   color: var(--text-primary);
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
   letter-spacing: var(--letter-spacing-tight);
-  line-height: var(--line-height-tight);
 }
 
 .contact-profile-title {
@@ -67,7 +67,7 @@
 }
 
 .contact-profile-phone-list {
-  overflow-wrap: normal;
+  overflow-wrap: anywhere;
 }
 
 .contact-profile-phone-field {
@@ -76,14 +76,15 @@
 
 .contact-profile-phone-viewport {
   position: relative;
-  display: block;
-  height: var(--space-11);
-  overflow: hidden;
+  display: grid;
+  min-width: 0;
+  min-height: var(--space-11);
 }
 
 .contact-profile-phone-viewport .contact-profile-phone-item {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
+  min-width: 0;
+  max-width: 100%;
   justify-content: flex-end;
 }
 
@@ -96,19 +97,24 @@
 
 .contact-profile-phone-item {
   display: inline-flex;
+  max-width: 100%;
   align-items: center;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .contact-profile-phone-link {
   display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   gap: var(--space-1);
   min-height: var(--space-11);
+  overflow-wrap: anywhere;
 }
 
 .contact-profile-phone-viewport-whatsapp {
-  height: var(--space-16);
+  min-height: var(--space-16);
 }
 
 .contact-profile-whatsapp-link {
@@ -118,7 +124,9 @@
 
 .contact-profile-phone-copy {
   display: grid;
+  min-width: 0;
   gap: var(--space-1);
+  overflow-wrap: anywhere;
   text-align: left;
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useAdminDataCache } from "@/features/auth/admin-data-cache"
 import { listVacancies } from "./vacancy-repository"
 import type { Vacancy, VacancyStatus } from "./vacancy-types"
 
@@ -31,14 +32,17 @@ export function useVacancyPage({
   enabled = true,
   pageSize,
 }: VacancyPageOptions) {
-  const [state, setState] = useState<VacancyPageState>({
-    key: "",
-    vacancies: [],
-    total: 0,
-    loading: true,
-    error: null,
-  })
+  const cache = useAdminDataCache()
   const [revision, setRevision] = useState(0)
+  const cacheKey = `vacancies:page:${JSON.stringify([
+    scope,
+    page,
+    search,
+    area,
+    status,
+    archived,
+    pageSize,
+  ])}`
   const requestKey = JSON.stringify([
     scope,
     page,
@@ -49,9 +53,25 @@ export function useVacancyPage({
     revision,
     pageSize,
   ])
+  const [state, setState] = useState<VacancyPageState>(() => {
+    const cached = scope === "editor"
+      ? cache?.get<Pick<VacancyPageState, "vacancies" | "total">>(cacheKey)
+      : undefined
+    return {
+      key: cached ? requestKey : "",
+      vacancies: cached?.vacancies ?? [],
+      total: cached?.total ?? 0,
+      loading: !cached,
+      error: null,
+    }
+  })
 
   useEffect(() => {
     if (!enabled) return
+    const cached = revision === 0 && scope === "editor"
+      ? cache?.get<Pick<VacancyPageState, "vacancies" | "total">>(cacheKey)
+      : undefined
+    if (cached) return
     const controller = new AbortController()
 
     void listVacancies({
@@ -66,6 +86,7 @@ export function useVacancyPage({
     })
       .then((result) => {
         if (!controller.signal.aborted) {
+          if (scope === "editor") cache?.set(cacheKey, result)
           setState({ ...result, key: requestKey, loading: false, error: null })
         }
       })
@@ -96,13 +117,26 @@ export function useVacancyPage({
     revision,
     requestKey,
     pageSize,
+    cache,
+    cacheKey,
   ])
 
+  const cached = revision === 0 && scope === "editor"
+    ? cache?.get<Pick<VacancyPageState, "vacancies" | "total">>(cacheKey)
+    : undefined
+  const visibleState: VacancyPageState =
+    state.key === requestKey || !cached
+      ? state
+      : { ...cached, key: requestKey, loading: false, error: null }
+
   return {
-    ...state,
-    loading: state.loading || state.key !== requestKey,
-    error: state.key === requestKey ? state.error : null,
-    reload: () => setRevision((current) => current + 1),
+    ...visibleState,
+    loading: visibleState.loading || visibleState.key !== requestKey,
+    error: visibleState.key === requestKey ? visibleState.error : null,
+    reload: () => {
+      cache?.invalidate(cacheKey)
+      setRevision((current) => current + 1)
+    },
   }
 }
 

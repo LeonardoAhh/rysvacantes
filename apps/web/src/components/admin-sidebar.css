@@ -1,0 +1,295 @@
+/* Admin layout and navigation. */
+
+/* ---------- Estructura ---------- */
+
+.admin-layout {
+  position: relative;
+  min-width: 0;
+}
+
+.admin-content {
+  min-width: 0;
+}
+
+/* ---------- Marca (compartida: header móvil y sidebar) ---------- */
+
+.admin-sidebar-brand {
+  display: inline-flex;
+  min-width: 0;
+  min-height: var(--space-12);
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-input);
+  color: var(--text-primary);
+  font-family: var(--font-heading-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--weight-bold);
+  line-height: 1.1;
+  text-decoration: none;
+}
+
+/* Tamaño fijo, incluido el relleno, para que no crezca con su contenido */
+.admin-sidebar-brand-mark {
+  box-sizing: border-box;
+  width: var(--space-12);
+  height: var(--space-12);
+  flex: 0 0 auto;
+  border-radius: var(--radius-input);
+  background: var(--brand-primary);
+  color: var(--brand-primary-foreground);
+  object-fit: contain;
+  padding: var(--space-2);
+}
+
+/* ---------- Header móvil ---------- */
+
+.admin-mobile-header {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  min-height: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--surface-soft);
+  padding-inline: max(var(--page-gutter), env(safe-area-inset-left)) max(var(--page-gutter), env(safe-area-inset-right));
+}
+
+.admin-menu-toggle {
+  display: inline-grid;
+  width: var(--space-12);
+  height: var(--space-12);
+  flex: 0 0 auto;
+  place-items: center;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-input);
+  background: var(--surface-default);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.admin-menu-toggle:hover {
+  background: var(--surface-brand-subtle);
+  color: var(--brand-primary);
+}
+
+.admin-menu-toggle[aria-expanded="true"] {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: var(--brand-primary-foreground);
+}
+
+.admin-menu-toggle svg {
+  width: var(--space-5);
+  height: var(--space-5);
+  color: inherit;
+}
+
+/* ---------- Panel de navegación móvil ---------- */
+
+.admin-mobile-navigation {
+  position: absolute;
+  inset: 100% 0 auto;
+  display: grid;
+  max-height: calc(100dvh - var(--space-16));
+  gap: var(--space-4);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-bottom: var(--border-width) solid var(--border-default);
+  background: var(--surface-soft);
+  padding: var(--space-4) max(var(--page-gutter), env(safe-area-inset-right)) max(var(--space-4), env(safe-area-inset-bottom)) max(var(--page-gutter), env(safe-area-inset-left));
+}
+
+.admin-mobile-navigation[hidden] {
+  display: none;
+}
+
+/* ---------- Navegación (sidebar y panel móvil) ---------- */
+
+.admin-sidebar {
+  display: none;
+}
+
+.admin-sidebar-nav {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+}
+
+/* Grupos opcionales: <section class="admin-sidebar-group"> con título */
+.admin-sidebar-group {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.admin-sidebar-group+.admin-sidebar-group {
+  margin-top: var(--space-4);
+}
+
+.admin-sidebar-group-title {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+.admin-sidebar-link {
+  display: flex;
+  min-width: 0;
+  min-height: var(--space-12);
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-input);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1.3;
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+/* El ícono siempre toma el color del enlace (activo, hover, normal) */
+.admin-sidebar-link svg {
+  width: var(--space-5);
+  height: var(--space-5);
+  flex: 0 0 auto;
+  color: inherit;
+}
+
+.admin-sidebar-link:hover {
+  background: var(--surface-brand-subtle);
+  color: var(--brand-primary);
+}
+
+/* Activo: relleno de marca (no solo color: cambia fondo, peso y forma) */
+.admin-sidebar-link[aria-current="page"] {
+  background: var(--brand-primary);
+  color: var(--brand-primary-foreground);
+  font-weight: var(--weight-bold);
+}
+
+.admin-sidebar-link[aria-current="page"]:hover {
+  background: var(--color-brand-hover);
+  color: var(--brand-primary-foreground);
+}
+
+/* Contador opcional (p. ej. vacantes publicadas) */
+.admin-sidebar-badge {
+  display: inline-grid;
+  min-width: var(--space-6);
+  min-height: var(--space-6);
+  margin-inline-start: auto;
+  place-items: center;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-input);
+  background: var(--surface-default);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  padding-inline: var(--space-2);
+}
+
+.admin-sidebar-link[aria-current="page"] .admin-sidebar-badge {
+  border-color: var(--surface-default);
+  background: var(--surface-default);
+  color: var(--brand-primary);
+}
+
+/* ---------- Pie: cerrar sesión ---------- */
+
+.admin-sidebar-footer {
+  margin-top: auto;
+  border-top: var(--border-width) solid var(--border-subtle);
+  padding-top: var(--space-3);
+}
+
+.admin-sidebar-footer .dashboard-sign-out {
+  display: grid;
+  justify-items: stretch;
+}
+
+.admin-sidebar-footer .dashboard-sign-out [data-slot="button"] {
+  width: 100%;
+  min-height: var(--space-12);
+  justify-content: flex-start;
+  border-radius: var(--radius-input);
+  color: var(--text-primary);
+}
+
+.admin-sidebar-footer .dashboard-sign-out [data-slot="button"]:hover {
+  background: var(--surface-brand-subtle);
+  color: var(--brand-primary);
+}
+
+.admin-sidebar-footer .dashboard-sign-out [role="alert"] {
+  color: var(--status-error);
+}
+
+/* ---------- Foco visible (obligatorio) ---------- */
+
+.admin-sidebar-brand:focus-visible,
+.admin-menu-toggle:focus-visible,
+.admin-sidebar-link:focus-visible,
+.admin-sidebar-footer .dashboard-sign-out [data-slot="button"]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ---------- Escritorio ≥ 840 px: sidebar anclada, a sangre, sin flotar ---------- */
+
+@media (min-width: 52.5rem) {
+  .admin-layout {
+    display: grid;
+    grid-template-columns: var(--admin-sidebar-width) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .admin-mobile-header,
+  .admin-mobile-navigation {
+    display: none;
+  }
+
+  .admin-sidebar {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    display: flex;
+    width: var(--admin-sidebar-width);
+    height: 100dvh;
+    flex-direction: column;
+    gap: var(--space-4);
+    overflow: hidden;
+    border-inline-end: var(--border-width) solid var(--border-subtle);
+    background: var(--surface-soft);
+    padding-block: 0 var(--space-4);
+    padding-inline: var(--space-4);
+  }
+
+  .admin-sidebar .admin-sidebar-brand {
+    min-height: var(--space-16);
+    flex: 0 0 auto;
+    margin-inline: calc(-1 * var(--space-4));
+    border-bottom: var(--border-width) solid var(--border-subtle);
+    border-radius: 0;
+    padding-inline: var(--space-4);
+  }
+
+  .admin-sidebar-nav {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-block: var(--space-2);
+  }
+
+  .admin-sidebar-footer {
+    flex: 0 0 auto;
+  }
+}

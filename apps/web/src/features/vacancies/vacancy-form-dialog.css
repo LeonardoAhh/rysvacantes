@@ -29,8 +29,9 @@
 .vacancy-step-title {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-lg);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
 }
 
 .vacancy-step-progress {
@@ -72,8 +73,8 @@
 .vacancy-select-trigger {
   width: 100%;
   min-height: var(--space-12);
-  border-color: transparent;
-  border-radius: var(--radius-md-token);
+  border-color: var(--border-default);
+  border-radius: var(--radius-input);
   background: var(--surface-field);
   font-size: var(--font-size-sm);
 }
@@ -114,7 +115,7 @@
 .vacancy-benefits-included {
   margin: 0;
   border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-md-token);
+  border-radius: var(--radius-input);
   background: var(--muted);
   padding: var(--space-3);
 }
@@ -156,7 +157,7 @@
 }
 
 .vacancy-benefits-rate-input input {
-  padding-inline-end: var(--space-8);
+  padding-inline-end: var(--space-10);
 }
 
 .vacancy-benefits-rate-input span {
@@ -166,11 +167,6 @@
   transform: translateY(-50%);
   color: var(--text-secondary);
   pointer-events: none;
-}
-
-.vacancy-form-field
-  :is(input, textarea, [data-slot="select-trigger"])[aria-invalid="true"] {
-  box-shadow: none;
 }
 
 .vacancy-step-fields > .vacancy-form-field-wide {
@@ -202,7 +198,7 @@
     max-height: calc(100dvh - var(--space-4));
     translate: none;
     border-bottom: 0;
-    border-radius: var(--radius-lg-token) var(--radius-lg-token) 0 0;
+    border-radius: var(--radius-modal-token) var(--radius-modal-token) 0 0;
     padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
   }
 

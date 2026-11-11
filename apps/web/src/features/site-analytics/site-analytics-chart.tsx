@@ -265,23 +265,25 @@ function TrendPanel({
             {data.length > 1 &&
               " La línea continua muestra las lecturas reales y la discontinua indica la tendencia estimada del período."}
           </figcaption>
-          <table className="sr-only">
-            <caption>Datos de {metric.dailyLabel.toLowerCase()}</caption>
-            <thead>
-              <tr>
-                <th scope="col">Fecha</th>
-                <th scope="col">{metric.tab}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((day) => (
-                <tr key={day.day}>
-                  <th scope="row">{formatDay(day.day, true)}</th>
-                  <td>{numberFormat.format(day.value)}</td>
+          <div className="sr-only">
+            <table>
+              <caption>Datos de {metric.dailyLabel.toLowerCase()}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">{metric.tab}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((day) => (
+                  <tr key={day.day}>
+                    <th scope="row">{formatDay(day.day, true)}</th>
+                    <td>{numberFormat.format(day.value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </figure>
       )}
     </div>

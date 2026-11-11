@@ -107,6 +107,19 @@ function getInitialForm(vacancy: Vacancy | null): VacancyFormValues {
   return values
 }
 
+function focusVacancyField(field: keyof VacancyFormValues) {
+  const fieldElement = document.getElementById(getVacancyFieldId(field))
+  const focusableSelector =
+    'input:not(:disabled), textarea:not(:disabled), select:not(:disabled), button:not(:disabled), [tabindex]:not([tabindex="-1"])'
+  const focusTarget =
+    fieldElement instanceof HTMLElement &&
+    fieldElement.matches(focusableSelector)
+      ? fieldElement
+      : fieldElement?.querySelector<HTMLElement>(focusableSelector)
+
+  focusTarget?.focus()
+}
+
 export function VacancyFormDialog({
   vacancy,
   onClose,
@@ -125,7 +138,8 @@ export function VacancyFormDialog({
   const [saveError, setSaveError] = useState("")
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
   const stepFieldsRef = useRef<HTMLDivElement>(null)
-  const firstRender = useRef(true)
+  const pendingFocusField = useRef<keyof VacancyFormValues | null>(null)
+  const previousStep = useRef(step)
   const isEditing = vacancy !== null
   const today = getBusinessDate()
   const minimumDeadline =
@@ -141,8 +155,14 @@ export function VacancyFormDialog({
 
   useEffect(() => {
     stepFieldsRef.current?.scrollTo({ top: 0 })
-    if (firstRender.current) {
-      firstRender.current = false
+    if (previousStep.current === step) {
+      return
+    }
+    previousStep.current = step
+    const pendingField = pendingFocusField.current
+    pendingFocusField.current = null
+    if (pendingField) {
+      focusVacancyField(pendingField)
       return
     }
     stepHeadingRef.current?.focus()
@@ -175,7 +195,7 @@ export function VacancyFormDialog({
       (field) => nextErrors[field]
     )
     if (currentStepError) {
-      document.getElementById(getVacancyFieldId(currentStepError))?.focus()
+      focusVacancyField(currentStepError)
       return
     }
 
@@ -190,10 +210,12 @@ export function VacancyFormDialog({
     if (firstInvalidField) {
       const targetStep = getFieldStep(firstInvalidField)
       setAttemptedSteps((current) => new Set(current).add(targetStep))
-      setStep(targetStep)
-      requestAnimationFrame(() => {
-        document.getElementById(getVacancyFieldId(firstInvalidField))?.focus()
-      })
+      if (targetStep === step) {
+        focusVacancyField(firstInvalidField)
+      } else {
+        pendingFocusField.current = firstInvalidField
+        setStep(targetStep)
+      }
       return
     }
 

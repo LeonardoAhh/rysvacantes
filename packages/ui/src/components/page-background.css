@@ -7,16 +7,3 @@
   pointer-events: none;
 }
 
-.page-background::before {
-  position: absolute;
-  content: "";
-  top: 0;
-  right: 0;
-  width: min(100%, var(--container-max));
-  height: min(100svh, var(--container-wide));
-  background: radial-gradient(
-    ellipse at 100% 0,
-    var(--surface-soft),
-    transparent 70%
-  );
-}

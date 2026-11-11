@@ -1,9 +1,56 @@
-import { motion, useReducedMotion } from "motion/react"
+import { useEffect, useRef, useState } from "react"
+import { motion, useInView, useReducedMotion } from "motion/react"
+import type { CSSProperties } from "react"
 import { ArrowRight, ArrowUpRight, Check, Sparkles } from "lucide-react"
 import { buttonVariants } from "@workspace/ui/components/button"
 import { routes } from "@/lib/routes"
+import "./hero-section.css"
 
+const brandLetters = Array.from("ViñoPlastic.")
 const motionTransition = { duration: 0.3, ease: "easeOut" as const }
+
+function AnimatedBrandName() {
+  const wordRef = useRef<HTMLSpanElement>(null)
+  const isInView = useInView(wordRef)
+  const shouldReduceMotion = useReducedMotion()
+  const [isPageVisible, setIsPageVisible] = useState(false)
+  const isAnimating = isInView && isPageVisible && !shouldReduceMotion
+
+  useEffect(() => {
+    const updateVisibility = () =>
+      setIsPageVisible(document.visibilityState === "visible")
+    updateVisibility()
+    document.addEventListener("visibilitychange", updateVisibility)
+    return () =>
+      document.removeEventListener("visibilitychange", updateVisibility)
+  }, [])
+
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className={`hero-brand-word ${isAnimating ? "is-animating" : ""}`}
+        ref={wordRef}
+      >
+        {brandLetters.map((letter, index) => {
+          const letterStyle: CSSProperties & { "--letter-index": number } = {
+            "--letter-index": index,
+          }
+          return (
+            <span
+              className="hero-brand-letter"
+              key={`${letter}-${index}`}
+              style={letterStyle}
+            >
+              {letter}
+            </span>
+          )
+        })}
+      </span>
+      <span className="sr-only">ViñoPlastic.</span>
+    </>
+  )
+}
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion()
@@ -22,12 +69,11 @@ export function HeroSection() {
         >
           <p className="eyebrow">Trabaja con nosotros</p>
           <h1 id="hero-title">
-            Trabaja en{" "}
-            <span>ViñoPlastic.</span>
+            Trabaja en <AnimatedBrandName />
           </h1>
           <p className="hero-description" id="talent">
-            Explora las vacantes y conoce sueldo, ubicación, horario y requisitos
-            antes de escribir a Reclutamiento.
+            Explora las vacantes y conoce sueldo, ubicación, horario y
+            requisitos antes de escribir a Reclutamiento.
           </p>
           <div className="hero-actions">
             <a

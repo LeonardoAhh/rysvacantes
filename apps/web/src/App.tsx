@@ -1,7 +1,9 @@
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react"
@@ -9,6 +11,7 @@ import type { ComponentType, ReactNode } from "react"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { PageBackground } from "@workspace/ui/components/page-background"
 import { SiteHeader } from "@/components/site-header"
+import { DashboardAccess } from "@/features/auth/dashboard-access"
 import {
   NavigationContext,
   type NavigateOptions,
@@ -26,22 +29,11 @@ type ActiveRoute = {
   scrollTo?: string | number
 }
 
-function RouteStatusPage({
-  children,
-  breadcrumbLabel,
-}: {
-  children: ReactNode
-  breadcrumbLabel: string
-}) {
+function RouteStatusPage({ children }: { children: ReactNode }) {
   return (
     <div className="route-status-page">
       <PageBackground />
-      <SiteHeader
-        breadcrumb={[
-          { href: routes.home, label: "Inicio" },
-          { label: breadcrumbLabel },
-        ]}
-      />
+      <SiteHeader />
       <main className="not-found-page page-container">{children}</main>
     </div>
   )
@@ -49,7 +41,7 @@ function RouteStatusPage({
 
 function NotFoundPage() {
   return (
-    <RouteStatusPage breadcrumbLabel="Página no encontrada">
+    <RouteStatusPage>
       <p className="not-found-code">404</p>
       <h1>Página no encontrada</h1>
       <p>La dirección que buscas no existe.</p>
@@ -59,7 +51,7 @@ function NotFoundPage() {
 
 function RouteErrorPage() {
   return (
-    <RouteStatusPage breadcrumbLabel="Error al abrir página">
+    <RouteStatusPage>
       <h1>No pudimos abrir esta página</h1>
       <p>Vuelve a intentarlo en un momento.</p>
     </RouteStatusPage>
@@ -85,6 +77,18 @@ function InitialRouteSkeleton() {
       </div>
     </div>
   )
+}
+
+function getMotionDuration(token: string) {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(token)
+    .trim()
+  const duration = Number.parseFloat(value)
+  if (!Number.isFinite(duration))
+    throw new Error(`Invalid motion duration token: ${token}`)
+  if (value.endsWith("ms")) return duration / 1000
+  if (value.endsWith("s")) return duration
+  throw new Error(`Invalid motion duration token: ${token}`)
 }
 
 function getInternalUrl(anchor: HTMLAnchorElement) {
@@ -129,6 +133,11 @@ function RouteView({ route }: { route: ActiveRoute }) {
 
 export function App() {
   const [activeRoute, setActiveRoute] = useState<ActiveRoute | null>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const routeExitDuration = useMemo(
+    () => getMotionDuration("--duration-fast"),
+    []
+  )
   const requestId = useRef(0)
   const scrollPositions = useRef(new Map<string, number>())
   const currentUrl = useRef(window.location.href)
@@ -292,11 +301,30 @@ export function App() {
 
   return (
     <NavigationContext.Provider value={navigate}>
-      {activeRoute ? (
-        <RouteView key={activeRoute.path} route={activeRoute} />
-      ) : (
-        <InitialRouteSkeleton />
-      )}
+      <AnimatePresence initial={false} mode="wait">
+        {activeRoute ? (
+          <motion.div
+            exit={
+              activeRoute.path === routes.home && !shouldReduceMotion
+                ? { opacity: 0 }
+                : undefined
+            }
+            key={activeRoute.path}
+            transition={{ duration: routeExitDuration, ease: "easeOut" }}
+          >
+            {activeRoute.path === routes.dashboard ||
+            activeRoute.path === routes.analytics ? (
+              <DashboardAccess>
+                <RouteView route={activeRoute} />
+              </DashboardAccess>
+            ) : (
+              <RouteView route={activeRoute} />
+            )}
+          </motion.div>
+        ) : (
+          <InitialRouteSkeleton />
+        )}
+      </AnimatePresence>
     </NavigationContext.Provider>
   )
 }

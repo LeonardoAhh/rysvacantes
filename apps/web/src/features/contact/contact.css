@@ -4,14 +4,14 @@
   display: grid;
   min-height: 0;
   place-items: center;
-  padding-block: var(--space-8);
+  padding-block: var(--page-section-space);
 }
 
 .contact-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(18rem, var(--container-narrow));
   align-items: center;
-  gap: clamp(var(--space-8), 8vw, var(--space-16));
+  gap: var(--page-section-space);
   margin-inline: auto;
 }
 
@@ -31,10 +31,10 @@
   margin: 0;
   color: var(--text-primary);
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-display);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--letter-spacing-brand);
-  line-height: var(--line-height-display);
+  font-size: var(--type-h1);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-h1);
 }
 
 .contact-description {
@@ -43,23 +43,19 @@
   color: var(--text-secondary);
   font-size: var(--font-size-lg);
   font-weight: var(--weight-light);
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-lead);
 }
 
 @media (width < 48rem) {
   .contact-main {
     place-items: start center;
-    padding-block: var(--space-8);
+    padding-block: var(--page-section-space);
   }
 
   .contact-layout {
     max-width: 34rem;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-8);
-  }
-
-  .contact-intro h1 {
-    font-size: var(--font-size-display-mobile);
+    gap: var(--page-content-gap);
   }
 
   .contact-description {

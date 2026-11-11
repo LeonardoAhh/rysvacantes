@@ -10,8 +10,8 @@
   z-index: 1;
   display: grid;
   align-content: start;
-  gap: var(--space-8);
-  padding-block: var(--space-10) var(--space-16);
+  gap: var(--page-content-gap);
+  padding-block: var(--page-section-space);
 }
 
 .site-analytics-chart-header h2 svg {
@@ -41,9 +41,9 @@
 .site-analytics-intro h1 {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-display-sm);
-  font-weight: var(--weight-semibold);
-  line-height: var(--line-height-display);
+  font-size: var(--type-h1);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h1);
 }
 
 .site-analytics-intro-meta {
@@ -57,8 +57,8 @@
 
 .site-analytics-description {
   color: var(--text-secondary);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lead);
 }
 
 .site-analytics-launch-badge {
@@ -110,9 +110,9 @@
   gap: var(--space-2);
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-xl);
-  font-weight: var(--weight-semibold);
-  line-height: var(--line-height-tight);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
 }
 
 .site-analytics-chart [data-slot="tabs-list"] {
@@ -195,16 +195,16 @@
 .site-analytics-trend-heading h3 {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-base);
-  font-weight: var(--weight-semibold);
-  line-height: var(--line-height-tight);
+  font-size: var(--type-h3);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h3);
 }
 
 .site-analytics-chart .site-analytics-period-trigger {
   max-width: 100%;
-  min-height: var(--space-11);
-  border: var(--border-width) solid var(--border-subtle);
-  border-radius: var(--radius-pill-token);
+  min-height: var(--space-12);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-control);
   background: var(--surface-default);
   color: var(--text-primary);
   font-weight: var(--weight-medium);
@@ -273,7 +273,7 @@
 
 .site-analytics-number-skeleton {
   width: var(--space-16);
-  height: var(--space-8);
+  height: var(--space-6);
 }
 
 @media (width >= 64rem) {
@@ -296,7 +296,7 @@
 @media (width < 48rem) {
   .site-analytics-main {
     gap: var(--space-6);
-    padding-block: var(--space-8) var(--space-10);
+    padding-block: var(--page-section-space);
   }
 
   .site-analytics-chart {

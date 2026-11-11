@@ -29,7 +29,7 @@ export function PublicVacancyCard({ vacancy }: { vacancy: Vacancy }) {
             )}
           </div>
           <CardTitle className="public-vacancy-title">
-            <h2>{vacancy.title}</h2>
+            <h3>{vacancy.title}</h3>
           </CardTitle>
         </CardHeader>
 

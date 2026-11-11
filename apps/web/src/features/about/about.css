@@ -24,15 +24,15 @@
 
 .about-page h2 {
   max-width: 16ch;
-  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-4xl));
-  font-weight: var(--weight-semibold);
-  line-height: var(--line-height-tight);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
 }
 
 .about-page h3 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--weight-semibold);
-  line-height: var(--line-height-normal);
+  font-size: var(--type-h3);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h3);
 }
 
 .about-page ul {
@@ -53,8 +53,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   align-items: center;
-  gap: clamp(var(--space-8), 6vw, var(--space-16));
-  padding-block: clamp(var(--space-12), 7vw, calc(var(--space-16) * 2));
+  gap: var(--page-section-space);
+  padding-block: var(--page-section-space);
 }
 
 .about-intro-copy {
@@ -63,10 +63,10 @@
 
 .about-intro h1 {
   max-width: 11ch;
-  font-size: var(--font-size-display);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--letter-spacing-brand);
-  line-height: var(--line-height-display);
+  font-size: var(--type-h1);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-h1);
 }
 
 .about-lead {
@@ -75,7 +75,7 @@
   color: var(--text-primary);
   font-size: var(--font-size-lg);
   font-weight: var(--weight-light);
-  line-height: var(--line-height-normal);
+  line-height: var(--line-height-lead);
 }
 
 .about-supporting {
@@ -90,7 +90,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-5);
-  margin-top: var(--space-8);
+  margin-top: var(--page-content-gap);
 }
 
 .about-hero-image,
@@ -127,7 +127,7 @@
 }
 
 .about-section {
-  padding-block: clamp(var(--space-12), 7vw, calc(var(--space-16) * 2));
+  padding-block: var(--page-section-space);
 }
 
 .about-products {
@@ -147,13 +147,13 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   align-items: center;
-  gap: clamp(var(--space-8), 6vw, var(--space-16));
+  gap: var(--page-section-space);
 }
 
 .about-service-list {
   display: grid;
   gap: var(--space-4);
-  margin-top: var(--space-8) !important;
+  margin-top: var(--page-content-gap) !important;
 }
 
 .about-service-list li,
@@ -174,7 +174,7 @@
 }
 
 .about-section-copy .about-detail {
-  margin-top: var(--space-8) !important;
+  margin-top: var(--page-content-gap) !important;
   font-size: var(--font-size-sm);
 }
 
@@ -192,7 +192,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
-  margin-top: var(--space-8);
+  margin-top: var(--page-content-gap);
 }
 
 .about-purpose-card,
@@ -200,7 +200,7 @@
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-xl-token);
   background: var(--surface-default);
-  padding: clamp(var(--space-6), 3vw, var(--space-10));
+  padding: var(--space-5);
 }
 
 .about-card-index {
@@ -211,7 +211,7 @@
 }
 
 .about-purpose-card h3 {
-  margin-top: var(--space-8);
+  margin-top: var(--page-content-gap);
 }
 
 .about-purpose-card p {
@@ -225,8 +225,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-5) var(--space-8);
-  margin-top: var(--space-8);
+  gap: var(--space-5) var(--page-content-gap);
+  margin-top: var(--page-content-gap);
 }
 
 .about-values ul,
@@ -250,7 +250,7 @@
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: var(--space-8);
+  gap: var(--page-content-gap);
 }
 
 .about-section-heading > p {
@@ -259,14 +259,14 @@
 }
 
 .about-sector-list {
-  margin-top: var(--space-8) !important;
+  margin-top: var(--page-content-gap) !important;
 }
 
 .about-quality-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  gap: clamp(var(--space-8), 6vw, var(--space-16));
+  gap: var(--page-section-space);
 }
 
 .about-quality-card ul {
@@ -284,11 +284,7 @@
   }
 
   .about-intro {
-    padding-block: var(--space-10) var(--space-12);
-  }
-
-  .about-intro h1 {
-    font-size: var(--font-size-display-mobile);
+    padding-block: var(--page-section-space);
   }
 
   .about-hero-image {

@@ -24,7 +24,7 @@
   display: grid;
   justify-items: start;
   gap: var(--space-5);
-  padding-block: var(--space-12);
+  padding-block: var(--page-section-space);
 }
 
 .dashboard-access-title {
@@ -54,8 +54,9 @@
 
 .dashboard-access-message h1 {
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h1);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h1);
 }
 
 .dashboard-access-message p {

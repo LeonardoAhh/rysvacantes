@@ -8,7 +8,7 @@
 .public-vacancies-main {
   position: relative;
   z-index: 1;
-  padding-block: var(--space-12) var(--space-16);
+  padding-block: var(--page-section-space);
 }
 
 .public-vacancies-intro {
@@ -26,10 +26,10 @@
 .public-vacancies-intro h1 {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-display-sm);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h1);
+  font-weight: var(--weight-bold);
   letter-spacing: var(--letter-spacing-tight);
-  line-height: var(--line-height-display);
+  line-height: var(--line-height-h1);
 }
 
 .public-vacancies-description {
@@ -38,7 +38,7 @@
   color: var(--text-secondary);
   font-size: var(--font-size-lg);
   font-weight: var(--weight-light);
-  line-height: var(--line-height-normal);
+  line-height: var(--line-height-lead);
 }
 
 .public-vacancies-transport-link {
@@ -66,7 +66,7 @@
 }
 
 .public-vacancies-listing {
-  margin-top: var(--space-12);
+  margin-top: var(--page-content-gap);
 }
 
 .public-vacancies-toolbar {
@@ -80,8 +80,9 @@
 .public-vacancies-toolbar h2 {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: var(--font-size-xl);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h2);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h2);
 }
 
 .public-vacancies-count {
@@ -132,15 +133,15 @@
 
 .public-vacancies-search input,
 .public-vacancies-area-filter [data-slot="select-trigger"] {
-  min-height: var(--space-11);
-  border: var(--border-width) solid transparent;
-  border-radius: var(--radius-md-token);
+  min-height: var(--space-12);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-input);
   background: var(--surface-field);
   color: var(--text-primary);
 }
 
 .public-vacancies-search input {
-  padding-left: var(--space-9);
+  padding-left: var(--space-10);
   padding-right: var(--space-3);
 }
 
@@ -269,10 +270,11 @@
   color: var(--brand-primary-foreground);
 }
 
-.public-vacancy-card h2 {
+.public-vacancy-card h3 {
   margin: 0;
-  font-size: var(--font-size-xl);
-  font-weight: var(--weight-semibold);
+  font-size: var(--type-h3);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-h3);
   overflow-wrap: anywhere;
 }
 
@@ -460,7 +462,7 @@
       "transport-note transport-note";
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
     align-items: end;
-    gap: var(--space-3) var(--space-12);
+    gap: var(--space-3) var(--page-content-gap);
   }
 
   .public-vacancies-eyebrow {
@@ -520,7 +522,7 @@
 
 @media (width < 48rem) {
   .public-vacancies-main {
-    padding-block: var(--space-8) var(--space-12);
+    padding-block: var(--page-section-space);
   }
 
   .public-vacancies-description {
@@ -528,7 +530,7 @@
   }
 
   .public-vacancies-listing {
-    margin-top: var(--space-8);
+    margin-top: var(--page-content-gap);
   }
 
   .public-vacancies-controls {
@@ -554,7 +556,7 @@
     width: 100%;
     min-width: 0;
     font-size: var(--font-size-base);
-    padding-inline: var(--space-8) var(--space-2);
+    padding-inline: var(--space-10) var(--space-2);
   }
 
   .public-vacancies-search > svg {
