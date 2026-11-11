@@ -68,6 +68,11 @@ function StopItem({
 export function TransportPage() {
   const [query, setQuery] = useState("")
   const [shift, setShift] = useState<number | null>(null)
+  const [routeDisclosure, setRouteDisclosure] = useState<{
+    query: string
+    shift: number | null
+    routeId: string | null
+  }>({ query: "", shift: null, routeId: null })
   const normalizedQuery = normalizeSearch(query.trim())
   const matchingRoutes = useMemo(
     () =>
@@ -88,6 +93,15 @@ export function TransportPage() {
         .filter((route) => route.visibleStops.length > 0),
     [normalizedQuery, shift]
   )
+
+  const hasActiveFilter = Boolean(normalizedQuery || shift !== null)
+  const filterChanged =
+    routeDisclosure.query !== normalizedQuery || routeDisclosure.shift !== shift
+  const openRouteId = filterChanged
+    ? hasActiveFilter
+      ? (matchingRoutes[0]?.id ?? null)
+      : null
+    : routeDisclosure.routeId
 
   return (
     <div className="site-page transport-page">
@@ -158,42 +172,76 @@ export function TransportPage() {
           {matchingRoutes.length === 1 ? "ruta" : "rutas"} disponibles
         </div>
         <div className="transport-routes">
-          {matchingRoutes.map((route) => (
-            <details
-              className="transport-route"
-              open={Boolean(normalizedQuery || shift !== null)}
-              id={route.id}
-              key={`${route.id}-${normalizedQuery}-${shift}`}
-            >
-              <summary className="transport-route-heading">
-                <span className="transport-route-id">
-                  {route.id.toUpperCase()}
-                </span>
-                <div>
-                  <h2 id={`${route.id}-title`}>{route.name}</h2>
-                  <p>
-                    {route.visibleStops.length}{" "}
-                    {route.visibleStops.length === 1 ? "parada" : "paradas"}
-                    {normalizedQuery || shift !== null ? " encontradas" : ""}
-                  </p>
+          {matchingRoutes.map((route) => {
+            const isOpen = openRouteId === route.id
+            const stopCount = `${route.visibleStops.length} ${
+              route.visibleStops.length === 1 ? "parada" : "paradas"
+            }${normalizedQuery || shift !== null ? " encontradas" : ""}`
+
+            return (
+              <article
+                className={`transport-route${isOpen ? "is-open" : ""}`}
+                id={route.id}
+                key={route.id}
+              >
+                <h2 className="transport-route-heading">
+                  <button
+                    aria-controls={`${route.id}-stops`}
+                    aria-expanded={isOpen}
+                    className="transport-route-toggle"
+                    onClick={() =>
+                      setRouteDisclosure({
+                        query: normalizedQuery,
+                        shift,
+                        routeId: isOpen ? null : route.id,
+                      })
+                    }
+                    type="button"
+                  >
+                    <span className="transport-route-id">
+                      {route.id.toUpperCase()}
+                    </span>
+                    <span className="transport-route-summary">
+                      <span className="transport-route-title-row">
+                        <span className="transport-route-name">
+                          {route.name}
+                        </span>
+                        <span className="transport-route-count">
+                          {stopCount}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="transport-route-action">
+                      {isOpen ? "Ocultar" : "Ver paradas"}
+                      <ChevronDown
+                        aria-hidden="true"
+                        className="transport-route-chevron"
+                      />
+                    </span>
+                  </button>
+                </h2>
+                <div
+                  aria-hidden={!isOpen}
+                  className="transport-route-panel"
+                  id={`${route.id}-stops`}
+                  inert={!isOpen}
+                >
+                  <div className="transport-route-panel-inner">
+                    <ol className="transport-stops">
+                      {route.visibleStops.map(({ stop, index }) => (
+                        <StopItem
+                          index={index}
+                          key={`${route.id}-${index}`}
+                          shift={shift}
+                          stop={stop}
+                        />
+                      ))}
+                    </ol>
+                  </div>
                 </div>
-                <ChevronDown
-                  aria-hidden="true"
-                  className="transport-route-chevron"
-                />
-              </summary>
-              <ol className="transport-stops">
-                {route.visibleStops.map(({ stop, index }) => (
-                  <StopItem
-                    index={index}
-                    key={`${route.id}-${index}`}
-                    shift={shift}
-                    stop={stop}
-                  />
-                ))}
-              </ol>
-            </details>
-          ))}
+              </article>
+            )
+          })}
         </div>
         {matchingRoutes.length === 0 && (
           <p className="transport-empty">

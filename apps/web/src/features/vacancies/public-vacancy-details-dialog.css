@@ -160,31 +160,30 @@ html:has([data-slot="sheet-content"].public-vacancy-sheet) body {
 
 .public-vacancy-sheet-footer [data-slot="button"],
 .public-vacancy-sheet-contact {
-  min-height: var(--space-11);
+  min-height: var(--space-12);
   white-space: nowrap;
 }
 
 .public-vacancy-sheet-contact {
+  appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  border: 0;
   border-radius: var(--radius-pill-token);
   background: var(--brand-primary);
   padding: var(--space-2) var(--space-4);
   color: var(--brand-primary-foreground);
+  font-family: var(--font-body-family);
   font-size: var(--font-size-sm);
   font-weight: var(--weight-semibold);
-  text-decoration: none;
+  line-height: var(--line-height-body);
+  cursor: pointer;
 }
 
 .public-vacancy-sheet-contact:hover {
   color: var(--brand-primary-foreground);
-}
-
-.public-vacancy-sheet-contact:focus-visible {
-  outline: var(--outline-width) solid var(--brand-primary);
-  outline-offset: var(--space-1);
 }
 
 .public-vacancy-sheet-contact svg {

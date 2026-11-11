@@ -1,5 +1,3 @@
-import { ArrowRight } from "lucide-react"
-import { getVacancyWhatsAppUrl } from "@/lib/recruitment-contact"
 import { Badge } from "@workspace/ui/components/badge"
 import {
   Card,
@@ -10,6 +8,7 @@ import {
 import { PublicVacancyDetailsDialog } from "./public-vacancy-details-dialog"
 import { PublicVacancySummary } from "./public-vacancy-summary"
 import { VacancyShiftBadge } from "./vacancy-shift-badge"
+import { VacancyWhatsAppContact } from "./vacancy-whatsapp-contact"
 import { hasCompleteVacancyDetails, type Vacancy } from "./vacancy-types"
 
 export function PublicVacancyCard({ vacancy }: { vacancy: Vacancy }) {
@@ -35,17 +34,13 @@ export function PublicVacancyCard({ vacancy }: { vacancy: Vacancy }) {
 
         <CardContent>
           <PublicVacancySummary vacancy={vacancy} />
-          <PublicVacancyDetailsDialog vacancy={vacancy} />
-          <a
-            aria-label={`Preguntar por WhatsApp sobre la vacante ${vacancy.title}`}
-            className="public-vacancy-contact"
-            href={getVacancyWhatsAppUrl(vacancy)}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Consultar por WhatsApp
-            <ArrowRight aria-hidden="true" />
-          </a>
+          <div className="public-vacancy-actions">
+            <PublicVacancyDetailsDialog vacancy={vacancy} />
+            <VacancyWhatsAppContact
+              className="public-vacancy-contact"
+              vacancy={vacancy}
+            />
+          </div>
         </CardContent>
       </Card>
     </li>

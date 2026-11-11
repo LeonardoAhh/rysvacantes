@@ -253,7 +253,7 @@ Todos usan solo tokens. Nombres de referencia (BEM o equivalente del proyecto).
 - **card**: `canvas`, borde 1 px `hairline`, `radius-card`, padding `space-5`.
 - **card-featured**: fondo `surface`, sin borde.
 - **vacancy-card**: título (h3), área, ubicación, tipo de jornada, enlace "Ver vacante". Toda la tarjeta es un solo enlace al detalle; sin enlaces anidados.
-- **route-card**: nombre de ruta, zona, turnos, enlace "Ver paradas y horarios".
+- **route-card**: nombre de ruta y cantidad de paradas en línea, separados por un borde; control con chevron y texto para mostrar u ocultar paradas. Solo una ruta puede expandirse a la vez; el panel se anima con `--duration-fast` y queda inmediato con movimiento reducido.
 
 ### Navegación
 

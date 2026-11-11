@@ -8,10 +8,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@workspace/ui/components/sheet"
-import { getVacancyWhatsAppUrl } from "@/lib/recruitment-contact"
 import { vacancyQueryParam } from "@/lib/routes"
 import { getPublicBenefits } from "./vacancy-benefits"
 import { PublicVacancySummary } from "./public-vacancy-summary"
+import { VacancyWhatsAppContact } from "./vacancy-whatsapp-contact"
 import {
   isMeaningfulVacancyDetail,
   vacancySalaryPeriodLabels,
@@ -124,10 +124,15 @@ export function PublicVacancyDetailsDialog({ vacancy }: { vacancy: Vacancy }) {
             </Button>
           </div>
           <div className="public-vacancy-step-heading">
-            <span>Paso {stepIndex + 1} de {steps.length}</span>
+            <span>
+              Paso {stepIndex + 1} de {steps.length}
+            </span>
             <strong>{stepLabels[activeStep]}</strong>
           </div>
-          <ol aria-label="Pasos de los detalles" className="public-vacancy-steps">
+          <ol
+            aria-label="Pasos de los detalles"
+            className="public-vacancy-steps"
+          >
             {steps.map((step, index) => (
               <li key={step}>
                 <button
@@ -237,15 +242,11 @@ export function PublicVacancyDetailsDialog({ vacancy }: { vacancy: Vacancy }) {
               Siguiente <ArrowRight aria-hidden="true" />
             </Button>
           ) : (
-            <a
-              aria-label={`Preguntar por WhatsApp sobre la vacante ${vacancy.title}`}
+            <VacancyWhatsAppContact
               className="public-vacancy-sheet-contact"
-              href={getVacancyWhatsAppUrl(vacancy)}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Consultar por WhatsApp <ArrowRight aria-hidden="true" />
-            </a>
+              vacancy={vacancy}
+              showArrow
+            />
           )}
         </footer>
       </SheetContent>

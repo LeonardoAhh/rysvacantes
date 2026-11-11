@@ -4,11 +4,15 @@ export const recruitmentPhones = [
   { number: "55 1406 3167", whatsapp: "5215514063167" },
 ] as const
 
-export function getVacancyWhatsAppUrl(vacancy: { title: string }) {
-  const whatsappUrl = new URL(`https://wa.me/${recruitmentPhones[0].whatsapp}`)
-  whatsappUrl.searchParams.set(
-    "text",
-    `Hola, me interesa la vacante "${vacancy.title}" de ViñoPlastic. ¿Cuál es el siguiente paso?`
-  )
+export function getVacancyWhatsAppMessage(vacancy: { title: string }) {
+  return `Hola, me interesa la vacante "${vacancy.title}" de ViñoPlastic. ¿Cuál es el siguiente paso?`
+}
+
+export function getVacancyWhatsAppUrl(
+  vacancy: { title: string },
+  whatsapp: (typeof recruitmentPhones)[number]["whatsapp"]
+) {
+  const whatsappUrl = new URL(`https://wa.me/${whatsapp}`)
+  whatsappUrl.searchParams.set("text", getVacancyWhatsAppMessage(vacancy))
   return whatsappUrl.toString()
 }

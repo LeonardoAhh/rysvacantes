@@ -1,0 +1,130 @@
+[data-slot="dialog-content"].vacancy-whatsapp-dialog {
+  width: min(
+    calc(100% - var(--page-gutter) - var(--page-gutter)),
+    var(--container-narrow)
+  );
+  max-width: var(--container-narrow);
+  max-height: calc(100dvh - var(--page-gutter) - var(--page-gutter));
+  gap: var(--space-4);
+  overflow-y: auto;
+  border-color: var(--border-default);
+  border-radius: var(--radius-modal-token);
+  background: var(--surface-default);
+  padding: var(--space-5);
+  color: var(--text-primary);
+}
+
+.vacancy-whatsapp-dialog [data-slot="dialog-header"] {
+  padding-inline-end: var(--space-12);
+}
+
+.vacancy-whatsapp-dialog [data-slot="dialog-title"] {
+  font-size: var(--type-h4);
+  font-weight: var(--weight-semibold);
+  line-height: var(--line-height-h4);
+}
+
+.vacancy-whatsapp-dialog [data-slot="dialog-close"] {
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-2);
+  width: var(--space-12);
+  height: var(--space-12);
+}
+
+.vacancy-whatsapp-options {
+  display: grid;
+  gap: var(--space-2);
+}
+
+@media (width >= 37.5rem) {
+  .vacancy-whatsapp-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.vacancy-whatsapp-options a {
+  display: flex;
+  min-height: var(--space-16);
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-3);
+  border: var(--border-width) solid var(--status-success);
+  border-radius: var(--radius-control);
+  background: var(--surface-success-subtle);
+  padding: var(--space-3);
+  color: var(--status-success);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+  text-decoration: none;
+}
+
+.vacancy-whatsapp-options a:hover {
+  background: var(--surface-success-subtle);
+  color: var(--status-success);
+}
+
+.vacancy-whatsapp-option-icon {
+  width: var(--space-5);
+  height: var(--space-5);
+  flex: 0 0 auto;
+}
+
+.vacancy-whatsapp-option-copy {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.vacancy-whatsapp-option-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.vacancy-whatsapp-options a:focus-visible,
+.public-vacancy-contact:focus-visible,
+.public-vacancy-sheet-contact:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.vacancy-whatsapp-options a > svg:last-child {
+  width: var(--space-4);
+  height: var(--space-4);
+  flex: 0 0 auto;
+}
+
+.vacancy-whatsapp-preview {
+  display: none;
+}
+
+@media (width >= 37.5rem) {
+  .vacancy-whatsapp-preview {
+    display: grid;
+    min-width: 0;
+    min-height: var(--space-16);
+    justify-items: center;
+    align-content: center;
+    gap: var(--space-1);
+    color: var(--status-success);
+  }
+
+  .vacancy-whatsapp-preview .vacancy-whatsapp-option-icon {
+    width: var(--space-4);
+    height: var(--space-4);
+  }
+
+  .vacancy-whatsapp-preview .vacancy-whatsapp-option-copy {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .vacancy-whatsapp-preview-line {
+    width: var(--space-16);
+    height: var(--space-2);
+    background: var(--border-default);
+  }
+
+  .vacancy-whatsapp-preview-line-short {
+    width: var(--space-12);
+  }
+}

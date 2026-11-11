@@ -1,5 +1,5 @@
-import type { ReactNode } from "react"
-import { motion, useReducedMotion } from "motion/react"
+import { useRef, type ReactNode } from "react"
+import { useInView, useReducedMotion } from "motion/react"
 
 type AboutRevealProps = {
   children: ReactNode
@@ -7,17 +7,20 @@ type AboutRevealProps = {
 }
 
 export function AboutReveal({ children, className }: AboutRevealProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, {
+    once: true,
+    amount: 0.35,
+  })
   const reduceMotion = useReducedMotion()
 
   return (
-    <motion.div
-      className={className}
-      initial={reduceMotion ? false : { opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      viewport={{ once: true, amount: 0.1, margin: "0px 0px -32px 0px" }}
-      whileInView={{ opacity: 1 }}
+    <div
+      className={className ? `about-reveal ${className}` : "about-reveal"}
+      data-revealed={isInView || reduceMotion ? "true" : "false"}
+      ref={ref}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }

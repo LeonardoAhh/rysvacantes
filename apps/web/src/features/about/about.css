@@ -2,6 +2,17 @@
   overflow: clip;
 }
 
+.about-reveal {
+  transition:
+    opacity var(--duration-fast) var(--easing-standard),
+    transform var(--duration-fast) var(--easing-standard);
+}
+
+.about-reveal[data-revealed="false"] {
+  opacity: 0;
+  transform: translateY(var(--space-2));
+}
+
 .about-page main {
   position: relative;
   z-index: 1;
@@ -42,7 +53,7 @@
 }
 
 .about-eyebrow {
-  margin-bottom: var(--space-4) !important;
+  margin-bottom: var(--space-3) !important;
   color: var(--brand-primary);
   font-size: var(--font-size-xs);
   font-weight: var(--weight-bold);
@@ -71,7 +82,7 @@
 
 .about-lead {
   max-width: 34rem;
-  margin-top: var(--space-6) !important;
+  margin-top: var(--space-5) !important;
   color: var(--text-primary);
   font-size: var(--font-size-lg);
   font-weight: var(--weight-light);
@@ -80,7 +91,7 @@
 
 .about-supporting {
   max-width: 31rem;
-  margin-top: var(--space-4) !important;
+  margin-top: var(--space-3) !important;
   color: var(--text-secondary);
   line-height: var(--line-height-relaxed);
 }
@@ -138,7 +149,7 @@
 .about-quality-grid > div > p:not(.about-eyebrow),
 .about-section-heading > p {
   max-width: 39rem;
-  margin-top: var(--space-5);
+  margin-top: var(--space-4);
   color: var(--text-secondary);
   line-height: var(--line-height-relaxed);
 }
@@ -211,7 +222,7 @@
 }
 
 .about-purpose-card h3 {
-  margin-top: var(--page-content-gap);
+  margin-top: var(--space-4);
 }
 
 .about-purpose-card p {
@@ -271,8 +282,8 @@
 
 .about-quality-card ul {
   display: grid;
-  gap: var(--space-4);
-  margin-top: var(--space-6);
+  gap: var(--space-3);
+  margin-top: var(--space-5);
 }
 
 @media (width < 48rem) {
@@ -302,5 +313,13 @@
 
   .about-section-heading > p {
     margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
